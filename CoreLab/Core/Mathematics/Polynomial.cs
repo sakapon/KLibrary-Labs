@@ -8,6 +8,12 @@ namespace KLibrary.Labs.Mathematics
     /// <summary>
     /// Represents a polynomial with a single variable.
     /// </summary>
+    /// <remarks>
+    /// The dictionary does not contain entries whose coefficient is 0.
+    /// TODO: Check if each coefficient in Dictionary is not 0 (pass through when accessed internally).
+    /// TODO: Equals method, etc.
+    /// TODO: ToString method.
+    /// </remarks>
     public struct Polynomial
     {
         /// <summary>
@@ -25,6 +31,10 @@ namespace KLibrary.Labs.Mathematics
             get { return _coefficients_org == null ? _coefficients_empty : _coefficients_org; }
         }
 
+        /// <summary>
+        /// Gets the dictionary which represents index/coefficient pairs.
+        /// </summary>
+        /// <value>The dictionary which represents index/coefficient pairs.</value>
         public ReadOnlyDictionary<int, double> Coefficients
         {
             get
@@ -35,18 +45,29 @@ namespace KLibrary.Labs.Mathematics
             }
         }
 
+        /// <summary>
+        /// Gets the degree of the polynomial.
+        /// </summary>
+        /// <value>The degree of the polynomial.</value>
         public int Degree
         {
             get { return CoefficientsOrg.Count == 0 ? 0 : CoefficientsOrg.Max(c => c.Key); }
         }
 
+        /// <summary>
+        /// Gets the coefficient for the specified index.
+        /// </summary>
+        /// <param name="index">The index of the variable.</param>
+        /// <returns>The coefficient for the specified index.</returns>
         public double this[int index]
         {
             get { return CoefficientsOrg.ContainsKey(index) ? CoefficientsOrg[index] : 0; }
         }
 
-        // The dictionary represents index/coefficient pairs.
-        // The dictionary does not contain entries whose coefficient is 0.
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Polynomial"/> structure.
+        /// </summary>
+        /// <param name="coefficients">The dictionary which represents index/coefficient pairs.</param>
         public Polynomial(IDictionary<int, double> coefficients)
         {
             _coefficients_org = coefficients;
@@ -144,7 +165,12 @@ namespace KLibrary.Labs.Mathematics
             return new Polynomial(coefficients);
         }
 
-        // Power
+        /// <summary>
+        /// Returns the specified power of the specified polynomial.
+        /// </summary>
+        /// <param name="p">The polynomial.</param>
+        /// <param name="power">The power.</param>
+        /// <returns>The calculated value.</returns>
         public static Polynomial operator ^(Polynomial p, int power)
         {
             if (power < 0) throw new ArgumentOutOfRangeException("power", "The value must be non-negative.");
@@ -185,12 +211,20 @@ namespace KLibrary.Labs.Mathematics
             }
         }
 
+        /// <summary>
+        /// Substitutes the specified value into the polynomial.
+        /// </summary>
+        /// <param name="value">The value to substitute.</param>
+        /// <returns>The calculated value.</returns>
         public double Substitute(double value)
         {
             return CoefficientsOrg.Sum(c => c.Value * Math.Pow(value, c.Key));
         }
 
-        // Solve the equation whose right operand is 0. 
+        /// <summary>
+        /// Solve the linear equation whose left operand is this polynomial and right operand is 0.
+        /// </summary>
+        /// <returns>The solution.</returns>
         public double SolveLinearEquation()
         {
             if (Degree != 1) throw new InvalidOperationException("The degree must be 1.");
@@ -202,7 +236,10 @@ namespace KLibrary.Labs.Mathematics
             return -b / a;
         }
 
-        // Solve the equation whose right operand is 0. 
+        /// <summary>
+        /// Solve the quadratic equation whose left operand is this polynomial and right operand is 0.
+        /// </summary>
+        /// <returns>The solution.</returns>
         public double[] SolveQuadraticEquation()
         {
             if (Degree != 2) throw new InvalidOperationException("The degree must be 2.");
