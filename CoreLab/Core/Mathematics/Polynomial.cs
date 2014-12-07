@@ -22,10 +22,9 @@ namespace KLibrary.Labs.Mathematics
             get { return Coefficients.Count == 0 ? 0 : Coefficients.Max(c => c.Key); }
         }
 
-        // Substitution
-        public double this[double value]
+        public double this[int index]
         {
-            get { return Coefficients.Sum(c => c.Value * Math.Pow(value, c.Key)); }
+            get { return Coefficients.ContainsKey(index) ? Coefficients[index] : 0; }
         }
 
         // The dictionary represents index/coefficient pairs.
@@ -128,14 +127,19 @@ namespace KLibrary.Labs.Mathematics
             }
         }
 
+        public double Substitute(double value)
+        {
+            return Coefficients.Sum(c => c.Value * Math.Pow(value, c.Key));
+        }
+
         // Solve the equation whose right operand is 0. 
         public double SolveLinearEquation()
         {
             if (Degree != 1) throw new InvalidOperationException("The degree must be 1.");
 
             // ax + b = 0
-            var a = GetCoefficient(1);
-            var b = GetCoefficient(0);
+            var a = this[1];
+            var b = this[0];
 
             return -b / a;
         }
@@ -146,19 +150,14 @@ namespace KLibrary.Labs.Mathematics
             if (Degree != 2) throw new InvalidOperationException("The degree must be 2.");
 
             // ax^2 + bx + c = 0
-            var a = GetCoefficient(2);
-            var b = GetCoefficient(1);
-            var c = GetCoefficient(0);
+            var a = this[2];
+            var b = this[1];
+            var c = this[0];
             var d = b * b - 4 * a * c;
 
             return d > 0 ? new[] { (-b - Math.Sqrt(d)) / (2 * a), (-b + Math.Sqrt(d)) / (2 * a) }
                 : d == 0 ? new[] { -b / (2 * a) }
                 : new double[0];
-        }
-
-        double GetCoefficient(int index)
-        {
-            return Coefficients.ContainsKey(index) ? Coefficients[index] : 0;
         }
     }
 }
