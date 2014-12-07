@@ -6,7 +6,7 @@ using System.Linq;
 namespace KLibrary.Labs.Mathematics
 {
     /// <summary>
-    /// Represents the polynomials with a single variable.
+    /// Represents a polynomial with a single variable.
     /// </summary>
     public struct Polynomial
     {
@@ -69,6 +69,20 @@ namespace KLibrary.Labs.Mathematics
             return new Polynomial(coefficients);
         }
 
+        public static Polynomial operator +(Polynomial p, double value)
+        {
+            var coefficients = new Dictionary<int, double>(p.CoefficientsOrg);
+
+            AddMonomial(coefficients, 0, value);
+
+            return new Polynomial(coefficients);
+        }
+
+        public static Polynomial operator +(double value, Polynomial p)
+        {
+            return p + value;
+        }
+
         public static Polynomial operator -(Polynomial p1, Polynomial p2)
         {
             var coefficients = new Dictionary<int, double>(p1.CoefficientsOrg);
@@ -77,6 +91,15 @@ namespace KLibrary.Labs.Mathematics
             {
                 AddMonomial(coefficients, item2.Key, -item2.Value);
             }
+            return new Polynomial(coefficients);
+        }
+
+        public static Polynomial operator -(Polynomial p, double value)
+        {
+            var coefficients = new Dictionary<int, double>(p.CoefficientsOrg);
+
+            AddMonomial(coefficients, 0, -value);
+
             return new Polynomial(coefficients);
         }
 
@@ -90,6 +113,22 @@ namespace KLibrary.Labs.Mathematics
                 {
                     AddMonomial(coefficients, item1.Key + item2.Key, item1.Value * item2.Value);
                 }
+            }
+            return new Polynomial(coefficients);
+        }
+
+        public static Polynomial operator *(Polynomial p, double value)
+        {
+            return value * p;
+        }
+
+        public static Polynomial operator *(double value, Polynomial p)
+        {
+            var coefficients = new Dictionary<int, double>();
+
+            foreach (var item in p.CoefficientsOrg)
+            {
+                AddMonomial(coefficients, item.Key, item.Value * value);
             }
             return new Polynomial(coefficients);
         }
