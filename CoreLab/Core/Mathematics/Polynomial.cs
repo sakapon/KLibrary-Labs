@@ -1,37 +1,56 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace KLibrary.Labs.Mathematics
 {
+    /// <summary>
+    /// Represents the polynomials with a single variable.
+    /// </summary>
     public struct Polynomial
     {
+        /// <summary>
+        /// Represents the variable x.
+        /// </summary>
         public static readonly Polynomial X = new Polynomial(new Dictionary<int, double> { { 1, 1 } });
 
         static readonly IDictionary<int, double> _coefficients_empty = new Dictionary<int, double>();
 
-        IDictionary<int, double> _coefficients;
+        IDictionary<int, double> _coefficients_org;
+        ReadOnlyDictionary<int, double> _coefficients_readonly;
 
-        IDictionary<int, double> Coefficients
+        IDictionary<int, double> CoefficientsOrg
         {
-            get { return _coefficients == null ? _coefficients_empty : _coefficients; }
+            get { return _coefficients_org == null ? _coefficients_empty : _coefficients_org; }
+        }
+
+        public ReadOnlyDictionary<int, double> Coefficients
+        {
+            get
+            {
+                if (_coefficients_readonly == null) _coefficients_readonly = new ReadOnlyDictionary<int, double>(CoefficientsOrg);
+
+                return _coefficients_readonly;
+            }
         }
 
         public int Degree
         {
-            get { return Coefficients.Count == 0 ? 0 : Coefficients.Max(c => c.Key); }
+            get { return CoefficientsOrg.Count == 0 ? 0 : CoefficientsOrg.Max(c => c.Key); }
         }
 
         public double this[int index]
         {
-            get { return Coefficients.ContainsKey(index) ? Coefficients[index] : 0; }
+            get { return CoefficientsOrg.ContainsKey(index) ? CoefficientsOrg[index] : 0; }
         }
 
         // The dictionary represents index/coefficient pairs.
         // The dictionary does not contain entries whose coefficient is 0.
         public Polynomial(IDictionary<int, double> coefficients)
         {
-            _coefficients = coefficients;
+            _coefficients_org = coefficients;
+            _coefficients_readonly = null;
         }
 
         public static implicit operator Polynomial(double value)
@@ -41,9 +60,9 @@ namespace KLibrary.Labs.Mathematics
 
         public static Polynomial operator +(Polynomial p1, Polynomial p2)
         {
-            var coefficients = new Dictionary<int, double>(p1.Coefficients);
+            var coefficients = new Dictionary<int, double>(p1.CoefficientsOrg);
 
-            foreach (var item2 in p2.Coefficients)
+            foreach (var item2 in p2.CoefficientsOrg)
             {
                 AddMonomial(coefficients, item2.Key, item2.Value);
             }
@@ -52,9 +71,9 @@ namespace KLibrary.Labs.Mathematics
 
         public static Polynomial operator -(Polynomial p1, Polynomial p2)
         {
-            var coefficients = new Dictionary<int, double>(p1.Coefficients);
+            var coefficients = new Dictionary<int, double>(p1.CoefficientsOrg);
 
-            foreach (var item2 in p2.Coefficients)
+            foreach (var item2 in p2.CoefficientsOrg)
             {
                 AddMonomial(coefficients, item2.Key, -item2.Value);
             }
@@ -65,9 +84,9 @@ namespace KLibrary.Labs.Mathematics
         {
             var coefficients = new Dictionary<int, double>();
 
-            foreach (var item1 in p1.Coefficients)
+            foreach (var item1 in p1.CoefficientsOrg)
             {
-                foreach (var item2 in p2.Coefficients)
+                foreach (var item2 in p2.CoefficientsOrg)
                 {
                     AddMonomial(coefficients, item1.Key + item2.Key, item1.Value * item2.Value);
                 }
@@ -79,7 +98,7 @@ namespace KLibrary.Labs.Mathematics
         {
             var coefficients = new Dictionary<int, double>();
 
-            foreach (var item in p.Coefficients)
+            foreach (var item in p.CoefficientsOrg)
             {
                 AddMonomial(coefficients, item.Key, item.Value / value);
             }
@@ -129,7 +148,7 @@ namespace KLibrary.Labs.Mathematics
 
         public double Substitute(double value)
         {
-            return Coefficients.Sum(c => c.Value * Math.Pow(value, c.Key));
+            return CoefficientsOrg.Sum(c => c.Value * Math.Pow(value, c.Key));
         }
 
         // Solve the equation whose right operand is 0. 
