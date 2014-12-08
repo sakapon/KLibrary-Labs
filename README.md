@@ -1,3 +1,3 @@
 ## KLibrary.Labs
 
-A laboratory.
+Laboratories.
