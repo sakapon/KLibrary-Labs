@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Media", "Media\Media.csproj", "{FA0F5F16-E1A6-4AA9-B982-B089A1ACDBED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{6C36B9E2-8289-41E2-B36F-EC5220A84A29}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FA0F5F16-E1A6-4AA9-B982-B089A1ACDBED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA0F5F16-E1A6-4AA9-B982-B089A1ACDBED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA0F5F16-E1A6-4AA9-B982-B089A1ACDBED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA0F5F16-E1A6-4AA9-B982-B089A1ACDBED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C36B9E2-8289-41E2-B36F-EC5220A84A29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C36B9E2-8289-41E2-B36F-EC5220A84A29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C36B9E2-8289-41E2-B36F-EC5220A84A29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C36B9E2-8289-41E2-B36F-EC5220A84A29}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
