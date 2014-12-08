@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Media
+namespace KLibrary.Lab.Media
 {
-    public class Class1
+    public class WavesPlayer
     {
     }
 }
