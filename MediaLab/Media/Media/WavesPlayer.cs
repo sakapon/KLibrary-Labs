@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Media;
 
-namespace KLibrary.Lab.Media
+namespace KLibrary.Labs.Media
 {
     public class WavesPlayer : IDisposable
     {
