@@ -54,6 +54,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\UI.Input\UI.Input.csproj">
+      <Project>{225b52e5-4655-4879-ade4-db53e66b7ffd}</Project>
+      <Name>UI.Input</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UI\UI.csproj">
       <Project>{c8fc215c-9a73-42bc-81a2-78ff2c7b5c0e}</Project>
       <Name>UI</Name>
