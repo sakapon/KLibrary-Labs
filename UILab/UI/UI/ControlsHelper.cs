@@ -5,14 +5,27 @@ using System.Windows;
 
 namespace KLibrary.Labs.UI
 {
+    /// <summary>
+    /// Provides the helper methods for controls.
+    /// </summary>
     public static class ControlsHelper
     {
+        /// <summary>
+        /// Makes the window borderless and enables transparency.
+        /// Can not be called after the window has been shown.
+        /// </summary>
+        /// <param name="window">The window.</param>
         public static void SetBorderless(this Window window)
         {
-            window.AllowsTransparency = true;
             window.WindowStyle = WindowStyle.None;
+            window.AllowsTransparency = true;
         }
 
+        /// <summary>
+        /// Relocates and resizes the window.
+        /// </summary>
+        /// <param name="window">The window.</param>
+        /// <param name="bounds">The location and the size.</param>
         public static void Relocate(this Window window, Int32Rect bounds)
         {
             window.Left = bounds.X;
