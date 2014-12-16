@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UI.Input
+namespace KLibrary.Labs.UI.Input
 {
-    public class Class1
+    static class NativeKeyboardMouse
     {
     }
 }
