@@ -22,8 +22,11 @@ namespace UnitTest.Media
 
             using (var player = new WavesPlayer(sounds))
             {
+                player.LoadAsync();
+                Thread.Sleep(1200);
+
                 player.Play(Empty);
-                Thread.Sleep(200);
+                Thread.Sleep(1200);
                 player.Play(Success);
                 Thread.Sleep(1200);
                 player.Play(Fail);
