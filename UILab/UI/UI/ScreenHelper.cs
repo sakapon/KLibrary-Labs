@@ -6,8 +6,15 @@ using System.Windows.Forms;
 
 namespace KLibrary.Labs.UI
 {
+    /// <summary>
+    /// Provides the helper methods for screen.
+    /// </summary>
     public static class ScreenHelper
     {
+        /// <summary>
+        /// Gets the bounds of all screens.
+        /// </summary>
+        /// <value>The bounds of all screens.</value>
         public static Int32Rect AllScreensBounds
         {
             get { return _AllScreensBounds.Value; }
@@ -15,6 +22,10 @@ namespace KLibrary.Labs.UI
 
         static readonly Lazy<Int32Rect> _AllScreensBounds = new Lazy<Int32Rect>(() => SystemInformation.VirtualScreen.ToInt32Rect());
 
+        /// <summary>
+        /// Gets the bounds of the primary screen.
+        /// </summary>
+        /// <value>The bounds of the primary screen.</value>
         public static Int32Rect PrimaryScreenBounds
         {
             get { return _PrimaryScreenBounds.Value; }
