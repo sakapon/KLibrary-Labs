@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace KLibrary.Labs
 {
@@ -15,6 +16,7 @@ namespace KLibrary.Labs
         }
     }
 
+    [DebuggerDisplay("IsDisposed: {_isDisposed}")]
     class DisposableAction : IDisposable
     {
         Action _action;
