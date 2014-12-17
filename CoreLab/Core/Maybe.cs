@@ -2,8 +2,15 @@
 
 namespace KLibrary.Labs
 {
+    /// <summary>
+    /// Represents a value type that can be assigned the unset state.
+    /// </summary>
+    /// <typeparam name="T">The underlying value type.</typeparam>
     public struct Maybe<T>
     {
+        /// <summary>
+        /// Represents the unset state.
+        /// </summary>
         public static readonly Maybe<T> None = new Maybe<T>();
 
         T _value;
@@ -47,7 +54,7 @@ namespace KLibrary.Labs
         {
             return HasValue
                 ? _value.ToString()
-                : "";
+                : "{None}";
         }
     }
 
