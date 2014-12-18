@@ -43,6 +43,16 @@ namespace UnitTest.Mathematics
         }
 
         [TestMethod]
+        public void FahrenheitTest()
+        {
+            Func<double, double> c_to_f = c => (x - 1.8 * c - 32).SolveLinearEquation();
+
+            Assert.AreEqual(32.0, c_to_f(0));
+            Assert.AreEqual(50.0, c_to_f(10));
+            Assert.AreEqual(212.0, c_to_f(100));
+        }
+
+        [TestMethod]
         public void PointsOnLineTest()
         {
             var p1 = new Point(0, -300);
