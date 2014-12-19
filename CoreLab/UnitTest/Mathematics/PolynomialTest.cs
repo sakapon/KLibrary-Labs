@@ -102,5 +102,29 @@ namespace UnitTest.Mathematics
             Assert.AreEqual((x + 2).GetHashCode(), (x + 2).GetHashCode());
             Assert.AreNotEqual((x + 1).GetHashCode(), (x + 2).GetHashCode());
         }
+
+        [TestMethod]
+        public void _ToString()
+        {
+            Assert.AreEqual("0", ((Polynomial)0).ToString());
+            Assert.AreEqual("1", ((Polynomial)1).ToString());
+            Assert.AreEqual("-1", ((Polynomial)(-1)).ToString());
+            Assert.AreEqual("0.5", ((Polynomial)0.5).ToString());
+
+            Assert.AreEqual("x", x.ToString());
+            Assert.AreEqual("-x", (-x).ToString());
+            Assert.AreEqual("2x", (2 * x).ToString());
+            Assert.AreEqual("-2x", (-2 * x).ToString());
+
+            Assert.AreEqual("x^2", x2.ToString());
+            Assert.AreEqual("-x^2", (-x2).ToString());
+            Assert.AreEqual("2x^2", (2 * x2).ToString());
+            Assert.AreEqual("-2x^2", (-2 * x2).ToString());
+
+            Assert.AreEqual("x^2+x+1", (x2 + x + 1).ToString());
+            Assert.AreEqual("2x^2+2x+2", (2 * x2 + 2 * x + 2).ToString());
+            Assert.AreEqual("-x^2-x-1", (-x2 - x - 1).ToString());
+            Assert.AreEqual("-2x^2-2x-2", (-2 * x2 - 2 * x - 2).ToString());
+        }
     }
 }

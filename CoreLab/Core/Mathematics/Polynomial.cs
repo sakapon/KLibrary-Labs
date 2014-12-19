@@ -234,10 +234,30 @@ namespace KLibrary.Labs.Mathematics
 
         public override int GetHashCode()
         {
-            return (int)Substitute(0x10);
+            return ToString().GetHashCode();
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            if (CoefficientsOrg.Count == 0) return "0";
+
+            var monomialQuery = CoefficientsOrg
+                .OrderByDescending(c => c.Key)
+                .Select((c, i) => ToMonomialString(c.Key, c.Value, i == 0));
+            return string.Join("", monomialQuery);
+        }
+
+        static string ToMonomialString(int index, double coefficient, bool isDegree)
+        {
+            // Premise: coefficient is not 0.
+            var c_abs = Math.Abs(coefficient);
+            return string.Format("{0}{1}{2}",
+                coefficient < 0 ? "-" : isDegree ? "" : "+",
+                c_abs == 1 && index != 0 ? "" : c_abs.ToString(),
+                index == 0 ? "" : index == 1 ? "x" : "x^" + index.ToString());
+        }
 
         /// <summary>
         /// Substitutes the specified value into the polynomial.
