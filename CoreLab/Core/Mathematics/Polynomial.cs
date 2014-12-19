@@ -24,7 +24,7 @@ namespace KLibrary.Labs.Mathematics
         static readonly IDictionary<int, double> _coefficients_empty = new Dictionary<int, double>();
 
         IDictionary<int, double> _coefficients_org;
-        ReadOnlyDictionary<int, double> _coefficients_readonly;
+        IReadOnlyDictionary<int, double> _coefficients_readonly;
 
         IDictionary<int, double> CoefficientsOrg
         {
@@ -35,7 +35,7 @@ namespace KLibrary.Labs.Mathematics
         /// Gets the dictionary which represents index/coefficient pairs.
         /// </summary>
         /// <value>The dictionary which represents index/coefficient pairs.</value>
-        public ReadOnlyDictionary<int, double> Coefficients
+        public IReadOnlyDictionary<int, double> Coefficients
         {
             get
             {
@@ -73,6 +73,8 @@ namespace KLibrary.Labs.Mathematics
             _coefficients_org = coefficients;
             _coefficients_readonly = null;
         }
+
+        #region Operators
 
         public static implicit operator Polynomial(double value)
         {
@@ -210,6 +212,32 @@ namespace KLibrary.Labs.Mathematics
                 coefficients.Remove(index);
             }
         }
+
+        #endregion
+
+        #region Equivalence Operators
+
+        public static bool operator ==(Polynomial p1, Polynomial p2)
+        {
+            return Enumerable.SequenceEqual(p1.CoefficientsOrg, p2.CoefficientsOrg);
+        }
+
+        public static bool operator !=(Polynomial p1, Polynomial p2)
+        {
+            return !(p1 == p2);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Polynomial && this == (Polynomial)obj;
+        }
+
+        public override int GetHashCode()
+        {
+            return (int)Substitute(0x10);
+        }
+
+        #endregion
 
         /// <summary>
         /// Substitutes the specified value into the polynomial.

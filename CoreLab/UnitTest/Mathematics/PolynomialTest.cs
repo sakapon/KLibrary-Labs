@@ -74,5 +74,33 @@ namespace UnitTest.Mathematics
         {
             return y => (p2.X - p1.X) * (y - p1.Y) / (p2.Y - p1.Y) + p1.X;
         }
+
+        [TestMethod]
+        public void Equals()
+        {
+            var p1 = 2 * x + 1;
+            Assert.IsFalse(object.ReferenceEquals(p1, p1));
+
+            Assert.IsFalse(object.Equals(x, null));
+            Assert.IsFalse(object.Equals((Polynomial)1, 1));
+            Assert.IsFalse(object.Equals(x, x + 1));
+            Assert.IsTrue(object.Equals(x + 1, x + 1));
+
+            Assert.IsFalse(x.Equals(null));
+            Assert.IsFalse(((Polynomial)1).Equals(1));
+            Assert.IsFalse(x.Equals(x + 1));
+            Assert.IsTrue((x + 1).Equals(x + 1));
+
+            Assert.IsFalse(x == x + 1);
+            Assert.IsTrue(x + 1 == x + 1);
+        }
+
+        [TestMethod]
+        public void _GetHashCode()
+        {
+            Assert.AreEqual((x + 1).GetHashCode(), (x + 1).GetHashCode());
+            Assert.AreEqual((x + 2).GetHashCode(), (x + 2).GetHashCode());
+            Assert.AreNotEqual((x + 1).GetHashCode(), (x + 2).GetHashCode());
+        }
     }
 }
