@@ -44,6 +44,7 @@
     <Compile Include="Disposable.cs" />
     <Compile Include="Mathematics\Polynomial.cs" />
     <Compile Include="Maybe.cs" />
+    <Compile Include="MonadBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
