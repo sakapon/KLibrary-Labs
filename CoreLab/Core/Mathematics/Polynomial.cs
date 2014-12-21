@@ -11,8 +11,6 @@ namespace KLibrary.Labs.Mathematics
     /// <remarks>
     /// The dictionary does not contain entries whose coefficient is 0.
     /// TODO: Check if each coefficient in Dictionary is not 0 (pass through when accessed internally).
-    /// TODO: Equals method, etc.
-    /// TODO: ToString method.
     /// </remarks>
     public struct Polynomial
     {
@@ -81,6 +79,12 @@ namespace KLibrary.Labs.Mathematics
             return value == 0 ? default(Polynomial) : new Polynomial(new Dictionary<int, double> { { 0, value } });
         }
 
+        /// <summary>
+        /// Adds two polynomials.
+        /// </summary>
+        /// <param name="p1">The first polynomial.</param>
+        /// <param name="p2">The second polynomial.</param>
+        /// <returns>The sum of two polynomials.</returns>
         public static Polynomial operator +(Polynomial p1, Polynomial p2)
         {
             var coefficients = new Dictionary<int, double>(p1.CoefficientsOrg);
@@ -106,6 +110,12 @@ namespace KLibrary.Labs.Mathematics
             return p + value;
         }
 
+        /// <summary>
+        /// Subtracts one specified polynomial from another.
+        /// </summary>
+        /// <param name="p1">The polynomial.</param>
+        /// <param name="p2">The polynomial to subtract.</param>
+        /// <returns>The difference of two polynomials.</returns>
         public static Polynomial operator -(Polynomial p1, Polynomial p2)
         {
             var coefficients = new Dictionary<int, double>(p1.CoefficientsOrg);
@@ -217,36 +227,59 @@ namespace KLibrary.Labs.Mathematics
 
         #region Equivalence Operators
 
+        /// <summary>
+        /// Compares two polynomials for equality.
+        /// </summary>
+        /// <param name="p1">The first polynomial.</param>
+        /// <param name="p2">The second polynomial.</param>
+        /// <returns><see langword="true"/> if two polynomials are equal; otherwise, <see langword="false"/>.</returns>
         public static bool operator ==(Polynomial p1, Polynomial p2)
         {
             return Enumerable.SequenceEqual(p1.CoefficientsOrg, p2.CoefficientsOrg);
         }
 
+        /// <summary>
+        /// Compares two polynomials for inequality.
+        /// </summary>
+        /// <param name="p1">The first polynomial.</param>
+        /// <param name="p2">The second polynomial.</param>
+        /// <returns><see langword="true"/> if two polynomials are different; otherwise, <see langword="false"/>.</returns>
         public static bool operator !=(Polynomial p1, Polynomial p2)
         {
             return !(p1 == p2);
         }
 
+        /// <summary>
+        /// Compares the specified object to this polynomial.
+        /// </summary>
+        /// <param name="obj">The object to compare.</param>
+        /// <returns><see langword="true"/> if the object is a <see cref="Polynomial"/> and is equal to this polynomial; otherwise, <see langword="false"/>.</returns>
         public override bool Equals(object obj)
         {
             return obj is Polynomial && this == (Polynomial)obj;
         }
 
+        /// <summary>
+        /// Returns the hash code for this polynomial.
+        /// </summary>
+        /// <returns>The hash code for this polynomial.</returns>
         public override int GetHashCode()
         {
             return ToString().GetHashCode();
         }
 
-        #endregion
-
+        /// <summary>
+        /// Returns the string which represents this polynomial.
+        /// </summary>
+        /// <returns>The string which represents this polynomial.</returns>
         public override string ToString()
         {
             if (CoefficientsOrg.Count == 0) return "0";
 
-            var monomialQuery = CoefficientsOrg
+            var monomialsQuery = CoefficientsOrg
                 .OrderByDescending(c => c.Key)
                 .Select((c, i) => ToMonomialString(c.Key, c.Value, i == 0));
-            return string.Join("", monomialQuery);
+            return string.Join("", monomialsQuery);
         }
 
         static string ToMonomialString(int index, double coefficient, bool isDegree)
@@ -259,8 +292,10 @@ namespace KLibrary.Labs.Mathematics
                 index == 0 ? "" : index == 1 ? "x" : "x^" + index.ToString());
         }
 
+        #endregion
+
         /// <summary>
-        /// Substitutes the specified value into the polynomial.
+        /// Substitutes the specified value into this polynomial.
         /// </summary>
         /// <param name="value">The value to substitute.</param>
         /// <returns>The calculated value.</returns>
