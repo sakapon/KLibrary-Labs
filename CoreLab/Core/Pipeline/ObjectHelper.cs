@@ -10,10 +10,7 @@ namespace KLibrary.Labs.Pipeline
             return obj;
         }
 
-        public static T Do<T>(this T obj, Func<T, bool> condition, Action<T> action)
-        {
-            return Do(obj, condition, action, null);
-        }
+        #region Action - Branch
 
         public static T Do<T>(this T obj, Func<T, bool> condition, Action<T> trueAction, Action<T> falseAction)
         {
@@ -24,19 +21,9 @@ namespace KLibrary.Labs.Pipeline
             return obj;
         }
 
-        public static T Do<T>(this T obj, T condition, Action<T> action)
-        {
-            return Do(obj, condition, action, null);
-        }
-
         public static T Do<T>(this T obj, T condition, Action<T> trueAction, Action<T> falseAction)
         {
             return Do(obj, o => object.Equals(o, condition), trueAction, falseAction);
-        }
-
-        public static T Do<T>(this T obj, params CaseForAction<T>[] cases)
-        {
-            return Do(obj, null, cases);
         }
 
         public static T Do<T>(this T obj, Action<T> defaultAction, params CaseForAction<T>[] cases)
@@ -55,12 +42,35 @@ namespace KLibrary.Labs.Pipeline
             return obj;
         }
 
+        #endregion
+
+        #region Action - Partial Branch
+
+        public static T Do<T>(this T obj, Func<T, bool> condition, Action<T> action)
+        {
+            return Do(obj, condition, action, null);
+        }
+
+        public static T Do<T>(this T obj, T condition, Action<T> action)
+        {
+            return Do(obj, condition, action, null);
+        }
+
+        public static T Do<T>(this T obj, params CaseForAction<T>[] cases)
+        {
+            return Do(obj, null, cases);
+        }
+
+        #endregion
+
         public static TResult Map<T, TResult>(this T obj, Func<T, TResult> mapping)
         {
             if (mapping == null) throw new ArgumentNullException("mapping");
 
             return mapping(obj);
         }
+
+        #region Func - Branch
 
         public static TResult Map<T, TResult>(this T obj, Func<T, bool> condition, Func<T, TResult> trueMapping, Func<T, TResult> falseMapping)
         {
@@ -91,22 +101,29 @@ namespace KLibrary.Labs.Pipeline
             return defaultMapping(obj);
         }
 
+        #endregion
+
+        #region Func - Partial Branch
+
         public static T Fallback<T>(this T obj, Func<T, bool> condition, Func<T, T> fallback)
         {
-            if (condition == null) throw new ArgumentNullException("condition");
             if (fallback == null) throw new ArgumentNullException("fallback");
 
-            return condition(obj) ? fallback(obj) : obj;
+            return Map(obj, condition, fallback, Usual.Identity);
         }
 
         public static T Fallback<T>(this T obj, T condition, Func<T, T> fallback)
         {
-            return Fallback(obj, o => object.Equals(o, condition), fallback);
+            if (fallback == null) throw new ArgumentNullException("fallback");
+
+            return Map(obj, condition, fallback, Usual.Identity);
         }
 
         public static T Fallback<T>(this T obj, params CaseForFunc<T, T>[] cases)
         {
-            return Map(obj, o => o, cases);
+            return Map(obj, Usual.Identity, cases);
         }
+
+        #endregion
     }
 }

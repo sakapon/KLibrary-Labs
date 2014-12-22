@@ -14,6 +14,11 @@ namespace KLibrary.Labs.Pipeline
             return func();
         }
 
+        public static T Identity<T>(T obj)
+        {
+            return obj;
+        }
+
         public static bool IsNull<T>(T obj) where T : class
         {
             return obj == null;
