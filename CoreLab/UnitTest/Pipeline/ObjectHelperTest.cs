@@ -9,7 +9,23 @@ namespace UnitTest.Pipeline
     public class ObjectHelperTest
     {
         [TestMethod]
-        public void DoAction()
+        public void DoAction_01()
+        {
+            Action action = () => Console.WriteLine("Event Handlers");
+            action.DoAction(Usual.IsNotNull, Usual.DoAction);
+
+            var count = 0;
+            Action action2;
+            action2 = null;
+            action2.DoAction(Usual.IsNotNull, a => count++);
+            Assert.AreEqual(0, count);
+            action2 = () => { };
+            action2.DoAction(Usual.IsNotNull, a => count++);
+            Assert.AreEqual(1, count);
+        }
+
+        [TestMethod]
+        public void DoAction_02()
         {
             Action<int> WriteEvenOdd = n =>
                 n.DoAction(i => i % 2 == 0, i => Console.WriteLine("Even"), i => Console.WriteLine("Odd"));
