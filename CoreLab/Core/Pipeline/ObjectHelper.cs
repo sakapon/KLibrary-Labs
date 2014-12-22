@@ -4,7 +4,7 @@ namespace KLibrary.Labs.Pipeline
 {
     public static class ObjectHelper
     {
-        public static T Do<T>(this T obj, Action<T> action)
+        public static T DoAction<T>(this T obj, Action<T> action)
         {
             if (action != null) action(obj);
             return obj;
@@ -12,7 +12,7 @@ namespace KLibrary.Labs.Pipeline
 
         #region Action - Branch
 
-        public static T Do<T>(this T obj, Func<T, bool> condition, Action<T> trueAction, Action<T> falseAction)
+        public static T DoAction<T>(this T obj, Func<T, bool> condition, Action<T> trueAction, Action<T> falseAction)
         {
             if (condition == null) throw new ArgumentNullException("condition");
 
@@ -21,12 +21,12 @@ namespace KLibrary.Labs.Pipeline
             return obj;
         }
 
-        public static T Do<T>(this T obj, T condition, Action<T> trueAction, Action<T> falseAction)
+        public static T DoAction<T>(this T obj, T condition, Action<T> trueAction, Action<T> falseAction)
         {
-            return Do(obj, o => object.Equals(o, condition), trueAction, falseAction);
+            return DoAction(obj, o => object.Equals(o, condition), trueAction, falseAction);
         }
 
-        public static T Do<T>(this T obj, Action<T> defaultAction, params CaseForAction<T>[] cases)
+        public static T DoAction<T>(this T obj, Action<T> defaultAction, params CaseForAction<T>[] cases)
         {
             if (cases == null) throw new ArgumentNullException("cases");
 
@@ -46,24 +46,24 @@ namespace KLibrary.Labs.Pipeline
 
         #region Action - Partial Branch
 
-        public static T Do<T>(this T obj, Func<T, bool> condition, Action<T> action)
+        public static T DoAction<T>(this T obj, Func<T, bool> condition, Action<T> action)
         {
-            return Do(obj, condition, action, null);
+            return DoAction(obj, condition, action, null);
         }
 
-        public static T Do<T>(this T obj, T condition, Action<T> action)
+        public static T DoAction<T>(this T obj, T condition, Action<T> action)
         {
-            return Do(obj, condition, action, null);
+            return DoAction(obj, condition, action, null);
         }
 
-        public static T Do<T>(this T obj, params CaseForAction<T>[] cases)
+        public static T DoAction<T>(this T obj, params CaseForAction<T>[] cases)
         {
-            return Do(obj, null, cases);
+            return DoAction(obj, null, cases);
         }
 
         #endregion
 
-        public static TResult Map<T, TResult>(this T obj, Func<T, TResult> mapping)
+        public static TResult DoFunc<T, TResult>(this T obj, Func<T, TResult> mapping)
         {
             if (mapping == null) throw new ArgumentNullException("mapping");
 
@@ -72,7 +72,7 @@ namespace KLibrary.Labs.Pipeline
 
         #region Func - Branch
 
-        public static TResult Map<T, TResult>(this T obj, Func<T, bool> condition, Func<T, TResult> trueMapping, Func<T, TResult> falseMapping)
+        public static TResult DoFunc<T, TResult>(this T obj, Func<T, bool> condition, Func<T, TResult> trueMapping, Func<T, TResult> falseMapping)
         {
             if (condition == null) throw new ArgumentNullException("condition");
             if (trueMapping == null) throw new ArgumentNullException("trueMapping");
@@ -81,12 +81,12 @@ namespace KLibrary.Labs.Pipeline
             return (condition(obj) ? trueMapping : falseMapping)(obj);
         }
 
-        public static TResult Map<T, TResult>(this T obj, T condition, Func<T, TResult> trueMapping, Func<T, TResult> falseMapping)
+        public static TResult DoFunc<T, TResult>(this T obj, T condition, Func<T, TResult> trueMapping, Func<T, TResult> falseMapping)
         {
-            return Map(obj, o => object.Equals(o, condition), trueMapping, falseMapping);
+            return DoFunc(obj, o => object.Equals(o, condition), trueMapping, falseMapping);
         }
 
-        public static TResult Map<T, TResult>(this T obj, Func<T, TResult> defaultMapping, params CaseForFunc<T, TResult>[] cases)
+        public static TResult DoFunc<T, TResult>(this T obj, Func<T, TResult> defaultMapping, params CaseForFunc<T, TResult>[] cases)
         {
             if (defaultMapping == null) throw new ArgumentNullException("defaultMapping");
             if (cases == null) throw new ArgumentNullException("cases");
@@ -109,19 +109,19 @@ namespace KLibrary.Labs.Pipeline
         {
             if (fallback == null) throw new ArgumentNullException("fallback");
 
-            return Map(obj, condition, fallback, Usual.Identity);
+            return DoFunc(obj, condition, fallback, Usual.Identity);
         }
 
         public static T Fallback<T>(this T obj, T condition, Func<T, T> fallback)
         {
             if (fallback == null) throw new ArgumentNullException("fallback");
 
-            return Map(obj, condition, fallback, Usual.Identity);
+            return DoFunc(obj, condition, fallback, Usual.Identity);
         }
 
         public static T Fallback<T>(this T obj, params CaseForFunc<T, T>[] cases)
         {
-            return Map(obj, Usual.Identity, cases);
+            return DoFunc(obj, Usual.Identity, cases);
         }
 
         #endregion

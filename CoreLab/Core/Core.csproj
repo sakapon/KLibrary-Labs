@@ -46,6 +46,7 @@
     <Compile Include="Maybe.cs" />
     <Compile Include="MonadBase.cs" />
     <Compile Include="Pipeline\Case.cs" />
+    <Compile Include="Pipeline\ExceptionHelper.cs" />
     <Compile Include="Pipeline\FuncHelper.cs" />
     <Compile Include="Pipeline\ObjectHelper.cs" />
     <Compile Include="Pipeline\Usual.cs" />
