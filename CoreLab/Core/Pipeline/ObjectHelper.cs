@@ -63,32 +63,32 @@ namespace KLibrary.Labs.Pipeline
 
         #endregion
 
-        public static TResult DoFunc<T, TResult>(this T obj, Func<T, TResult> mapping)
+        public static TResult DoFunc<T, TResult>(this T obj, Func<T, TResult> func)
         {
-            if (mapping == null) throw new ArgumentNullException("mapping");
+            if (func == null) throw new ArgumentNullException("func");
 
-            return mapping(obj);
+            return func(obj);
         }
 
         #region Func - Branch
 
-        public static TResult DoFunc<T, TResult>(this T obj, Func<T, bool> condition, Func<T, TResult> trueMapping, Func<T, TResult> falseMapping)
+        public static TResult DoFunc<T, TResult>(this T obj, Func<T, bool> condition, Func<T, TResult> trueFunc, Func<T, TResult> falseFunc)
         {
             if (condition == null) throw new ArgumentNullException("condition");
-            if (trueMapping == null) throw new ArgumentNullException("trueMapping");
-            if (falseMapping == null) throw new ArgumentNullException("falseMapping");
+            if (trueFunc == null) throw new ArgumentNullException("trueFunc");
+            if (falseFunc == null) throw new ArgumentNullException("falseFunc");
 
-            return (condition(obj) ? trueMapping : falseMapping)(obj);
+            return (condition(obj) ? trueFunc : falseFunc)(obj);
         }
 
-        public static TResult DoFunc<T, TResult>(this T obj, T condition, Func<T, TResult> trueMapping, Func<T, TResult> falseMapping)
+        public static TResult DoFunc<T, TResult>(this T obj, T condition, Func<T, TResult> trueFunc, Func<T, TResult> falseFunc)
         {
-            return DoFunc(obj, o => object.Equals(o, condition), trueMapping, falseMapping);
+            return DoFunc(obj, o => object.Equals(o, condition), trueFunc, falseFunc);
         }
 
-        public static TResult DoFunc<T, TResult>(this T obj, Func<T, TResult> defaultMapping, params CaseForFunc<T, TResult>[] cases)
+        public static TResult DoFunc<T, TResult>(this T obj, Func<T, TResult> defaultFunc, params CaseForFunc<T, TResult>[] cases)
         {
-            if (defaultMapping == null) throw new ArgumentNullException("defaultMapping");
+            if (defaultFunc == null) throw new ArgumentNullException("defaultFunc");
             if (cases == null) throw new ArgumentNullException("cases");
 
             foreach (var @case in cases)
@@ -98,7 +98,7 @@ namespace KLibrary.Labs.Pipeline
                     return @case.Func(obj);
                 }
             }
-            return defaultMapping(obj);
+            return defaultFunc(obj);
         }
 
         #endregion
