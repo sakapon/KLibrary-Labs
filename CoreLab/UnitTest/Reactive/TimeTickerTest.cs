@@ -22,5 +22,16 @@ namespace UnitTest.Reactive
                 Thread.Sleep(20000);
             }
         }
+
+        [TestMethod]
+        public void TimeTicker_ctor2()
+        {
+            var context = new TimeTicker(TimeSpan.FromSeconds(1))
+                .Take(10)
+                .Do(i => Debug.WriteLine("Thread: {0}", Thread.CurrentThread.ManagedThreadId))
+                .Subscribe(i => Debug.WriteLine("{0}: {1:HH:mm:ss.fff}", i, DateTime.Now));
+
+            Thread.Sleep(20000);
+        }
     }
 }

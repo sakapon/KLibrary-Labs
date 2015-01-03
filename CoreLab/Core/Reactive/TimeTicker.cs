@@ -17,7 +17,7 @@ namespace KLibrary.Labs.Reactive
                 for (long i = 0; !_isCompleted; i++)
                 {
                     var timeout = (i + 1) * intervalMilliseconds + (startTime - DateTime.Now).TotalMilliseconds;
-                    await Task.Delay((int)timeout);
+                    await Task.Delay(Math.Max(0, (int)timeout));
                     OnNext(i);
                 }
             });
@@ -27,11 +27,11 @@ namespace KLibrary.Labs.Reactive
         {
             if (observer == null) throw new ArgumentNullException("observer");
 
-            observers.Add(observer);
+            Observers.Add(observer);
             return Disposable.FromAction(() =>
             {
-                observers.Remove(observer);
-                if (observers.Count == 0) _isCompleted = true;
+                Observers.Remove(observer);
+                if (Observers.Count == 0) _isCompleted = true;
             });
         }
     }

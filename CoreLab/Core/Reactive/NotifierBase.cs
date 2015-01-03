@@ -6,29 +6,34 @@ namespace KLibrary.Labs.Reactive
 {
     public abstract class NotifierBase<T> : IObservable<T>
     {
-        protected List<IObserver<T>> observers = new List<IObserver<T>>();
+        protected List<IObserver<T>> Observers { get; private set; }
+
+        public NotifierBase()
+        {
+            Observers = new List<IObserver<T>>();
+        }
 
         public virtual IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null) throw new ArgumentNullException("observer");
 
-            observers.Add(observer);
-            return Disposable.FromAction(() => observers.Remove(observer));
+            Observers.Add(observer);
+            return Disposable.FromAction(() => Observers.Remove(observer));
         }
 
         protected void OnNext(T value)
         {
-            observers.ForEach(o => o.OnNext(value));
+            Observers.ForEach(o => o.OnNext(value));
         }
 
         protected void OnError(Exception error)
         {
-            observers.ForEach(o => o.OnError(error));
+            Observers.ForEach(o => o.OnError(error));
         }
 
         protected void OnCompleted()
         {
-            observers.ForEach(o => o.OnCompleted());
+            Observers.ForEach(o => o.OnCompleted());
         }
     }
 }
