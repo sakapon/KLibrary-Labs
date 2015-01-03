@@ -6,9 +6,9 @@ namespace KLibrary.Labs.Reactive
 {
     public abstract class NotifierBase<T> : IObservable<T>
     {
-        List<IObserver<T>> observers = new List<IObserver<T>>();
+        protected List<IObserver<T>> observers = new List<IObserver<T>>();
 
-        public IDisposable Subscribe(IObserver<T> observer)
+        public virtual IDisposable Subscribe(IObserver<T> observer)
         {
             if (observer == null) throw new ArgumentNullException("observer");
 
