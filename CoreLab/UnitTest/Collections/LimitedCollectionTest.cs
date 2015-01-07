@@ -1,7 +1,6 @@
 ﻿using KLibrary.Labs.Collections;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Linq;
 
 namespace UnitTest.Collections
 {
@@ -11,66 +10,74 @@ namespace UnitTest.Collections
         [TestMethod]
         public void ctor_null()
         {
-            var history = new LimitedCollection<int>();
-            Assert.AreEqual(null, history.MaxCount);
-            Assert.AreEqual(false, history.IsFull);
+            var collection = new LimitedCollection<int>();
+            Assert.AreEqual(0, collection.Count);
+            Assert.AreEqual(null, collection.MaxCount);
+            Assert.AreEqual(false, collection.IsFull);
 
             for (int i = 0; i < 100; i++)
             {
-                history.Record(i);
+                collection.Record(i);
             }
-            Assert.AreEqual(100, history.Count);
-            Assert.AreEqual(null, history.MaxCount);
-            Assert.AreEqual(false, history.IsFull);
+            Assert.AreEqual(100, collection.Count);
+            Assert.AreEqual(null, collection.MaxCount);
+            Assert.AreEqual(false, collection.IsFull);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ctor_0()
         {
-            var history = new LimitedCollection<int>(0);
+            var collection = new LimitedCollection<int>(0);
         }
 
         [TestMethod]
         public void ctor_1()
         {
-            var history = new LimitedCollection<int>(1);
-            Assert.AreEqual(1, history.MaxCount);
-            Assert.AreEqual(false, history.IsFull);
+            var collection = new LimitedCollection<int>(1);
+            Assert.AreEqual(0, collection.Count);
+            Assert.AreEqual(1, collection.MaxCount);
+            Assert.AreEqual(false, collection.IsFull);
 
-            history.Record(123);
-            Assert.AreEqual(1, history.MaxCount);
-            Assert.AreEqual(true, history.IsFull);
-            Assert.AreEqual(123, history.First());
+            collection.Record(123);
+            Assert.AreEqual(1, collection.Count);
+            Assert.AreEqual(1, collection.MaxCount);
+            Assert.AreEqual(true, collection.IsFull);
+            Assert.AreEqual(123, collection.FirstItem);
 
-            history.Record(456);
-            Assert.AreEqual(1, history.MaxCount);
-            Assert.AreEqual(true, history.IsFull);
-            Assert.AreEqual(456, history.First());
+            collection.Record(456);
+            Assert.AreEqual(1, collection.Count);
+            Assert.AreEqual(1, collection.MaxCount);
+            Assert.AreEqual(true, collection.IsFull);
+            Assert.AreEqual(456, collection.FirstItem);
         }
 
         [TestMethod]
         public void ctor_3()
         {
-            var history = new LimitedCollection<int>(3);
-            Assert.AreEqual(3, history.MaxCount);
-            Assert.AreEqual(false, history.IsFull);
+            var collection = new LimitedCollection<int>(3);
+            Assert.AreEqual(0, collection.Count);
+            Assert.AreEqual(3, collection.MaxCount);
+            Assert.AreEqual(false, collection.IsFull);
 
-            history.Record(123);
-            history.Record(234);
-            Assert.AreEqual(3, history.MaxCount);
-            Assert.AreEqual(false, history.IsFull);
-            Assert.AreEqual(234, history.Last());
+            collection.Record(123);
+            collection.Record(234);
+            Assert.AreEqual(2, collection.Count);
+            Assert.AreEqual(3, collection.MaxCount);
+            Assert.AreEqual(false, collection.IsFull);
+            Assert.AreEqual(234, collection.LastItem);
 
-            history.Record(345);
-            Assert.AreEqual(3, history.MaxCount);
-            Assert.AreEqual(true, history.IsFull);
-            Assert.AreEqual(345, history.Last());
+            collection.Record(345);
+            Assert.AreEqual(3, collection.Count);
+            Assert.AreEqual(3, collection.MaxCount);
+            Assert.AreEqual(true, collection.IsFull);
+            Assert.AreEqual(345, collection.LastItem);
 
-            history.Record(456);
-            Assert.AreEqual(3, history.MaxCount);
-            Assert.AreEqual(true, history.IsFull);
-            Assert.AreEqual(456, history.Last());
+            collection.Record(456);
+            Assert.AreEqual(3, collection.Count);
+            Assert.AreEqual(3, collection.MaxCount);
+            Assert.AreEqual(true, collection.IsFull);
+            Assert.AreEqual(456, collection.LastItem);
         }
     }
 }

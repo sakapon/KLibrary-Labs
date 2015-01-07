@@ -28,7 +28,7 @@ namespace KLibrary.Labs.Collections
 
             if (MaxSpan.HasValue)
             {
-                while (Count > 0 && now - this[0].Timestamp > MaxSpan)
+                while (Count > 0 && now - this[0].Timestamp >= MaxSpan)
                 {
                     RemoveAt(0);
                 }

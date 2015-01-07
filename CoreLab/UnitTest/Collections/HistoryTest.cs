@@ -1,8 +1,7 @@
 ﻿using KLibrary.Labs.Collections;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 
 namespace UnitTest.Collections
 {
@@ -10,52 +9,81 @@ namespace UnitTest.Collections
     public class HistoryTest
     {
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void ctor_0()
+        public void ctor_null_null()
         {
-            var history = new LimitedCollection<int>(0);
+            var history = new History<int>();
+            Assert.AreEqual(null, history.MaxSpan);
+
+            for (int i = 0; i < 100; i++)
+            {
+                history.Record(i);
+                Thread.Sleep(30);
+            }
+
+            Assert.AreEqual(100, history.Count);
         }
 
         [TestMethod]
-        public void ctor_1()
+        public void ctor_null_1()
         {
-            var history = new LimitedCollection<int>(1);
-            Assert.AreEqual(1, history.MaxCount);
-            Assert.AreEqual(false, history.IsFull);
+            var span = TimeSpan.FromSeconds(1);
+            var history = new History<int>(span);
+            Assert.AreEqual(span, history.MaxSpan);
 
-            history.Record(123);
-            Assert.AreEqual(1, history.MaxCount);
-            Assert.AreEqual(true, history.IsFull);
-            Assert.AreEqual(123, history.First());
+            for (int i = 0; i < 100; i++)
+            {
+                history.Record(i);
+                Thread.Sleep(30);
+            }
 
-            history.Record(456);
-            Assert.AreEqual(1, history.MaxCount);
-            Assert.AreEqual(true, history.IsFull);
-            Assert.AreEqual(456, history.First());
+            Assert.IsTrue(history.Count < 100);
+            Assert.IsTrue(history.LastItem.Timestamp - history.FirstItem.Timestamp < span);
         }
 
         [TestMethod]
-        public void ctor_3()
+        public void ctor_10_null()
         {
-            var history = new LimitedCollection<int>(3);
-            Assert.AreEqual(3, history.MaxCount);
-            Assert.AreEqual(false, history.IsFull);
+            var history = new History<int>(10);
+            Assert.AreEqual(null, history.MaxSpan);
 
-            history.Record(123);
-            history.Record(234);
-            Assert.AreEqual(3, history.MaxCount);
-            Assert.AreEqual(false, history.IsFull);
-            Assert.AreEqual(234, history.Last());
+            for (int i = 0; i < 100; i++)
+            {
+                history.Record(i);
+                Thread.Sleep(30);
+            }
 
-            history.Record(345);
-            Assert.AreEqual(3, history.MaxCount);
-            Assert.AreEqual(true, history.IsFull);
-            Assert.AreEqual(345, history.Last());
+            Assert.AreEqual(10, history.Count);
+        }
 
-            history.Record(456);
-            Assert.AreEqual(3, history.MaxCount);
-            Assert.AreEqual(true, history.IsFull);
-            Assert.AreEqual(456, history.Last());
+        [TestMethod]
+        public void ctor_10_1()
+        {
+            var span = TimeSpan.FromSeconds(1);
+            var history = new History<int>(10, span);
+
+            for (int i = 0; i < 100; i++)
+            {
+                history.Record(i);
+                Thread.Sleep(30);
+            }
+
+            Assert.AreEqual(10, history.Count);
+        }
+
+        [TestMethod]
+        public void ctor_50_1()
+        {
+            var span = TimeSpan.FromSeconds(1);
+            var history = new History<int>(50, span);
+
+            for (int i = 0; i < 100; i++)
+            {
+                history.Record(i);
+                Thread.Sleep(30);
+            }
+
+            Assert.IsTrue(history.Count > 30);
+            Assert.IsTrue(history.Count < 40);
         }
     }
 }

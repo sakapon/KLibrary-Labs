@@ -12,6 +12,16 @@ namespace KLibrary.Labs.Collections
             get { return Count >= MaxCount; }
         }
 
+        public T FirstItem
+        {
+            get { return this[0]; }
+        }
+
+        public T LastItem
+        {
+            get { return this[Count - 1]; }
+        }
+
         public LimitedCollection() { }
 
         public LimitedCollection(int maxCount)
