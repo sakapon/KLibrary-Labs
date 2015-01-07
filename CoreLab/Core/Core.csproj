@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Collections\DisposableCollection.cs" />
     <Compile Include="Collections\History.cs" />
+    <Compile Include="Collections\LimitedCollection.cs" />
     <Compile Include="Disposable.cs" />
     <Compile Include="Mathematics\Polynomial.cs" />
     <Compile Include="Maybe.cs" />
