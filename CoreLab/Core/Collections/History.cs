@@ -8,7 +8,15 @@ namespace KLibrary.Labs.Collections
     {
         public TimeSpan? MaxSpan { get; private set; }
 
-        public History(int? maxCount, TimeSpan? maxSpan)
+        public History() { }
+        public History(int maxCount) : base(maxCount) { }
+
+        public History(TimeSpan maxSpan)
+        {
+            MaxSpan = maxSpan;
+        }
+
+        public History(int maxCount, TimeSpan maxSpan)
             : base(maxCount)
         {
             MaxSpan = maxSpan;

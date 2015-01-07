@@ -9,19 +9,21 @@ namespace KLibrary.Labs.Collections
 
         public bool IsFull
         {
-            get { return Count == MaxCount; }
+            get { return Count >= MaxCount; }
         }
 
-        public LimitedCollection(int? maxCount)
+        public LimitedCollection() { }
+
+        public LimitedCollection(int maxCount)
         {
-            if (maxCount <= 0) throw new ArgumentOutOfRangeException("maxCount", maxCount, "The value must be positive or null.");
+            if (maxCount <= 0) throw new ArgumentOutOfRangeException("maxCount", maxCount, "The value must be positive.");
 
             MaxCount = maxCount;
         }
 
         public void Record(T value)
         {
-            if (IsFull) RemoveAt(0);
+            while (IsFull) RemoveAt(0);
 
             Add(value);
         }

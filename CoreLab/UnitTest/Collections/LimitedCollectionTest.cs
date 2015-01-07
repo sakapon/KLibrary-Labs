@@ -9,6 +9,22 @@ namespace UnitTest.Collections
     public class LimitedCollectionTest
     {
         [TestMethod]
+        public void ctor_null()
+        {
+            var history = new LimitedCollection<int>();
+            Assert.AreEqual(null, history.MaxCount);
+            Assert.AreEqual(false, history.IsFull);
+
+            for (int i = 0; i < 100; i++)
+            {
+                history.Record(i);
+            }
+            Assert.AreEqual(100, history.Count);
+            Assert.AreEqual(null, history.MaxCount);
+            Assert.AreEqual(false, history.IsFull);
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ctor_0()
         {
