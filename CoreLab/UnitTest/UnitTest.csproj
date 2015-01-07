@@ -65,6 +65,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Collections\HistoryTest.cs" />
     <Compile Include="Mathematics\PolynomialTest.cs" />
     <Compile Include="Pipeline\ObjectHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
