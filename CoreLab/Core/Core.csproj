@@ -47,6 +47,7 @@
     <Compile Include="Mathematics\Polynomial.cs" />
     <Compile Include="Maybe.cs" />
     <Compile Include="MonadBase.cs" />
+    <Compile Include="OldNewValues.cs" />
     <Compile Include="Pipeline\Case.cs" />
     <Compile Include="Pipeline\ExceptionHelper.cs" />
     <Compile Include="Pipeline\FuncHelper.cs" />
