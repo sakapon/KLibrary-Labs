@@ -5,16 +5,16 @@ namespace KLibrary.Labs.Collections
 {
     public class LimitedCollection<T> : Collection<T>
     {
-        public int MaxCount { get; private set; }
+        public int? MaxCount { get; private set; }
 
         public bool IsFull
         {
             get { return Count == MaxCount; }
         }
 
-        public LimitedCollection(int maxCount)
+        public LimitedCollection(int? maxCount)
         {
-            if (maxCount <= 0) throw new ArgumentOutOfRangeException("maxCount", maxCount, "The value must be positive.");
+            if (maxCount <= 0) throw new ArgumentOutOfRangeException("maxCount", maxCount, "The value must be positive or null.");
 
             MaxCount = maxCount;
         }

@@ -6,9 +6,9 @@ namespace KLibrary.Labs.Collections
 {
     public class History<T> : LimitedCollection<HistoryItem<T>>
     {
-        public TimeSpan MaxSpan { get; private set; }
+        public TimeSpan? MaxSpan { get; private set; }
 
-        public History(int maxCount, TimeSpan maxSpan)
+        public History(int? maxCount, TimeSpan? maxSpan)
             : base(maxCount)
         {
             MaxSpan = maxSpan;
@@ -18,9 +18,12 @@ namespace KLibrary.Labs.Collections
         {
             var now = DateTime.Now;
 
-            while (Count > 0 && now - this[0].Timestamp > MaxSpan)
+            if (MaxSpan.HasValue)
             {
-                RemoveAt(0);
+                while (Count > 0 && now - this[0].Timestamp > MaxSpan)
+                {
+                    RemoveAt(0);
+                }
             }
 
             Record(new HistoryItem<T>(value, now));
