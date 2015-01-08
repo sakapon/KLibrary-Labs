@@ -9,7 +9,7 @@ namespace KLibrary.Labs.Collections
 
         public bool IsFull
         {
-            get { return Count >= MaxCount; }
+            get { return Count == MaxCount; }
         }
 
         public T FirstItem
@@ -31,11 +31,16 @@ namespace KLibrary.Labs.Collections
             MaxCount = maxCount;
         }
 
-        public void Record(T value)
+        protected override void InsertItem(int index, T item)
         {
-            while (IsFull) RemoveAt(0);
+            throw new NotSupportedException();
+        }
 
-            Add(value);
+        public new void Add(T value)
+        {
+            if (IsFull) RemoveAt(0);
+
+            base.InsertItem(Count, value);
         }
     }
 }

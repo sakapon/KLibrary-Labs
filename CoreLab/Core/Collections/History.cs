@@ -34,7 +34,7 @@ namespace KLibrary.Labs.Collections
                 }
             }
 
-            Record(now);
+            Add(now);
         }
     }
 
@@ -68,7 +68,7 @@ namespace KLibrary.Labs.Collections
                 }
             }
 
-            Record(new HistoryItem<T>(value, now));
+            Add(new HistoryItem<T>(value, now));
         }
     }
 

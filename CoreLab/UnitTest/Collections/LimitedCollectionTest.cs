@@ -17,7 +17,7 @@ namespace UnitTest.Collections
 
             for (int i = 0; i < 100; i++)
             {
-                collection.Record(i);
+                collection.Add(i);
             }
             Assert.AreEqual(100, collection.Count);
             Assert.AreEqual(null, collection.MaxCount);
@@ -39,13 +39,13 @@ namespace UnitTest.Collections
             Assert.AreEqual(1, collection.MaxCount);
             Assert.AreEqual(false, collection.IsFull);
 
-            collection.Record(123);
+            collection.Add(123);
             Assert.AreEqual(1, collection.Count);
             Assert.AreEqual(1, collection.MaxCount);
             Assert.AreEqual(true, collection.IsFull);
             Assert.AreEqual(123, collection.FirstItem);
 
-            collection.Record(456);
+            collection.Add(456);
             Assert.AreEqual(1, collection.Count);
             Assert.AreEqual(1, collection.MaxCount);
             Assert.AreEqual(true, collection.IsFull);
@@ -60,24 +60,32 @@ namespace UnitTest.Collections
             Assert.AreEqual(3, collection.MaxCount);
             Assert.AreEqual(false, collection.IsFull);
 
-            collection.Record(123);
-            collection.Record(234);
+            collection.Add(123);
+            collection.Add(234);
             Assert.AreEqual(2, collection.Count);
             Assert.AreEqual(3, collection.MaxCount);
             Assert.AreEqual(false, collection.IsFull);
             Assert.AreEqual(234, collection.LastItem);
 
-            collection.Record(345);
+            collection.Add(345);
             Assert.AreEqual(3, collection.Count);
             Assert.AreEqual(3, collection.MaxCount);
             Assert.AreEqual(true, collection.IsFull);
             Assert.AreEqual(345, collection.LastItem);
 
-            collection.Record(456);
+            collection.Add(456);
             Assert.AreEqual(3, collection.Count);
             Assert.AreEqual(3, collection.MaxCount);
             Assert.AreEqual(true, collection.IsFull);
             Assert.AreEqual(456, collection.LastItem);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void Insert()
+        {
+            var collection = new LimitedCollection<int>();
+            collection.Insert(0, 123);
         }
     }
 }
