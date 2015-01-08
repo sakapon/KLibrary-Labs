@@ -35,8 +35,12 @@ namespace KLibrary.Labs.Mathematics
 
             if (history.Count < 2) return (Frequency = 0);
 
-            var frequency = (history.Count - 1) / (history.LastItem - history.FirstItem).TotalSeconds;
-            return (Frequency = frequency);
+            return (Frequency = GetFrequency(history));
+        }
+
+        internal static double GetFrequency(History history)
+        {
+            return (history.Count - 1) / (history.LastItem - history.FirstItem).TotalSeconds;
         }
     }
 }

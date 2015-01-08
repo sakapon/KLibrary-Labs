@@ -45,6 +45,7 @@
     <Compile Include="Collections\History.cs" />
     <Compile Include="Collections\QueueCollection.cs" />
     <Compile Include="Disposable.cs" />
+    <Compile Include="Mathematics\FrequencyFilter.cs" />
     <Compile Include="Mathematics\FrequencyMeter.cs" />
     <Compile Include="Mathematics\Polynomial.cs" />
     <Compile Include="Maybe.cs" />
