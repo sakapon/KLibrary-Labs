@@ -59,6 +59,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reactive\Notifier.cs" />
     <Compile Include="Reactive\NotifierBase.cs" />
+    <Compile Include="Reactive\Observable2.cs" />
     <Compile Include="Reactive\ObservableEvent.cs" />
     <Compile Include="Reactive\TimeTicker.cs" />
   </ItemGroup>
