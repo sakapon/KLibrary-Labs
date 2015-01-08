@@ -7,10 +7,10 @@ namespace KLibrary.Labs.Mathematics
 {
     public class FrequencyMeter
     {
-        const int MaxCount = 100;
-        static readonly TimeSpan MaxSpan = TimeSpan.FromSeconds(1);
+        const int DefaultMaxCount = 100;
+        static readonly TimeSpan DefaultMaxSpan = TimeSpan.FromSeconds(1);
 
-        History<bool> history;
+        History history;
 
         public double Frequency { get; private set; }
 
@@ -21,16 +21,21 @@ namespace KLibrary.Labs.Mathematics
 
         public FrequencyMeter()
         {
-            history = new History<bool>(MaxCount, MaxSpan);
+            history = new History(DefaultMaxCount, DefaultMaxSpan);
+        }
+
+        public FrequencyMeter(int historyMaxCount, TimeSpan historyMaxSpan)
+        {
+            history = new History(historyMaxCount, historyMaxSpan);
         }
 
         public double Record()
         {
-            history.Record(false);
+            history.Record();
 
             if (history.Count < 2) return (Frequency = 0);
 
-            var frequency = (history.Count - 1) / (history.LastItem.Timestamp - history.FirstItem.Timestamp).TotalSeconds;
+            var frequency = (history.Count - 1) / (history.LastItem - history.FirstItem).TotalSeconds;
             return (Frequency = frequency);
         }
     }
