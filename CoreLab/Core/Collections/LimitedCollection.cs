@@ -14,12 +14,22 @@ namespace KLibrary.Labs.Collections
 
         public T FirstItem
         {
-            get { return this[0]; }
+            get
+            {
+                if (Count == 0) throw new InvalidOperationException("There is no item.");
+
+                return this[0];
+            }
         }
 
         public T LastItem
         {
-            get { return this[Count - 1]; }
+            get
+            {
+                if (Count == 0) throw new InvalidOperationException("There is no item.");
+                
+                return this[Count - 1];
+            }
         }
 
         public LimitedCollection() { }
@@ -33,7 +43,7 @@ namespace KLibrary.Labs.Collections
 
         protected override void InsertItem(int index, T item)
         {
-            throw new NotSupportedException();
+            throw new NotSupportedException("Use Add method.");
         }
 
         public new void Add(T value)
