@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace KLibrary.Labs.Collections
 {
-    public class History : LimitedCollection<DateTime>
+    public class History : QueueCollection<DateTime>
     {
         public TimeSpan? MaxSpan { get; private set; }
 
@@ -38,7 +38,7 @@ namespace KLibrary.Labs.Collections
         }
     }
 
-    public class History<T> : LimitedCollection<HistoryItem<T>>
+    public class History<T> : QueueCollection<HistoryItem<T>>
     {
         public TimeSpan? MaxSpan { get; private set; }
 

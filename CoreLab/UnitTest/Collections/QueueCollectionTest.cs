@@ -5,12 +5,12 @@ using System;
 namespace UnitTest.Collections
 {
     [TestClass]
-    public class LimitedCollectionTest
+    public class QueueCollectionTest
     {
         [TestMethod]
         public void ctor_null()
         {
-            var collection = new LimitedCollection<int>();
+            var collection = new QueueCollection<int>();
             Assert.AreEqual(0, collection.Count);
             Assert.AreEqual(null, collection.MaxCount);
             Assert.AreEqual(false, collection.IsFull);
@@ -28,13 +28,13 @@ namespace UnitTest.Collections
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ctor_0()
         {
-            var collection = new LimitedCollection<int>(0);
+            var collection = new QueueCollection<int>(0);
         }
 
         [TestMethod]
         public void ctor_1()
         {
-            var collection = new LimitedCollection<int>(1);
+            var collection = new QueueCollection<int>(1);
             Assert.AreEqual(0, collection.Count);
             Assert.AreEqual(1, collection.MaxCount);
             Assert.AreEqual(false, collection.IsFull);
@@ -55,7 +55,7 @@ namespace UnitTest.Collections
         [TestMethod]
         public void ctor_3()
         {
-            var collection = new LimitedCollection<int>(3);
+            var collection = new QueueCollection<int>(3);
             Assert.AreEqual(0, collection.Count);
             Assert.AreEqual(3, collection.MaxCount);
             Assert.AreEqual(false, collection.IsFull);
@@ -84,7 +84,7 @@ namespace UnitTest.Collections
         [ExpectedException(typeof(NotSupportedException))]
         public void Insert()
         {
-            var collection = new LimitedCollection<int>();
+            var collection = new QueueCollection<int>();
             collection.Insert(0, 123);
         }
     }

@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace KLibrary.Labs.Collections
 {
-    public class LimitedCollection<T> : Collection<T>
+    public class QueueCollection<T> : Collection<T>
     {
         public int? MaxCount { get; private set; }
 
@@ -32,9 +32,9 @@ namespace KLibrary.Labs.Collections
             }
         }
 
-        public LimitedCollection() { }
+        public QueueCollection() { }
 
-        public LimitedCollection(int maxCount)
+        public QueueCollection(int maxCount)
         {
             if (maxCount <= 0) throw new ArgumentOutOfRangeException("maxCount", maxCount, "The value must be positive.");
 
