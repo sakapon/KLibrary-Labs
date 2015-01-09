@@ -69,6 +69,7 @@
     <Compile Include="Collections\QueueCollectionTest.cs" />
     <Compile Include="Mathematics\PolynomialTest.cs" />
     <Compile Include="Mathematics\FrequencyMeterTest.cs" />
+    <Compile Include="Mathematics\FrequencyFilterTest.cs" />
     <Compile Include="Pipeline\ObjectHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MaybeTest.cs" />
