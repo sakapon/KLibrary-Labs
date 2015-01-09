@@ -28,8 +28,8 @@ namespace KLibrary.Labs.Mathematics
             history.Record();
 
             var frequency = FrequencyMeter.GetFrequency(history);
-            var isActive = frequency <= MaxFrequency;
-            if (isActive)
+            var isAvailable = frequency <= MaxFrequency;
+            if (isAvailable)
             {
                 ArrangedFrequency = frequency;
             }
@@ -38,7 +38,7 @@ namespace KLibrary.Labs.Mathematics
                 history.RemoveAt(history.Count - 1);
             }
 
-            return isActive;
+            return isAvailable;
         }
     }
 }

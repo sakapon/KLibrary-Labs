@@ -12,6 +12,11 @@ namespace KLibrary.Labs.Reactive
             return new TimeTicker(interval);
         }
 
+        public static IObservable<long> Interval(TimeSpan interval, bool forAsync)
+        {
+            return new TimeTicker(interval, forAsync);
+        }
+
         public static IObservable<T> SetMaxFrequency<T>(this IObservable<T> observable, double maxFrequency)
         {
             if (observable == null) throw new ArgumentNullException("observable");
