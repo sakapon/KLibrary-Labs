@@ -38,5 +38,15 @@ namespace UnitTest.Mathematics
 
             Thread.Sleep(3000);
         }
+
+        [TestMethod]
+        public void Observable_SetMaxFrequency()
+        {
+            Observable2.Interval(TimeSpan.FromMilliseconds(20))
+                .SetMaxFrequency(25)
+                .Subscribe(Console.WriteLine);
+
+            Thread.Sleep(3000);
+        }
     }
 }
