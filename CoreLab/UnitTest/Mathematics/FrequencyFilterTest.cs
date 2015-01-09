@@ -14,12 +14,16 @@ namespace UnitTest.Mathematics
         public void ctor_1()
         {
             var filter = new FrequencyFilter(25);
+            var meter = new FrequencyMeter();
 
             Observable2.Interval(TimeSpan.FromMilliseconds(20))
                 .Where(_ => filter.CheckLap())
+                .Do(_ => meter.RecordLap())
                 .Subscribe(Console.WriteLine);
 
             Thread.Sleep(3000);
+            Assert.IsTrue(meter.Frequency > 24);
+            Assert.IsTrue(meter.Frequency <= 25);
         }
 
         [TestMethod]
