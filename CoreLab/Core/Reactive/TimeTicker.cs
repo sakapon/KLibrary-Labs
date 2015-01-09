@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace KLibrary.Labs.Reactive
@@ -7,9 +8,11 @@ namespace KLibrary.Labs.Reactive
     {
         bool _isCompleted;
 
-        public TimeTicker(TimeSpan interval)
+        public TimeTicker(TimeSpan interval) : this(interval, false) { }
+
+        public TimeTicker(TimeSpan interval, bool forAsync)
         {
-            Task.Run(async () =>
+            Task.Run(() =>
             {
                 var intervalMilliseconds = interval.TotalMilliseconds;
                 var startTime = DateTime.Now;
@@ -17,8 +20,17 @@ namespace KLibrary.Labs.Reactive
                 for (long i = 0; !_isCompleted; i++)
                 {
                     var timeout = (i + 1) * intervalMilliseconds + (startTime - DateTime.Now).TotalMilliseconds;
-                    await Task.Delay(Math.Max(0, (int)timeout));
-                    OnNext(i);
+                    Thread.Sleep(Math.Max(0, (int)timeout));
+
+                    if (forAsync)
+                    {
+                        var j = i;
+                        Task.Run(() => OnNext(j));
+                    }
+                    else
+                    {
+                        OnNext(i);
+                    }
                 }
             });
         }
