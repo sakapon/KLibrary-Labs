@@ -15,11 +15,6 @@ namespace KLibrary.Labs.Mathematics
         public double MaxFrequency { get; set; }
         public double ArrangedFrequency { get; private set; }
 
-        public double ArrangedPeriodSeconds
-        {
-            get { return 1 / ArrangedFrequency; }
-        }
-
         public FrequencyFilter(double maxFrequency) : this(maxFrequency, DefaultMaxCount, DefaultMaxSpan) { }
 
         public FrequencyFilter(double maxFrequency, int historyMaxCount, TimeSpan historyMaxSpan)
@@ -28,25 +23,21 @@ namespace KLibrary.Labs.Mathematics
             history = new History(historyMaxCount, historyMaxSpan);
         }
 
-        public bool Check()
+        public bool CheckLap()
         {
             history.Record();
 
-            if (history.Count < 2)
-            {
-                ArrangedFrequency = 0;
-                return true;
-            }
-
             var frequency = FrequencyMeter.GetFrequency(history);
             var isActive = frequency <= MaxFrequency;
-            if (!isActive)
+            if (isActive)
+            {
+                ArrangedFrequency = frequency;
+            }
+            else
             {
                 history.RemoveAt(history.Count - 1);
-                frequency = history.Count < 2 ? 0 : FrequencyMeter.GetFrequency(history);
             }
 
-            ArrangedFrequency = frequency;
             return isActive;
         }
     }

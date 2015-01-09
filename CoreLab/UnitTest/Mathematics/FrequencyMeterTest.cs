@@ -16,7 +16,7 @@ namespace UnitTest.Mathematics
             var meter = new FrequencyMeter();
 
             Observable2.Interval(TimeSpan.FromMilliseconds(30))
-                .Select(_ => meter.Record())
+                .Select(_ => meter.RecordLap())
                 .Subscribe(Console.WriteLine);
 
             Thread.Sleep(3000);
@@ -28,7 +28,7 @@ namespace UnitTest.Mathematics
             var meter = new FrequencyMeter();
 
             Observable2.Interval(TimeSpan.FromMilliseconds(5))
-                .Select(_ => meter.Record())
+                .Select(_ => meter.RecordLap())
                 .Subscribe(Console.WriteLine);
 
             Thread.Sleep(3000);
@@ -40,7 +40,7 @@ namespace UnitTest.Mathematics
             var meter = new FrequencyMeter(200, TimeSpan.FromSeconds(5));
 
             Observable2.Interval(TimeSpan.FromMilliseconds(30))
-                .Select(_ => meter.Record())
+                .Select(_ => meter.RecordLap())
                 .Subscribe(Console.WriteLine);
 
             Thread.Sleep(3000);

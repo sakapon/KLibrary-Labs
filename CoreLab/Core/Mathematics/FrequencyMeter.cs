@@ -14,32 +14,24 @@ namespace KLibrary.Labs.Mathematics
 
         public double Frequency { get; private set; }
 
-        public double PeriodSeconds
-        {
-            get { return 1 / Frequency; }
-        }
-
-        public FrequencyMeter()
-        {
-            history = new History(DefaultMaxCount, DefaultMaxSpan);
-        }
+        public FrequencyMeter() : this(DefaultMaxCount, DefaultMaxSpan) { }
 
         public FrequencyMeter(int historyMaxCount, TimeSpan historyMaxSpan)
         {
             history = new History(historyMaxCount, historyMaxSpan);
         }
 
-        public double Record()
+        public double RecordLap()
         {
             history.Record();
-
-            if (history.Count < 2) return (Frequency = 0);
 
             return (Frequency = GetFrequency(history));
         }
 
         internal static double GetFrequency(History history)
         {
+            if (history.Count < 2) return 0;
+
             return (history.Count - 1) / (history.LastItem - history.FirstItem).TotalSeconds;
         }
     }
