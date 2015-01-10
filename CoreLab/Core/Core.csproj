@@ -61,6 +61,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reactive\ActionObserver.cs" />
     <Compile Include="Reactive\Models\IObservableProperty.cs" />
+    <Compile Include="Reactive\Models\ObservableProperty.cs" />
     <Compile Include="Reactive\Models\ObservablePropertyBase.cs" />
     <Compile Include="Reactive\Notifier.cs" />
     <Compile Include="Reactive\NotifierBase.cs" />
