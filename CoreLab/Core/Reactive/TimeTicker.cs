@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,19 +33,14 @@ namespace KLibrary.Labs.Reactive
                         OnNext(i);
                     }
                 }
+
+                Debug.WriteLine("The thread for tick is end.");
             });
         }
 
-        public override IDisposable Subscribe(IObserver<long> observer)
+        protected override void OnDisposing()
         {
-            if (observer == null) throw new ArgumentNullException("observer");
-
-            Observers.Add(observer);
-            return Disposable.FromAction(() =>
-            {
-                Observers.Remove(observer);
-                if (Observers.Count == 0) _isCompleted = true;
-            });
+            _isCompleted = true;
         }
     }
 }

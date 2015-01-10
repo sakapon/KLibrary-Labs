@@ -23,13 +23,7 @@ namespace KLibrary.Labs.Reactive
 
             var filter = new FrequencyFilter(maxFrequency);
 
-            var notifier = new Notifier<T>();
-            observable.Subscribe(new ActionObserver<T>(o =>
-            {
-                if (filter.CheckLap()) notifier.NotifyNext(o);
-            },
-            notifier.NotifyError, notifier.NotifyCompleted));
-            return notifier;
+            return new ChainNotifier<T, T>(observable, (o, onNext) => { if (filter.CheckLap()) onNext(o); });
         }
     }
 }

@@ -44,9 +44,9 @@ namespace UnitTest.Mathematics
         {
             Observable2.Interval(TimeSpan.FromMilliseconds(20))
                 .SetMaxFrequency(25)
-                .Subscribe(Console.WriteLine);
-
-            Thread.Sleep(3000);
+                .Take(100)
+                .Do(Console.WriteLine)
+                .Wait();
         }
     }
 }
