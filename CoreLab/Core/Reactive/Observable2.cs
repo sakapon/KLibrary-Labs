@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace KLibrary.Labs.Reactive
 {
@@ -17,13 +18,26 @@ namespace KLibrary.Labs.Reactive
             return new TimeTicker(interval, forAsync);
         }
 
-        public static IObservable<T> SetMaxFrequency<T>(this IObservable<T> observable, double maxFrequency)
+        public static IObservable<TSource> SetMaxFrequency<TSource>(this IObservable<TSource> source, double maxFrequency)
         {
-            if (observable == null) throw new ArgumentNullException("observable");
+            if (source == null) throw new ArgumentNullException("source");
 
             var filter = new FrequencyFilter(maxFrequency);
 
-            return new ChainNotifier<T, T>(observable, (o, onNext) => { if (filter.CheckLap()) onNext(o); });
+            return new ChainNotifier<TSource, TSource>(source, (o, onNext) => { if (filter.CheckLap()) onNext(o); });
+        }
+
+        public static IObservable<TSource> DoAsync<TSource>(this IObservable<TSource> source, Action<TSource> onNext)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            if (onNext == null) throw new ArgumentNullException("onNext");
+
+            return new ChainNotifier<TSource, TSource>(source, (o, onNext2) =>
+                Task.Run(() =>
+                {
+                    onNext(o);
+                    onNext2(o);
+                }));
         }
     }
 }
