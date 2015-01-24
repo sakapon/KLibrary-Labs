@@ -66,6 +66,7 @@
     <Compile Include="Reactive\ChainNotifier.cs" />
     <Compile Include="Reactive\NotifierBase.cs" />
     <Compile Include="Reactive\Observable2.cs" />
+    <Compile Include="Reactive\ObservableChain.cs" />
     <Compile Include="Reactive\ObservableEvent.cs" />
     <Compile Include="Reactive\Timers\PeriodicTimer.cs" />
   </ItemGroup>

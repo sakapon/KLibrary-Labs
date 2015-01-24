@@ -14,6 +14,17 @@ namespace KLibrary.Labs.Reactive
             return new PeriodicTimer(interval);
         }
 
+        public static IObservable<TResult> ChainNext<TSource, TResult>(this IObservable<TSource> source, Func<IObserver<TResult>, Action<TSource>> getOnNext)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            if (getOnNext == null) throw new ArgumentNullException("getOnNext");
+
+            var chain = new ObservableChain<TResult>();
+            var observer = new ActionObserver<TSource>(getOnNext(chain), chain.OnError, chain.OnCompleted);
+            chain.Subscription = source.Subscribe(observer);
+            return chain;
+        }
+
         public static IObservable<TSource> SetMaxFrequency<TSource>(this IObservable<TSource> source, double maxFrequency)
         {
             if (source == null) throw new ArgumentNullException("source");
@@ -28,6 +39,35 @@ namespace KLibrary.Labs.Reactive
             if (source == null) throw new ArgumentNullException("source");
 
             return new ChainNotifier<TSource, TSource>(source, (o, onNext) => Task.Run(() => onNext(o)));
+        }
+
+        public static IObservable<TSource> Filter<TSource>(this IObservable<TSource> source, Func<TSource, bool> filter)
+        {
+            return ChainNext<TSource, TSource>(source, obs => o => { if (filter(o)) obs.OnNext(o); });
+        }
+
+        public static IObservable<TResult> Map<TSource, TResult>(this IObservable<TSource> source, Func<TSource, TResult> mapping)
+        {
+            return ChainNext<TSource, TResult>(source, obs => o => obs.OnNext(mapping(o)));
+        }
+
+        [Obsolete("Use Take method.")]
+        public static IObservable<TSource> Take2<TSource>(this IObservable<TSource> source, int count)
+        {
+            var isCompleted = false;
+            var i = 0;
+
+            return ChainNext<TSource, TSource>(source, obs => o =>
+            {
+                if (isCompleted) return;
+                if (i < count) obs.OnNext(o);
+                i++;
+                if (i >= count)
+                {
+                    isCompleted = true;
+                    obs.OnCompleted();
+                }
+            });
         }
     }
 }
