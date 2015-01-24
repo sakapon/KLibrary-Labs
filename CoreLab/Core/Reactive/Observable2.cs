@@ -27,17 +27,11 @@ namespace KLibrary.Labs.Reactive
             return new ChainNotifier<TSource, TSource>(source, (o, onNext) => { if (filter.CheckLap()) onNext(o); });
         }
 
-        public static IObservable<TSource> DoAsync<TSource>(this IObservable<TSource> source, Action<TSource> onNext)
+        public static IObservable<TSource> ToAsync<TSource>(this IObservable<TSource> source)
         {
             if (source == null) throw new ArgumentNullException("source");
-            if (onNext == null) throw new ArgumentNullException("onNext");
 
-            return new ChainNotifier<TSource, TSource>(source, (o, onNext2) =>
-                Task.Run(() =>
-                {
-                    onNext(o);
-                    onNext2(o);
-                }));
+            return new ChainNotifier<TSource, TSource>(source, (o, onNext) => Task.Run(() => onNext(o)));
         }
     }
 }
