@@ -18,6 +18,12 @@ namespace KLibrary.Labs.Reactive.Models
 
             return Subscribe(new ActionObserver<T>(o => onValueChanged()));
         }
+
+        public override string ToString()
+        {
+            // For designers.
+            return GetType().Name;
+        }
     }
 
     public abstract class ObservablePropertyBase<T> : ObservablePropertyBaseCore<T>, INotifyPropertyChanged
