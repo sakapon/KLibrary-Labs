@@ -1,8 +1,9 @@
-﻿using KLibrary.Labs.Mathematics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KLibrary.Labs.Mathematics;
+using KLibrary.Labs.Reactive.Timers;
 
 namespace KLibrary.Labs.Reactive
 {
@@ -10,12 +11,7 @@ namespace KLibrary.Labs.Reactive
     {
         public static IObservable<long> Interval(TimeSpan interval)
         {
-            return new TimeTicker(interval);
-        }
-
-        public static IObservable<long> Interval(TimeSpan interval, bool forAsync)
-        {
-            return new TimeTicker(interval, forAsync);
+            return new PeriodicTimer(interval);
         }
 
         public static IObservable<TSource> SetMaxFrequency<TSource>(this IObservable<TSource> source, double maxFrequency)
