@@ -7,6 +7,11 @@ namespace KLibrary.Labs.Reactive.Models
     {
         public abstract T Value { get; set; }
 
+        public static explicit operator T(ObservablePropertyBaseCore<T> value)
+        {
+            return value.Value;
+        }
+
         public virtual void NotifyValueChanged()
         {
             NotifyNext(Value);
