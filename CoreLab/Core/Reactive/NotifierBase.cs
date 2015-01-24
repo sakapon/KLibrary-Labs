@@ -18,10 +18,12 @@ namespace KLibrary.Labs.Reactive
             if (observer == null) throw new ArgumentNullException("observer");
 
             Observers.Add(observer);
+            if (Observers.Count == 1) OnObservationStarted();
+
             return Disposable.FromAction(() =>
             {
                 Observers.Remove(observer);
-                if (Observers.Count == 0) OnDisposing();
+                if (Observers.Count == 0) OnObservationStopped();
             });
         }
 
@@ -41,7 +43,11 @@ namespace KLibrary.Labs.Reactive
             Array.ForEach(Observers.ToArray(), o => o.OnCompleted());
         }
 
-        protected virtual void OnDisposing()
+        protected virtual void OnObservationStarted()
+        {
+        }
+
+        protected virtual void OnObservationStopped()
         {
         }
     }

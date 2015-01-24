@@ -7,19 +7,24 @@ namespace KLibrary.Labs.Reactive.Timers
 {
     public class PeriodicTimer : NotifierBase<long>
     {
-        bool _isCompleted;
+        bool _isActive;
 
         public TimeSpan Interval { get; private set; }
 
         public PeriodicTimer(TimeSpan interval)
         {
             Interval = interval;
+        }
+
+        protected override void OnObservationStarted()
+        {
+            _isActive = true;
 
             Task.Run(() =>
             {
                 var nextTimePoint = DateTime.Now;
 
-                for (var i = 0L; !_isCompleted; i++)
+                for (var i = 0L; _isActive; i++)
                 {
                     nextTimePoint += Interval;
                     var timeout = (nextTimePoint - DateTime.Now).TotalMilliseconds;
@@ -32,9 +37,9 @@ namespace KLibrary.Labs.Reactive.Timers
             });
         }
 
-        protected override void OnDisposing()
+        protected override void OnObservationStopped()
         {
-            _isCompleted = true;
+            _isActive = false;
         }
     }
 }

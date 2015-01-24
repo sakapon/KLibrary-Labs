@@ -14,7 +14,7 @@ namespace KLibrary.Labs.Reactive
             _disposable = predecessor.Subscribe(observer);
         }
 
-        protected override void OnDisposing()
+        protected override void OnObservationStopped()
         {
             _disposable.Dispose();
         }
