@@ -2,6 +2,7 @@
 
 namespace KLibrary.Labs.Reactive
 {
+    [Obsolete]
     public class ChainNotifier<T, TPrevious> : NotifierBase<T>
     {
         IDisposable _disposable;

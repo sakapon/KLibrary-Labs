@@ -27,18 +27,14 @@ namespace KLibrary.Labs.Reactive
 
         public static IObservable<TSource> SetMaxFrequency<TSource>(this IObservable<TSource> source, double maxFrequency)
         {
-            if (source == null) throw new ArgumentNullException("source");
-
             var filter = new FrequencyFilter(maxFrequency);
 
-            return new ChainNotifier<TSource, TSource>(source, (o, onNext) => { if (filter.CheckLap()) onNext(o); });
+            return ChainNext<TSource, TSource>(source, obs => o => { if (filter.CheckLap()) obs.OnNext(o); });
         }
 
         public static IObservable<TSource> ToAsync<TSource>(this IObservable<TSource> source)
         {
-            if (source == null) throw new ArgumentNullException("source");
-
-            return new ChainNotifier<TSource, TSource>(source, (o, onNext) => Task.Run(() => onNext(o)));
+            return ChainNext<TSource, TSource>(source, obs => o => Task.Run(() => obs.OnNext(o)));
         }
 
         public static IObservable<TSource> Filter<TSource>(this IObservable<TSource> source, Func<TSource, bool> filter)

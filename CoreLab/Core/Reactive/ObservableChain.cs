@@ -4,18 +4,29 @@ namespace KLibrary.Labs.Reactive
 {
     public class ObservableChain<T> : ObservableEvent<T>
     {
+        bool _isUnsubscribed;
+
         public IDisposable Subscription { get; set; }
 
         public override void OnCompleted()
         {
             base.OnCompleted();
 
-            if (Subscription != null) Subscription.Dispose();
+            Unsubscribe();
         }
 
         protected override void OnObservationStopped()
         {
-            if (Subscription != null) Subscription.Dispose();
+            Unsubscribe();
+        }
+
+        void Unsubscribe()
+        {
+            if (!_isUnsubscribed && Subscription != null)
+            {
+                _isUnsubscribed = true;
+                Subscription.Dispose();
+            }
         }
     }
 }
