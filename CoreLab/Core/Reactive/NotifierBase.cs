@@ -27,18 +27,18 @@ namespace KLibrary.Labs.Reactive
             });
         }
 
-        protected void OnNext(T value)
+        protected void NotifyNext(T value)
         {
             // 変更操作との競合を避けるため、配列にコピーします。
             Array.ForEach(Observers.ToArray(), o => o.OnNext(value));
         }
 
-        protected void OnError(Exception error)
+        protected void NotifyError(Exception error)
         {
             Array.ForEach(Observers.ToArray(), o => o.OnError(error));
         }
 
-        protected void OnCompleted()
+        protected void NotifyCompleted()
         {
             Array.ForEach(Observers.ToArray(), o => o.OnCompleted());
         }

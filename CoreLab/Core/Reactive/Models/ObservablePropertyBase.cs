@@ -9,7 +9,7 @@ namespace KLibrary.Labs.Reactive.Models
 
         public virtual void NotifyValueChanged()
         {
-            OnNext(Value);
+            NotifyNext(Value);
         }
 
         public IDisposable Subscribe(Action onValueChanged)

@@ -30,7 +30,7 @@ namespace KLibrary.Labs.Reactive.Timers
                     var timeout = (nextTimePoint - DateTime.Now).TotalMilliseconds;
                     Thread.Sleep(Math.Max(0, (int)timeout));
 
-                    OnNext(i);
+                    NotifyNext(i);
                 }
 
                 Debug.WriteLine("The thread for tick is end.");

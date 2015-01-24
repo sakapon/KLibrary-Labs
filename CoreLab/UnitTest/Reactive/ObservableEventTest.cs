@@ -64,8 +64,8 @@ namespace UnitTest.Reactive
 
             public Counter()
             {
-                Observable.Interval(TimeSpan.FromMilliseconds(100))
-                    .Subscribe(Counted.NotifyNext);
+                Observable2.Interval(TimeSpan.FromMilliseconds(100))
+                    .Subscribe(Counted);
             }
         }
 
@@ -76,9 +76,9 @@ namespace UnitTest.Reactive
 
             public Switcher()
             {
-                Observable.Interval(TimeSpan.FromSeconds(1))
+                Observable2.Interval(TimeSpan.FromSeconds(1))
                     .Select(i => (_flag = !_flag))
-                    .Subscribe(Switched.NotifyNext);
+                    .Subscribe(Switched);
             }
         }
     }
