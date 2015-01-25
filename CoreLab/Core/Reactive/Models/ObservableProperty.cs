@@ -24,7 +24,7 @@ namespace KLibrary.Labs.Reactive.Models
             _value = defaultValue;
         }
 
-        public static implicit operator ObservableProperty<T>(T value)
+        public static explicit operator ObservableProperty<T>(T value)
         {
             return new ObservableProperty<T>(value);
         }
@@ -48,7 +48,7 @@ namespace KLibrary.Labs.Reactive.Models
             _value = value;
         }
 
-        public static implicit operator ReadOnlyProperty<T>(T value)
+        public static explicit operator ReadOnlyProperty<T>(T value)
         {
             return new ReadOnlyProperty<T>(value);
         }
