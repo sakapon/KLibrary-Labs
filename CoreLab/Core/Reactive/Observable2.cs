@@ -1,8 +1,9 @@
-﻿using KLibrary.Labs.Mathematics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KLibrary.Labs.Mathematics;
+using KLibrary.Labs.Reactive.Timers;
 
 namespace KLibrary.Labs.Reactive
 {
@@ -10,34 +11,59 @@ namespace KLibrary.Labs.Reactive
     {
         public static IObservable<long> Interval(TimeSpan interval)
         {
-            return new TimeTicker(interval);
+            return new PeriodicTimer(interval);
         }
 
-        public static IObservable<long> Interval(TimeSpan interval, bool forAsync)
+        public static IObservable<TResult> ChainNext<TSource, TResult>(this IObservable<TSource> source, Func<IObserver<TResult>, Action<TSource>> getOnNext)
         {
-            return new TimeTicker(interval, forAsync);
+            if (source == null) throw new ArgumentNullException("source");
+            if (getOnNext == null) throw new ArgumentNullException("getOnNext");
+
+            var chain = new ObservableChain<TResult>();
+            var observer = new ActionObserver<TSource>(getOnNext(chain), chain.OnError, chain.OnCompleted);
+            chain.Subscription = source.Subscribe(observer);
+            return chain;
         }
 
         public static IObservable<TSource> SetMaxFrequency<TSource>(this IObservable<TSource> source, double maxFrequency)
         {
-            if (source == null) throw new ArgumentNullException("source");
-
             var filter = new FrequencyFilter(maxFrequency);
 
-            return new ChainNotifier<TSource, TSource>(source, (o, onNext) => { if (filter.CheckLap()) onNext(o); });
+            return ChainNext<TSource, TSource>(source, obs => o => { if (filter.CheckLap()) obs.OnNext(o); });
         }
 
-        public static IObservable<TSource> DoAsync<TSource>(this IObservable<TSource> source, Action<TSource> onNext)
+        public static IObservable<TSource> ToAsync<TSource>(this IObservable<TSource> source)
         {
-            if (source == null) throw new ArgumentNullException("source");
-            if (onNext == null) throw new ArgumentNullException("onNext");
+            return ChainNext<TSource, TSource>(source, obs => o => Task.Run(() => obs.OnNext(o)));
+        }
 
-            return new ChainNotifier<TSource, TSource>(source, (o, onNext2) =>
-                Task.Run(() =>
+        public static IObservable<TSource> Filter<TSource>(this IObservable<TSource> source, Func<TSource, bool> filter)
+        {
+            return ChainNext<TSource, TSource>(source, obs => o => { if (filter(o)) obs.OnNext(o); });
+        }
+
+        public static IObservable<TResult> Map<TSource, TResult>(this IObservable<TSource> source, Func<TSource, TResult> mapping)
+        {
+            return ChainNext<TSource, TResult>(source, obs => o => obs.OnNext(mapping(o)));
+        }
+
+        [Obsolete("Use Take method.")]
+        public static IObservable<TSource> Take2<TSource>(this IObservable<TSource> source, int count)
+        {
+            var isCompleted = false;
+            var i = 0;
+
+            return ChainNext<TSource, TSource>(source, obs => o =>
+            {
+                if (isCompleted) return;
+                if (i < count) obs.OnNext(o);
+                i++;
+                if (i >= count)
                 {
-                    onNext(o);
-                    onNext2(o);
-                }));
+                    isCompleted = true;
+                    obs.OnCompleted();
+                }
+            });
         }
     }
 }

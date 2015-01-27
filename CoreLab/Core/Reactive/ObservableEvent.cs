@@ -2,7 +2,26 @@
 
 namespace KLibrary.Labs.Reactive
 {
-    public class ObservableEvent<T> : IObservable<T>
+    // Use System.Reactive.Subjects.Subject<T> class.
+    public class ObservableEvent<T> : NotifierBase<T>, IObserver<T>
+    {
+        public virtual void OnNext(T value)
+        {
+            NotifyNext(value);
+        }
+
+        public virtual void OnError(Exception error)
+        {
+            NotifyError(error);
+        }
+
+        public virtual void OnCompleted()
+        {
+            NotifyCompleted();
+        }
+    }
+
+    internal class ObservableEvent_Old<T> : IObservable<T>
     {
         event Action<T> TheEvent;
 

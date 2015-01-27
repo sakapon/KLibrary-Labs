@@ -18,30 +18,36 @@ namespace KLibrary.Labs.Reactive
             if (observer == null) throw new ArgumentNullException("observer");
 
             Observers.Add(observer);
+            if (Observers.Count == 1) OnObservationStarted();
+
             return Disposable.FromAction(() =>
             {
                 Observers.Remove(observer);
-                if (Observers.Count == 0) OnDisposing();
+                if (Observers.Count == 0) OnObservationStopped();
             });
         }
 
-        protected void OnNext(T value)
+        protected void NotifyNext(T value)
         {
             // 変更操作との競合を避けるため、配列にコピーします。
             Array.ForEach(Observers.ToArray(), o => o.OnNext(value));
         }
 
-        protected void OnError(Exception error)
+        protected void NotifyError(Exception error)
         {
             Array.ForEach(Observers.ToArray(), o => o.OnError(error));
         }
 
-        protected void OnCompleted()
+        protected void NotifyCompleted()
         {
             Array.ForEach(Observers.ToArray(), o => o.OnCompleted());
         }
 
-        protected virtual void OnDisposing()
+        protected virtual void OnObservationStarted()
+        {
+        }
+
+        protected virtual void OnObservationStopped()
         {
         }
     }

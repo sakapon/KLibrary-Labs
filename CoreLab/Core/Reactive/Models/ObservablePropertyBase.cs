@@ -7,9 +7,14 @@ namespace KLibrary.Labs.Reactive.Models
     {
         public abstract T Value { get; set; }
 
+        public static explicit operator T(ObservablePropertyBaseCore<T> value)
+        {
+            return value.Value;
+        }
+
         public virtual void NotifyValueChanged()
         {
-            OnNext(Value);
+            NotifyNext(Value);
         }
 
         public IDisposable Subscribe(Action onValueChanged)
@@ -17,6 +22,12 @@ namespace KLibrary.Labs.Reactive.Models
             if (onValueChanged == null) throw new ArgumentNullException("onValueChanged");
 
             return Subscribe(new ActionObserver<T>(o => onValueChanged()));
+        }
+
+        public override string ToString()
+        {
+            // For designers.
+            return GetType().Name;
         }
     }
 

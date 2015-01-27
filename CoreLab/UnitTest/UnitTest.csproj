@@ -76,7 +76,7 @@
     <Compile Include="MaybeTest.cs" />
     <Compile Include="DisposableTest.cs" />
     <Compile Include="Reactive\ObservableEventTest.cs" />
-    <Compile Include="Reactive\TimeTickerTest.cs" />
+    <Compile Include="Reactive\Timers\PeriodicTimerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

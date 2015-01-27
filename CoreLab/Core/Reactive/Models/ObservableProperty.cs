@@ -23,6 +23,11 @@ namespace KLibrary.Labs.Reactive.Models
         {
             _value = defaultValue;
         }
+
+        public static explicit operator ObservableProperty<T>(T value)
+        {
+            return new ObservableProperty<T>(value);
+        }
     }
 
     // 固定値プロパティの Observable 化 (非実用的)。
@@ -41,6 +46,11 @@ namespace KLibrary.Labs.Reactive.Models
         public ReadOnlyProperty(T value)
         {
             _value = value;
+        }
+
+        public static explicit operator ReadOnlyProperty<T>(T value)
+        {
+            return new ReadOnlyProperty<T>(value);
         }
     }
 

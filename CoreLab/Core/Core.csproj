@@ -64,11 +64,12 @@
     <Compile Include="Reactive\Models\IObservableProperty.cs" />
     <Compile Include="Reactive\Models\ObservableProperty.cs" />
     <Compile Include="Reactive\Models\ObservablePropertyBase.cs" />
-    <Compile Include="Reactive\Notifier.cs" />
+    <Compile Include="Reactive\ChainNotifier.cs" />
     <Compile Include="Reactive\NotifierBase.cs" />
     <Compile Include="Reactive\Observable2.cs" />
+    <Compile Include="Reactive\ObservableChain.cs" />
     <Compile Include="Reactive\ObservableEvent.cs" />
-    <Compile Include="Reactive\TimeTicker.cs" />
+    <Compile Include="Reactive\Timers\PeriodicTimer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

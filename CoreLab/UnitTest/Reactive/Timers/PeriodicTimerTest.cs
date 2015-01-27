@@ -1,20 +1,23 @@
-﻿using KLibrary.Labs.Reactive;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
+using KLibrary.Labs.Reactive;
+using KLibrary.Labs.Reactive.Timers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace UnitTest.Reactive
+namespace UnitTest.Reactive.Timers
 {
     [TestClass]
-    public class TimeTickerTest
+    public class PeriodicTimerTest
     {
+        static readonly Action<long> WriteLong = i => Debug.WriteLine("{0}: {1:HH:mm:ss.fff}", i, DateTime.Now);
+
         [TestMethod]
         public void ctor_Thread_Sync()
         {
-            var threadIds = new TimeTicker(TimeSpan.FromMilliseconds(20))
+            var threadIds = new PeriodicTimer(TimeSpan.FromMilliseconds(20))
                 .Take(100)
                 .Select(_ => Thread.CurrentThread.ManagedThreadId)
                 .ToEnumerable()
@@ -27,7 +30,8 @@ namespace UnitTest.Reactive
         [TestMethod]
         public void ctor_Thread_Async()
         {
-            var threadIds = new TimeTicker(TimeSpan.FromMilliseconds(20), true)
+            var threadIds = new PeriodicTimer(TimeSpan.FromMilliseconds(20))
+                .ToAsync()
                 .Take(100)
                 .Select(_ => Thread.CurrentThread.ManagedThreadId)
                 .ToEnumerable()
@@ -38,28 +42,31 @@ namespace UnitTest.Reactive
         }
 
         [TestMethod]
-        public void ctor_Sync()
+        public void ctor_Time_Sync()
         {
-            new TimeTicker(TimeSpan.FromSeconds(1))
+            WriteLong(-1);
+            new PeriodicTimer(TimeSpan.FromSeconds(1))
                 .Take(10)
-                .Do(i => Debug.WriteLine("{0}: {1:HH:mm:ss.fff}", i, DateTime.Now))
+                .Do(WriteLong)
                 .Wait();
         }
 
         [TestMethod]
-        public void ctor_Async()
+        public void ctor_Time_Async()
         {
-            new TimeTicker(TimeSpan.FromSeconds(1), true)
+            WriteLong(-1);
+            new PeriodicTimer(TimeSpan.FromSeconds(1))
+                .ToAsync()
                 .Take(10)
-                .Do(i => Debug.WriteLine("{0}: {1:HH:mm:ss.fff}", i, DateTime.Now))
+                .Do(WriteLong)
                 .Wait();
         }
 
         [TestMethod]
         public void Dispose()
         {
-            var context = new TimeTicker(TimeSpan.FromMilliseconds(500))
-                .Subscribe(i => Debug.WriteLine("{0}: {1:HH:mm:ss.fff}", i, DateTime.Now));
+            var context = new PeriodicTimer(TimeSpan.FromMilliseconds(500))
+                .Subscribe(WriteLong);
 
             using (context)
             {
@@ -70,9 +77,9 @@ namespace UnitTest.Reactive
         [TestMethod]
         public void Dispose_not()
         {
-            var context = new TimeTicker(TimeSpan.FromMilliseconds(500))
+            var context = new PeriodicTimer(TimeSpan.FromMilliseconds(500))
                 .Take(10)
-                .Subscribe(i => Debug.WriteLine("{0}: {1:HH:mm:ss.fff}", i, DateTime.Now));
+                .Subscribe(WriteLong);
 
             Thread.Sleep(6000);
         }
