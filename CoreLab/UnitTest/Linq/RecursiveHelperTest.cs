@@ -50,5 +50,18 @@ namespace UnitTest.Linq
                 Console.WriteLine(path);
             }
         }
+
+        [TestMethod]
+        public void EnumerateRecursively_Children2()
+        {
+            var query = new { Index = 0, Path = Path.GetFullPath(@"..\..\") }
+                .EnumerateRecursively(_ => Directory.EnumerateDirectories(_.Path)
+                    .Select(p => new { Index = _.Index + 1, Path = p }));
+
+            foreach (var item in query)
+            {
+                Console.WriteLine("{0}: {1}", item.Index, item.Path);
+            }
+        }
     }
 }
