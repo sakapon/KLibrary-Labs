@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="Collections\HistoryTest.cs" />
     <Compile Include="Collections\QueueCollectionTest.cs" />
+    <Compile Include="Linq\RecursiveHelperTest.cs" />
     <Compile Include="Mathematics\PolynomialTest.cs" />
     <Compile Include="Mathematics\FrequencyMeterTest.cs" />
     <Compile Include="Mathematics\FrequencyFilterTest.cs" />

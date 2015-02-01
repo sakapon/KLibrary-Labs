@@ -46,6 +46,7 @@
     <Compile Include="Collections\QueueCollection.cs" />
     <Compile Include="Disposable.cs" />
     <Compile Include="Linq\Enumerable2.cs" />
+    <Compile Include="Linq\RecursiveHelper.cs" />
     <Compile Include="Mathematics\FrequencyConditioner.cs" />
     <Compile Include="Mathematics\FrequencyFilter.cs" />
     <Compile Include="Mathematics\FrequencyMeter.cs" />
