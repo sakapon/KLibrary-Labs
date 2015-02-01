@@ -43,6 +43,26 @@ namespace KLibrary.Labs
             return new Maybe<T>(value);
         }
 
+        public static bool operator ==(Maybe<T> value1, Maybe<T> value2)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator !=(Maybe<T> value1, Maybe<T> value2)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
         public Maybe<TResult> Bind<TResult>(Func<T, Maybe<TResult>> func)
         {
             return HasValue
@@ -63,6 +83,30 @@ namespace KLibrary.Labs
         public static Maybe<T> ToMaybe<T>(this T value)
         {
             return value;
+        }
+
+        public static Maybe<T> ToMaybeWithoutDefault<T>(this T value)
+        {
+            return ToMaybeWithoutDefault(value, default(T));
+        }
+
+        public static Maybe<T> ToMaybeWithoutDefault<T>(this T value, T defaultValue)
+        {
+            return !object.Equals(value, defaultValue)
+                ? value
+                : Maybe<T>.None;
+        }
+
+        public static T GetValueOrDefault<T>(this Maybe<T> maybe)
+        {
+            return GetValueOrDefault(maybe, default(T));
+        }
+
+        public static T GetValueOrDefault<T>(this Maybe<T> maybe, T defaultValue)
+        {
+            return maybe.HasValue
+                ? maybe.Value
+                : defaultValue;
         }
 
         public static Maybe<TResult> Select<T, TResult>(this Maybe<T> maybe, Func<T, TResult> selector)
