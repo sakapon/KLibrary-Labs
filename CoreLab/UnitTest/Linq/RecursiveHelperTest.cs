@@ -52,10 +52,23 @@ namespace UnitTest.Linq
         }
 
         [TestMethod]
-        public void EnumerateRecursively_Children2()
+        public void EnumerateRecursively_Children_Index()
         {
             var query = new { Index = 0, Path = Path.GetFullPath(@"..\..\") }
                 .EnumerateRecursively(_ => Directory.EnumerateDirectories(_.Path)
+                    .Select(p => new { Index = _.Index + 1, Path = p }));
+
+            foreach (var item in query)
+            {
+                Console.WriteLine("{0}: {1}", item.Index, item.Path);
+            }
+        }
+
+        [TestMethod]
+        public void EnumerateRecursively2_Children_Index()
+        {
+            var query = new { Index = 0, Path = Path.GetFullPath(@"..\..\") }
+                .EnumerateRecursively2(_ => Directory.EnumerateDirectories(_.Path)
                     .Select(p => new { Index = _.Index + 1, Path = p }));
 
             foreach (var item in query)

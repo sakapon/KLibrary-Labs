@@ -27,15 +27,24 @@ namespace KLibrary.Labs.Linq
 
         static IEnumerable<TSource> EnumerateRecursively_Private<TSource>(TSource initialValue, Func<TSource, IEnumerable<TSource>> getNextItems)
         {
-            yield return initialValue;
+            return initialValue.ToEnumerable()
+                .Concat(getNextItems(initialValue).SelectMany(o => EnumerateRecursively_Private(o, getNextItems)));
+        }
 
-            foreach (var child in getNextItems(initialValue))
-            {
-                foreach (var o in EnumerateRecursively_Private(child, getNextItems))
-                {
-                    yield return o;
-                }
-            }
+        public static IEnumerable<TSource> EnumerateRecursively2<TSource>(this TSource initialValue, Func<TSource, IEnumerable<TSource>> getNextItems)
+        {
+            if (getNextItems == null) throw new ArgumentNullException("getNextItems");
+
+            return EnumerateRecursively2_Private(new[] { initialValue }, getNextItems);
+        }
+
+        static IEnumerable<TSource> EnumerateRecursively2_Private<TSource>(TSource[] initialValues, Func<TSource, IEnumerable<TSource>> getNextItems)
+        {
+            if (initialValues.Length == 0) return initialValues;
+
+            // 上の階層から順に返します。
+            return initialValues
+                .Concat(EnumerateRecursively2_Private(initialValues.SelectMany(getNextItems).ToArray(), getNextItems));
         }
     }
 }
