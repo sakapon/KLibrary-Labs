@@ -58,6 +58,18 @@ namespace KLibrary.Labs.Reactive.Models
             return new FollowingGetProperty<TSource>(source, defaultValue);
         }
 
+        public static IObservable<TSource> Do<TSource, TProperty>(this IObservable<TSource> source, IObservableGetProperty<TProperty> property)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            if (property == null) throw new ArgumentNullException("property");
+
+            return source.ChainNext<TSource, TSource>(obs => o =>
+            {
+                property.OnNext();
+                obs.OnNext(o);
+            });
+        }
+
         public static IDisposable Subscribe<TSource, TProperty>(this IObservable<TSource> source, IObservableGetProperty<TProperty> property)
         {
             if (source == null) throw new ArgumentNullException("source");
