@@ -3,7 +3,7 @@
 namespace KLibrary.Labs.Reactive
 {
     // Use System.Reactive.Subjects.Subject<T> class.
-    public class ObservableEvent<T> : NotifierBase<T>, IObserver<T>
+    public class ObservableEvent<T> : NotifierBase<T>, IObservable<T>, IObserver<T>
     {
         public virtual void OnNext(T value)
         {

@@ -8,6 +8,11 @@ namespace KLibrary.Labs.Reactive
     {
         protected List<IObserver<T>> Observers { get; private set; }
 
+        public bool HasObservers
+        {
+            get { return Observers.Count > 0; }
+        }
+
         public NotifierBase()
         {
             Observers = new List<IObserver<T>>();
@@ -30,17 +35,26 @@ namespace KLibrary.Labs.Reactive
         protected void NotifyNext(T value)
         {
             // 変更操作との競合を避けるため、配列にコピーします。
-            Array.ForEach(Observers.ToArray(), o => o.OnNext(value));
+            foreach (var o in Observers.ToArray())
+            {
+                o.OnNext(value);
+            }
         }
 
         protected void NotifyError(Exception error)
         {
-            Array.ForEach(Observers.ToArray(), o => o.OnError(error));
+            foreach (var o in Observers.ToArray())
+            {
+                o.OnError(error);
+            }
         }
 
         protected void NotifyCompleted()
         {
-            Array.ForEach(Observers.ToArray(), o => o.OnCompleted());
+            foreach (var o in Observers.ToArray())
+            {
+                o.OnCompleted();
+            }
         }
 
         protected virtual void OnObservationStarted()
