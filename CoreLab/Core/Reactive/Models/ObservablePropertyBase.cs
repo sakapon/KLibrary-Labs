@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace KLibrary.Labs.Reactive.Models
 {
-    public abstract class ObservablePropertyBaseCore<T> : NotifierBase<T>, IObservableProperty
+    public abstract class ObservablePropertyBaseCore<T> : ObservableEvent<T>
     {
         public abstract T Value { get; set; }
 
@@ -12,16 +12,14 @@ namespace KLibrary.Labs.Reactive.Models
             return value.Value;
         }
 
-        public virtual void NotifyValueChanged()
+        public override void OnNext(T value)
         {
-            NotifyNext(Value);
+            Value = value;
         }
 
-        public IDisposable Subscribe(Action onValueChanged)
+        protected virtual void NotifyValueChanged()
         {
-            if (onValueChanged == null) throw new ArgumentNullException("onValueChanged");
-
-            return Subscribe(new ActionObserver<T>(o => onValueChanged()));
+            NotifyNext(Value);
         }
 
         public override string ToString()
@@ -31,13 +29,57 @@ namespace KLibrary.Labs.Reactive.Models
         }
     }
 
-    public abstract class ObservablePropertyBase<T> : ObservablePropertyBaseCore<T>, INotifyPropertyChanged
+    public abstract class ObservableGetPropertyBaseCore<T> : NotifierBase<T>
+    {
+        public abstract T Value { get; }
+
+        public static explicit operator T(ObservableGetPropertyBaseCore<T> value)
+        {
+            return value.Value;
+        }
+
+        public abstract void OnNext();
+
+        protected virtual void NotifyValueChanged()
+        {
+            NotifyNext(Value);
+        }
+
+        public override string ToString()
+        {
+            // For designers.
+            return GetType().Name;
+        }
+    }
+
+    public abstract class ObservablePropertyBase<T> : ObservablePropertyBaseCore<T>, IObservableProperty<T>
     {
         static readonly PropertyChangedEventArgs EventArgs_ValueChanged = new PropertyChangedEventArgs("Value");
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public override void NotifyValueChanged()
+        protected override void NotifyValueChanged()
+        {
+            base.NotifyValueChanged();
+
+            var pc = PropertyChanged;
+            if (pc != null) pc(this, EventArgs_ValueChanged);
+        }
+
+        protected void NotifyPropertyChanged(string propertyName)
+        {
+            var pc = PropertyChanged;
+            if (pc != null) pc(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    public abstract class ObservableGetPropertyBase<T> : ObservableGetPropertyBaseCore<T>, IObservableGetProperty<T>
+    {
+        static readonly PropertyChangedEventArgs EventArgs_ValueChanged = new PropertyChangedEventArgs("Value");
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected override void NotifyValueChanged()
         {
             base.NotifyValueChanged();
 

@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace KLibrary.Labs.Reactive
 {
+    // On...: 前のシーケンスから通知を受けるためのメソッド。
+    // Notify...: 後ろのシーケンスに通知するためのメソッド。
     public abstract class NotifierBase<T> : IObservable<T>
     {
         protected List<IObserver<T>> Observers { get; private set; }
