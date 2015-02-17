@@ -45,29 +45,24 @@ namespace KLibrary.Labs
 
         public static bool operator ==(Maybe<T> value1, Maybe<T> value2)
         {
-            throw new NotImplementedException();
+            return !(value1.HasValue ^ value2.HasValue) && (!value1.HasValue || object.Equals(value1._value, value2._value));
         }
 
         public static bool operator !=(Maybe<T> value1, Maybe<T> value2)
         {
-            throw new NotImplementedException();
+            return !(value1 == value2);
         }
 
         public override bool Equals(object obj)
         {
-            throw new NotImplementedException();
+            return obj is Maybe<T> && this == (Maybe<T>)obj;
         }
 
         public override int GetHashCode()
         {
-            throw new NotImplementedException();
-        }
-
-        public Maybe<TResult> Bind<TResult>(Func<T, Maybe<TResult>> func)
-        {
             return HasValue
-                ? func(_value)
-                : Maybe<TResult>.None;
+                ? _value.GetHashCode()
+                : 0;
         }
 
         public override string ToString()
@@ -76,6 +71,13 @@ namespace KLibrary.Labs
                 ? _value.ToString()
                 : "{None}";
         }
+
+        public Maybe<TResult> Bind<TResult>(Func<T, Maybe<TResult>> func)
+        {
+            return HasValue
+                ? func(_value)
+                : Maybe<TResult>.None;
+        }
     }
 
     public static class Maybe
@@ -83,30 +85,6 @@ namespace KLibrary.Labs
         public static Maybe<T> ToMaybe<T>(this T value)
         {
             return value;
-        }
-
-        public static Maybe<T> ToMaybeWithoutDefault<T>(this T value)
-        {
-            return ToMaybeWithoutDefault(value, default(T));
-        }
-
-        public static Maybe<T> ToMaybeWithoutDefault<T>(this T value, T defaultValue)
-        {
-            return !object.Equals(value, defaultValue)
-                ? value
-                : Maybe<T>.None;
-        }
-
-        public static T GetValueOrDefault<T>(this Maybe<T> maybe)
-        {
-            return GetValueOrDefault(maybe, default(T));
-        }
-
-        public static T GetValueOrDefault<T>(this Maybe<T> maybe, T defaultValue)
-        {
-            return maybe.HasValue
-                ? maybe.Value
-                : defaultValue;
         }
 
         public static Maybe<TResult> Select<T, TResult>(this Maybe<T> maybe, Func<T, TResult> selector)
