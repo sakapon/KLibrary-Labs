@@ -1,7 +1,7 @@
-﻿using KLibrary.Labs.Collections;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using KLibrary.Labs.Collections;
 
 namespace KLibrary.Labs.Mathematics
 {
