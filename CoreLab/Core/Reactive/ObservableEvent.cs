@@ -2,8 +2,13 @@
 
 namespace KLibrary.Labs.Reactive
 {
+    public interface IObservableEvent<T> : IObservable<T>, IObserver<T>
+    {
+        bool HasObservers { get; }
+    }
+
     // Use System.Reactive.Subjects.Subject<T> class.
-    public class ObservableEvent<T> : NotifierBase<T>, IObservable<T>, IObserver<T>
+    public class ObservableEvent<T> : NotifierBase<T>, IObservableEvent<T>
     {
         public virtual void OnNext(T value)
         {

@@ -30,6 +30,11 @@ namespace KLibrary.Labs.Reactive.Models
             return new DirectGetProperty<TSource>(getValue);
         }
 
+        public static IObservableEvent<TSource> CreateEvent<TSource>()
+        {
+            return new ObservableEvent<TSource>();
+        }
+
         public static IObservable<TSource> ToObservableMask<TSource>(this IObservable<TSource> source)
         {
             if (source == null) throw new ArgumentNullException("source");
