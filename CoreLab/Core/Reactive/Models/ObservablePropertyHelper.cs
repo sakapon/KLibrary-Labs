@@ -3,33 +3,72 @@ using System.ComponentModel;
 
 namespace KLibrary.Labs.Reactive.Models
 {
+    /// <summary>
+    /// Provides a set of static methods for the observable property model.
+    /// </summary>
     public static class ObservableProperty
     {
+        /// <summary>
+        /// Creates an instance of <see cref="IObservableProperty&lt;TSource&gt;"/> with the default value of <typeparamref name="TSource"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the property.</typeparam>
+        /// <returns>An <see cref="IObservableProperty&lt;TSource&gt;"/> object.</returns>
         public static IObservableProperty<TSource> Create<TSource>()
         {
             return new ObservableProperty<TSource>();
         }
 
+        /// <summary>
+        /// Creates an instance of <see cref="IObservableProperty&lt;TSource&gt;"/> with the specified default value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the property.</typeparam>
+        /// <param name="defaultValue">The default value.</param>
+        /// <returns>An <see cref="IObservableProperty&lt;TSource&gt;"/> object.</returns>
         public static IObservableProperty<TSource> Create<TSource>(TSource defaultValue)
         {
             return new ObservableProperty<TSource>(defaultValue);
         }
 
+        /// <summary>
+        /// Creates an instance of <see cref="IObservableGetProperty&lt;TSource&gt;"/> with the return value of <paramref name="getValue"/> as the default value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the property.</typeparam>
+        /// <param name="getValue">The function to get a new property value.</param>
+        /// <returns>An <see cref="IObservableGetProperty&lt;TSource&gt;"/> object.</returns>
         public static IObservableGetProperty<TSource> CreateGet<TSource>(Func<TSource> getValue)
         {
             return new ObservableGetProperty<TSource>(getValue);
         }
 
+        /// <summary>
+        /// Creates an instance of <see cref="IObservableGetProperty&lt;TSource&gt;"/> with the specified default value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the property.</typeparam>
+        /// <param name="getValue">The function to get a new property value.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <returns>An <see cref="IObservableGetProperty&lt;TSource&gt;"/> object.</returns>
         public static IObservableGetProperty<TSource> CreateGet<TSource>(Func<TSource> getValue, TSource defaultValue)
         {
             return new ObservableGetProperty<TSource>(getValue, defaultValue);
         }
 
+        /// <summary>
+        /// Creates an instance of <see cref="IObservableGetProperty&lt;TSource&gt;"/>.
+        /// The property value is not cached, so is evaluated for every access.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the property.</typeparam>
+        /// <param name="getValue">The function to get a new property value.</param>
+        /// <returns>An <see cref="IObservableGetProperty&lt;TSource&gt;"/> object.</returns>
         public static IObservableGetProperty<TSource> CreateGetDirect<TSource>(Func<TSource> getValue)
         {
             return new DirectGetProperty<TSource>(getValue);
         }
 
+        /// <summary>
+        /// Creates an instance of <see cref="IObservableEvent&lt;TSource&gt;"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of objects to be provided.</typeparam>
+        /// <returns>An <see cref="IObservableEvent&lt;TSource&gt;"/> object.</returns>
         public static IObservableEvent<TSource> CreateEvent<TSource>()
         {
             return new ObservableEvent<TSource>();

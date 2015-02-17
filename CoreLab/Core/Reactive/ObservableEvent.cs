@@ -2,8 +2,15 @@
 
 namespace KLibrary.Labs.Reactive
 {
+    /// <summary>
+    /// Represents an IObservable-based event.
+    /// </summary>
+    /// <typeparam name="T">The type of objects to be provided.</typeparam>
     public interface IObservableEvent<T> : IObservable<T>, IObserver<T>
     {
+        /// <summary>
+        /// Gets a value indicating whether this observable object has observers.
+        /// </summary>
         bool HasObservers { get; }
     }
 
