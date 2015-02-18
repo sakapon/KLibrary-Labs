@@ -25,17 +25,24 @@ namespace UnitTest.Linq
         [TestMethod]
         public void EnumerateRecursively_Parents()
         {
-            var query = Environment.CurrentDirectory
-                .EnumerateRecursively(p =>
-                {
-                    var di = Directory.GetParent(p);
-                    return di != null ? di.FullName : null;
-                })
-                .TakeWhile(p => p != null);
-
-            foreach (var path in query)
+            var query1 = Environment.CurrentDirectory
+                .ToMaybe()
+                .EnumerateRecursively(path => path
+                    .Select(p => Directory.GetParent(p))
+                    .Select(d => d.FullName))
+                .TakeWhile(path => path.HasValue)
+                .Select(path => path.Value);
+            foreach (var path in query1)
             {
                 Console.WriteLine(path);
+            }
+
+            var query2 = new DirectoryInfo(Environment.CurrentDirectory)
+                .EnumerateRecursively(d => d.Parent)
+                .TakeWhile(d => d != null);
+            foreach (var dir in query2)
+            {
+                Console.WriteLine(dir.FullName);
             }
         }
 
