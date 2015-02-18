@@ -35,7 +35,9 @@ namespace KLibrary.Labs
 
         public static bool operator ==(Maybe<T> value1, Maybe<T> value2)
         {
-            return !value1.HasValue ? !value2.HasValue : (value2.HasValue && object.Equals(value1.Value, value2.Value));
+            return value1.HasValue
+                ? (value2.HasValue && object.Equals(value1.Value, value2.Value))
+                : !value2.HasValue;
         }
 
         public static bool operator !=(Maybe<T> value1, Maybe<T> value2)
@@ -77,11 +79,22 @@ namespace KLibrary.Labs
             return value;
         }
 
+        public static Maybe<T> Do<T>(this Maybe<T> maybe, Action<T> action)
+        {
+            if (maybe.HasValue) action((T)maybe);
+            return maybe;
+        }
+
         public static Maybe<TResult> Select<T, TResult>(this Maybe<T> maybe, Func<T, TResult> selector)
         {
             return maybe.HasValue
                 ? selector((T)maybe)
                 : Maybe<TResult>.None;
+        }
+
+        public static Maybe<TResult> SelectMany<T, TResult>(this Maybe<T> maybe, Func<T, Maybe<TResult>> selector)
+        {
+            return maybe.Bind(selector);
         }
 
         public static Maybe<TResult> SelectMany<T, U, TResult>(this Maybe<T> maybe, Func<T, Maybe<U>> selector, Func<T, U, TResult> resultSelector)
@@ -97,6 +110,13 @@ namespace KLibrary.Labs
             return maybe.HasValue && predicate((T)maybe)
                 ? maybe
                 : Maybe<T>.None;
+        }
+
+        public static Maybe<TResult> Combine<T1, T2, TResult>(this Maybe<T1> maybe1, Maybe<T2> maybe2, Func<T1, T2, TResult> resultSelector)
+        {
+            return maybe1.HasValue && maybe2.HasValue
+                ? resultSelector((T1)maybe1, (T2)maybe2)
+                : Maybe<TResult>.None;
         }
     }
 }
