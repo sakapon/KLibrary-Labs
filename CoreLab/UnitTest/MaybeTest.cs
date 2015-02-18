@@ -1,6 +1,6 @@
-﻿using KLibrary.Labs;
+﻿using System;
+using KLibrary.Labs;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace UnitTest
 {
@@ -16,6 +16,25 @@ namespace UnitTest
 
             var r2 = Maybe<int>.None.Select(i => 3 * i);
             Assert.IsFalse(r2.HasValue);
+        }
+
+        [TestMethod]
+        public void Equals()
+        {
+            Assert.IsTrue(Maybe<int>.None == default(Maybe<int>));
+            Assert.IsTrue(0.ToMaybe() == 0);
+            Assert.IsTrue(1.ToMaybe() == 1);
+            Assert.IsFalse(Maybe<int>.None == 0);
+            Assert.IsFalse(0 == Maybe<int>.None);
+            Assert.IsFalse(1.ToMaybe() == 2);
+
+            var obj = new object();
+            Assert.IsTrue(Maybe<object>.None == default(object));
+            Assert.IsTrue(default(object).ToMaybe() == default(object));
+            Assert.IsTrue(obj.ToMaybe() == obj);
+            Assert.IsFalse(Maybe<object>.None == obj);
+            Assert.IsFalse(obj == Maybe<object>.None);
+            Assert.IsFalse(obj.ToMaybe() == new object());
         }
 
         [TestMethod]

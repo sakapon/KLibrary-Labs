@@ -1,6 +1,6 @@
-﻿using KLibrary.Labs;
+﻿using System;
+using KLibrary.Labs;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace UnitTest
 {

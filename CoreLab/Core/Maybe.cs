@@ -45,7 +45,7 @@ namespace KLibrary.Labs
 
         public static bool operator ==(Maybe<T> value1, Maybe<T> value2)
         {
-            return !(value1.HasValue ^ value2.HasValue) && (!value1.HasValue || object.Equals(value1._value, value2._value));
+            return !value1.HasValue ? !value2.HasValue : (value2.HasValue && object.Equals(value1._value, value2._value));
         }
 
         public static bool operator !=(Maybe<T> value1, Maybe<T> value2)
@@ -61,14 +61,14 @@ namespace KLibrary.Labs
         public override int GetHashCode()
         {
             return HasValue
-                ? _value.GetHashCode()
+                ? (_value != null ? _value.GetHashCode() : 0)
                 : 0;
         }
 
         public override string ToString()
         {
             return HasValue
-                ? _value.ToString()
+                ? (_value != null ? _value.ToString() : "{Null}")
                 : "{None}";
         }
 
