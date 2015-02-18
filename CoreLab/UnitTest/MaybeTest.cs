@@ -30,7 +30,7 @@ namespace UnitTest
 
             var obj = new object();
             Assert.IsTrue(Maybe<object>.None == default(object));
-            Assert.IsTrue(default(object).ToMaybe() == default(object));
+            Assert.IsTrue(new Maybe<object>(null) == default(object));
             Assert.IsTrue(obj.ToMaybe() == obj);
             Assert.IsFalse(Maybe<object>.None == obj);
             Assert.IsFalse(obj == Maybe<object>.None);

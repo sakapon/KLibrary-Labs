@@ -13,14 +13,24 @@ namespace KLibrary.Labs
         /// </summary>
         public static readonly Maybe<T> None = new Maybe<T>();
 
-        public T Value { get; private set; }
+        T _value;
+
+        public T Value
+        {
+            get
+            {
+                if (!HasValue) throw new InvalidOperationException();
+                return _value;
+            }
+        }
+
         public bool HasValue { get; private set; }
 
         public Maybe(T value)
             : this()
         {
-            Value = value;
-            HasValue = value != null;
+            _value = value;
+            HasValue = true;
         }
 
         public static explicit operator T(Maybe<T> value)
@@ -35,7 +45,7 @@ namespace KLibrary.Labs
 
         public static bool operator ==(Maybe<T> value1, Maybe<T> value2)
         {
-            return !value1.HasValue ? !value2.HasValue : (value2.HasValue && object.Equals(value1.Value, value2.Value));
+            return !value1.HasValue ? !value2.HasValue : (value2.HasValue && object.Equals(value1._value, value2._value));
         }
 
         public static bool operator !=(Maybe<T> value1, Maybe<T> value2)
@@ -51,21 +61,21 @@ namespace KLibrary.Labs
         public override int GetHashCode()
         {
             return HasValue
-                ? Value.GetHashCode()
+                ? (_value != null ? _value.GetHashCode() : 0)
                 : 0;
         }
 
         public override string ToString()
         {
             return HasValue
-                ? Value.ToString()
+                ? (_value != null ? _value.ToString() : "{Null}")
                 : "{None}";
         }
 
         public Maybe<TResult> Bind<TResult>(Func<T, Maybe<TResult>> func)
         {
             return HasValue
-                ? func(Value)
+                ? func(_value)
                 : Maybe<TResult>.None;
         }
     }
