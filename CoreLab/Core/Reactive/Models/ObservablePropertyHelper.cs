@@ -119,7 +119,7 @@ namespace KLibrary.Labs.Reactive.Models
             if (source == null) throw new ArgumentNullException("source");
             if (property == null) throw new ArgumentNullException("property");
 
-            return source.Subscribe(new ActionObserver<TSource>(o => property.OnNext()));
+            return source.Subscribe(Observer2.Create<TSource>(o => property.OnNext()));
         }
     }
 

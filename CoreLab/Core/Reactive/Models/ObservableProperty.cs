@@ -163,7 +163,7 @@ namespace KLibrary.Labs.Reactive.Models
         {
             if (predecessor == null) throw new ArgumentNullException("predecessor");
 
-            predecessor.Subscribe(new ActionObserver<T>(SetValue));
+            predecessor.Subscribe(Observer2.Create<T>(SetValue));
             _value = defaultValue;
         }
 
