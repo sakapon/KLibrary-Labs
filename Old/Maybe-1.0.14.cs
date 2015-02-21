@@ -13,14 +13,24 @@ namespace KLibrary.Labs
         /// </summary>
         public static readonly Maybe<T> None = new Maybe<T>();
 
-        public T Value { get; private set; }
+        T _value;
+
+        public T Value
+        {
+            get
+            {
+                if (!HasValue) throw new InvalidOperationException();
+                return _value;
+            }
+        }
+
         public bool HasValue { get; private set; }
 
         public Maybe(T value)
             : this()
         {
-            Value = value;
-            HasValue = value != null;
+            _value = value;
+            HasValue = true;
         }
 
         public static explicit operator T(Maybe<T> value)
@@ -35,9 +45,7 @@ namespace KLibrary.Labs
 
         public static bool operator ==(Maybe<T> value1, Maybe<T> value2)
         {
-            return value1.HasValue
-                ? (value2.HasValue && object.Equals(value1.Value, value2.Value))
-                : !value2.HasValue;
+            return !value1.HasValue ? !value2.HasValue : (value2.HasValue && object.Equals(value1._value, value2._value));
         }
 
         public static bool operator !=(Maybe<T> value1, Maybe<T> value2)
@@ -53,21 +61,21 @@ namespace KLibrary.Labs
         public override int GetHashCode()
         {
             return HasValue
-                ? Value.GetHashCode()
+                ? (_value != null ? _value.GetHashCode() : 0)
                 : 0;
         }
 
         public override string ToString()
         {
             return HasValue
-                ? Value.ToString()
+                ? (_value != null ? _value.ToString() : "{Null}")
                 : "{None}";
         }
 
         public Maybe<TResult> Bind<TResult>(Func<T, Maybe<TResult>> func)
         {
             return HasValue
-                ? func(Value)
+                ? func(_value)
                 : Maybe<TResult>.None;
         }
     }
@@ -79,22 +87,11 @@ namespace KLibrary.Labs
             return value;
         }
 
-        public static Maybe<T> Do<T>(this Maybe<T> maybe, Action<T> action)
-        {
-            if (maybe.HasValue) action((T)maybe);
-            return maybe;
-        }
-
         public static Maybe<TResult> Select<T, TResult>(this Maybe<T> maybe, Func<T, TResult> selector)
         {
             return maybe.HasValue
                 ? selector((T)maybe)
                 : Maybe<TResult>.None;
-        }
-
-        public static Maybe<TResult> SelectMany<T, TResult>(this Maybe<T> maybe, Func<T, Maybe<TResult>> selector)
-        {
-            return maybe.Bind(selector);
         }
 
         public static Maybe<TResult> SelectMany<T, U, TResult>(this Maybe<T> maybe, Func<T, Maybe<U>> selector, Func<T, U, TResult> resultSelector)
@@ -110,13 +107,6 @@ namespace KLibrary.Labs
             return maybe.HasValue && predicate((T)maybe)
                 ? maybe
                 : Maybe<T>.None;
-        }
-
-        public static Maybe<TResult> Combine<T1, T2, TResult>(this Maybe<T1> maybe1, Maybe<T2> maybe2, Func<T1, T2, TResult> resultSelector)
-        {
-            return maybe1.HasValue && maybe2.HasValue
-                ? resultSelector((T1)maybe1, (T2)maybe2)
-                : Maybe<TResult>.None;
         }
     }
 }
