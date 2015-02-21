@@ -42,7 +42,7 @@ namespace KLibrary.Labs.Reactive
             if (handler == null) throw new ArgumentNullException("handler");
 
             TheEvent += handler;
-            return Disposable.FromAction(() => TheEvent -= handler);
+            return Disposable.Create(() => TheEvent -= handler);
         }
 
         public void Raise(T arg)

@@ -27,7 +27,7 @@ namespace KLibrary.Labs.Reactive
             Observers.Add(observer);
             if (Observers.Count == 1) OnObservationStarted();
 
-            return Disposable.FromAction(() =>
+            return Disposable.Create(() =>
             {
                 Observers.Remove(observer);
                 if (Observers.Count == 0) OnObservationStopped();

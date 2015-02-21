@@ -5,12 +5,12 @@ namespace KLibrary.Labs
 {
     public static class Disposable
     {
-        public static IDisposable FromAction(Action dispose)
+        public static IDisposable Create(Action dispose)
         {
             return new DelegateDisposable(dispose, false);
         }
 
-        public static IDisposable FromAction(Action dispose, bool onFinalizing)
+        public static IDisposable Create(Action dispose, bool onFinalizing)
         {
             return new DelegateDisposable(dispose, onFinalizing);
         }

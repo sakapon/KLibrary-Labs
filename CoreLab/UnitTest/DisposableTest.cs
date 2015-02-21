@@ -11,7 +11,7 @@ namespace UnitTest
         public void FromAction()
         {
             var count = 0;
-            using (var action = Disposable.FromAction(() => count++))
+            using (var action = Disposable.Create(() => count++))
             {
                 Assert.AreEqual(0, count);
             }
