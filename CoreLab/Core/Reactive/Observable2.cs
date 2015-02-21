@@ -20,7 +20,7 @@ namespace KLibrary.Labs.Reactive
             if (getOnNext == null) throw new ArgumentNullException("getOnNext");
 
             var chain = new ObservableChain<TResult>();
-            var observer = new ActionObserver<TSource>(getOnNext(chain), chain.OnError, chain.OnCompleted);
+            var observer = Observer2.Create(getOnNext(chain), chain.OnError, chain.OnCompleted);
             chain.Subscription = source.Subscribe(observer);
             return chain;
         }

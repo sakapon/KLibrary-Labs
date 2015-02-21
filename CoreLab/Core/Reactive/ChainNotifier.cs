@@ -11,7 +11,7 @@ namespace KLibrary.Labs.Reactive
         {
             if (predecessor == null) throw new ArgumentNullException("predecessor");
 
-            var observer = new ActionObserver<TPrevious>(o => chain(o, NotifyNext), NotifyError, NotifyCompleted);
+            var observer = Observer2.Create<TPrevious>(o => chain(o, NotifyNext), NotifyError, NotifyCompleted);
             _disposable = predecessor.Subscribe(observer);
         }
 

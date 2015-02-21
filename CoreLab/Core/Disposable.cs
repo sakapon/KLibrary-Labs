@@ -5,32 +5,32 @@ namespace KLibrary.Labs
 {
     public static class Disposable
     {
-        public static IDisposable FromAction(Action action)
+        public static IDisposable FromAction(Action dispose)
         {
-            return new DisposableAction(action, false);
+            return new DelegateDisposable(dispose, false);
         }
 
-        public static IDisposable FromAction(Action action, bool onFinalizing)
+        public static IDisposable FromAction(Action dispose, bool onFinalizing)
         {
-            return new DisposableAction(action, onFinalizing);
+            return new DelegateDisposable(dispose, onFinalizing);
         }
     }
 
     [DebuggerDisplay("IsDisposed: {_isDisposed}")]
-    class DisposableAction : IDisposable
+    class DelegateDisposable : IDisposable
     {
-        Action _action;
+        Action _dispose;
         bool _onFinalizing;
         bool _isDisposed;
 
-        public DisposableAction(Action action, bool onFinalizing)
+        public DelegateDisposable(Action dispose, bool onFinalizing)
         {
-            if (action == null) throw new ArgumentNullException("action");
-            _action = action;
+            if (dispose == null) throw new ArgumentNullException("dispose");
+            _dispose = dispose;
             _onFinalizing = onFinalizing;
         }
 
-        ~DisposableAction()
+        ~DelegateDisposable()
         {
             Dispose(false);
         }
@@ -49,7 +49,7 @@ namespace KLibrary.Labs
 
             try
             {
-                _action();
+                _dispose();
             }
             catch (Exception) { }
         }
