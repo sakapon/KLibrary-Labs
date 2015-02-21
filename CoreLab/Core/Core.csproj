@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E9AA690E-6F68-4A92-A013-B0382474658D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>KLibrary.Labs</RootNamespace>
+    <AssemblyName>KLibrary.Labs.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <DocumentationFile>bin\Release\KLibrary.Labs.Core.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Collections\DisposableCollection.cs" />
+    <Compile Include="Collections\History.cs" />
+    <Compile Include="Collections\QueueCollection.cs" />
+    <Compile Include="Comparison.cs" />
+    <Compile Include="Disposable.cs" />
+    <Compile Include="Linq\Enumerable2.cs" />
+    <Compile Include="Linq\RecursiveHelper.cs" />
+    <Compile Include="Mathematics\FrequencyConditioner.cs" />
+    <Compile Include="Mathematics\FrequencyFilter.cs" />
+    <Compile Include="Mathematics\FrequencyMeter.cs" />
+    <Compile Include="Mathematics\Polynomial.cs" />
+    <Compile Include="Maybe.cs" />
+    <Compile Include="MonadBase.cs" />
+    <Compile Include="OldNewValues.cs" />
+    <Compile Include="Pipeline\Case.cs" />
+    <Compile Include="Pipeline\ExceptionHelper.cs" />
+    <Compile Include="Pipeline\FuncHelper.cs" />
+    <Compile Include="Pipeline\ObjectHelper.cs" />
+    <Compile Include="Pipeline\TupleHelper.cs" />
+    <Compile Include="Pipeline\Usual.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reactive\Observer2.cs" />
+    <Compile Include="Reactive\Models\IObservableProperty.cs" />
+    <Compile Include="Reactive\Models\ObservableProperty.cs" />
+    <Compile Include="Reactive\Models\ObservablePropertyBase.cs" />
+    <Compile Include="Reactive\ChainNotifier.cs" />
+    <Compile Include="Reactive\Models\ObservablePropertyHelper.cs" />
+    <Compile Include="Reactive\NotifierBase.cs" />
+    <Compile Include="Reactive\Observable2.cs" />
+    <Compile Include="Reactive\ObservableChain.cs" />
+    <Compile Include="Reactive\ObservableEvent.cs" />
+    <Compile Include="Reactive\Timers\PeriodicTimer.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
