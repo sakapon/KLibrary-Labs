@@ -44,6 +44,7 @@
     <Compile Include="Collections\DisposableCollection.cs" />
     <Compile Include="Collections\History.cs" />
     <Compile Include="Collections\QueueCollection.cs" />
+    <Compile Include="Comparison.cs" />
     <Compile Include="Disposable.cs" />
     <Compile Include="Linq\Enumerable2.cs" />
     <Compile Include="Linq\RecursiveHelper.cs" />
