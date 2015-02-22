@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Windows.UI.Input.Inking;
 
-namespace KLibrary.Labs.WinRT
+namespace KLibrary.Labs.UI.Input
 {
     class InkManagerContext
     {
