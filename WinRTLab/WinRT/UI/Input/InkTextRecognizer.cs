@@ -11,12 +11,9 @@ using Windows.UI.Input.Inking;
 
 namespace KLibrary.Labs.UI.Input
 {
-    // InkManager members to be called:
-    // ctor
-    // GetRecognizers
-    // SetDefaultRecognizer
-    // AddStroke
-    // RecognizeAsync
+    /// <summary>
+    /// Provides handwriting recognition for strokes.
+    /// </summary>
     public class InkTextRecognizer
     {
         public static readonly CultureInfo Culture_ja_JP = CultureInfo.GetCultureInfo("ja-JP");
@@ -27,6 +24,9 @@ namespace KLibrary.Labs.UI.Input
 
         InkManagerContext _context = new InkManagerContext();
 
+        /// <summary>
+        /// Gets or sets the culture to be used for handwriting recognition.
+        /// </summary>
         public CultureInfo Culture
         {
             get { return _context.Culture; }
@@ -41,6 +41,9 @@ namespace KLibrary.Labs.UI.Input
         public IObservable<string[]> CandidatesArrived { get; private set; }
         public IObservable<string> BestResultArrived { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InkTextRecognizer"/> class.
+        /// </summary>
         public InkTextRecognizer()
         {
             AllResultsArrived = _AllResultsArrived.ToObservableMask();
@@ -48,6 +51,10 @@ namespace KLibrary.Labs.UI.Input
             BestResultArrived = _BestResultArrived.ToObservableMask();
         }
 
+        /// <summary>
+        /// Clear the strokes.
+        /// The empty states will be notified via <see cref="AllResultsArrived"/>, <see cref="CandidatesArrived"/> and <see cref="BestResultArrived"/>.
+        /// </summary>
         public void Clear()
         {
             _context.Initialize();
@@ -57,6 +64,10 @@ namespace KLibrary.Labs.UI.Input
             _BestResultArrived.OnNext("");
         }
 
+        /// <summary>
+        /// Adds a stroke.
+        /// </summary>
+        /// <param name="stroke">The <see cref="Stroke"/> object.</param>
         public void AddStroke(Stroke stroke)
         {
             if (stroke == null) throw new ArgumentNullException("stroke");
@@ -64,6 +75,10 @@ namespace KLibrary.Labs.UI.Input
             _context.Manager.AddStroke(stroke.StylusPoints.ToInkStroke());
         }
 
+        /// <summary>
+        /// Adds a stroke by points.
+        /// </summary>
+        /// <param name="points">The collection of points.</param>
         public void AddStroke(IEnumerable<Point> points)
         {
             if (points == null) throw new ArgumentNullException("points");
@@ -71,12 +86,18 @@ namespace KLibrary.Labs.UI.Input
             _context.Manager.AddStroke(points.ToInkStroke());
         }
 
+        /// <summary>
+        /// Undo the last stroke.
+        /// </summary>
         public void UndoStroke()
         {
             _context.UndoStroke();
         }
 
-        // 認識の結果はイベントで通知されます。
+        /// <summary>
+        /// Performs handwriting recognition for the strokes.
+        /// The results of the recognition will be notified via <see cref="AllResultsArrived"/>, <see cref="CandidatesArrived"/> and <see cref="BestResultArrived"/>.
+        /// </summary>
         public async void RecognizeAsync()
         {
             try
