@@ -7,7 +7,7 @@ namespace KLibrary.Labs.WinRT
 {
     class InkManagerContext
     {
-        public InkManager Value { get; private set; }
+        public InkManager Manager { get; private set; }
 
         CultureInfo _culture = CultureInfo.CurrentCulture;
 
@@ -31,13 +31,13 @@ namespace KLibrary.Labs.WinRT
         // Can be repeated to call.
         public void Initialize()
         {
-            Value = new InkManager();
+            Manager = new InkManager();
             UpdateCulture();
         }
 
         void UpdateCulture()
         {
-            var recognizers = Value.GetRecognizers();
+            var recognizers = Manager.GetRecognizers();
             var recognizer = default(InkRecognizer);
 
             switch (_culture.Name)
@@ -61,36 +61,36 @@ namespace KLibrary.Labs.WinRT
                     break;
             }
 
-            if (recognizer != null) Value.SetDefaultRecognizer(recognizer);
+            if (recognizer != null) Manager.SetDefaultRecognizer(recognizer);
         }
 
         public void Fallback()
         {
             lock (this)
             {
-                var strokes = Value.GetStrokes();
+                var strokes = Manager.GetStrokes();
 
                 Initialize();
 
                 foreach (var stroke in strokes)
                 {
-                    Value.AddStroke(stroke.Clone());
+                    Manager.AddStroke(stroke.Clone());
                 }
             }
         }
 
-        public void Undo()
+        public void UndoStroke()
         {
             lock (this)
             {
-                var strokes = Value.GetStrokes();
+                var strokes = Manager.GetStrokes();
                 if (strokes.Count == 0) return;
 
                 Initialize();
 
                 foreach (var stroke in strokes.Take(strokes.Count - 1))
                 {
-                    Value.AddStroke(stroke.Clone());
+                    Manager.AddStroke(stroke.Clone());
                 }
             }
         }
