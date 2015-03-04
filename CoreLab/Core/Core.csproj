@@ -73,6 +73,7 @@
     <Compile Include="Reactive\ObservableChain.cs" />
     <Compile Include="Reactive\ObservableEvent.cs" />
     <Compile Include="Reactive\Timers\PeriodicTimer.cs" />
+    <Compile Include="Sure.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
