@@ -28,7 +28,7 @@ namespace KLibrary.Labs.Reactive.Timers
                 {
                     nextTimePoint += Interval;
                     var timeout = (nextTimePoint - DateTime.Now).TotalMilliseconds;
-                    Thread.Sleep(Math.Max(0, (int)timeout));
+                    Thread.Sleep(Math.Max(0, (int)Math.Ceiling(timeout)));
 
                     NotifyNext(i);
                 }
