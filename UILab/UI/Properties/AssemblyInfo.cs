@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Windows.Markup;
 
 // アセンブリに関する一般情報は以下の属性セットをとおして制御されます。
 // アセンブリに関連付けられている情報を変更するには、
@@ -32,5 +33,9 @@ using System.Runtime.InteropServices;
 // すべての値を指定するか、下のように '*' を使ってビルドおよびリビジョン番号を 
 // 既定値にすることができます:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.2.0")]
-[assembly: AssemblyFileVersion("1.0.2.0")]
+[assembly: AssemblyVersion("1.0.3.0")]
+[assembly: AssemblyFileVersion("1.0.3.0")]
+
+//[assembly: XmlnsDefinition("http://schemas.saka-pon.net/klibrary/ui", "KLibrary.Labs.UI.Controls")]
+[assembly: XmlnsDefinition("http://schemas.saka-pon.net/klibrary/ui", "KLibrary.Labs.UI.Converters")]
+[assembly: XmlnsPrefix("http://schemas.saka-pon.net/klibrary/ui", "kui")]
