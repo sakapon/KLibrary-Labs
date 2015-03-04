@@ -13,9 +13,20 @@ namespace KLibrary.Labs
         /// </summary>
         public static readonly Maybe<T> None = new Maybe<T>();
 
+        /// <summary>
+        /// Gets the underlying value.
+        /// </summary>
         public T Value { get; private set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this object has a non-null value.
+        /// </summary>
         public bool HasValue { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Maybe&lt;T&gt;"/> structure.
+        /// </summary>
+        /// <param name="value">The underlying value.</param>
         public Maybe(T value)
             : this()
         {
@@ -54,7 +65,7 @@ namespace KLibrary.Labs
         {
             return HasValue
                 ? Value.GetHashCode()
-                : 0;
+                : default(int);
         }
 
         public override string ToString()
@@ -72,8 +83,17 @@ namespace KLibrary.Labs
         }
     }
 
+    /// <summary>
+    /// Provides a set of static methods for the <see cref="Maybe&lt;T&gt;"/> structure.
+    /// </summary>
     public static class Maybe
     {
+        /// <summary>
+        /// Creates a <see cref="Maybe&lt;T&gt;"/> from a value.
+        /// </summary>
+        /// <typeparam name="T">The type of a value.</typeparam>
+        /// <param name="value">A value.</param>
+        /// <returns>A <see cref="Maybe&lt;T&gt;"/>.</returns>
         public static Maybe<T> ToMaybe<T>(this T value)
         {
             return value;
@@ -81,14 +101,14 @@ namespace KLibrary.Labs
 
         public static Maybe<T> Do<T>(this Maybe<T> maybe, Action<T> action)
         {
-            if (maybe.HasValue) action((T)maybe);
+            if (maybe.HasValue) action(maybe.Value);
             return maybe;
         }
 
         public static Maybe<TResult> Select<T, TResult>(this Maybe<T> maybe, Func<T, TResult> selector)
         {
             return maybe.HasValue
-                ? selector((T)maybe)
+                ? selector(maybe.Value)
                 : Maybe<TResult>.None;
         }
 
@@ -101,13 +121,13 @@ namespace KLibrary.Labs
         {
             var selected = maybe.Bind(selector);
             return selected.HasValue
-                ? resultSelector((T)maybe, (U)selected)
+                ? resultSelector(maybe.Value, selected.Value)
                 : Maybe<TResult>.None;
         }
 
         public static Maybe<T> Where<T>(this Maybe<T> maybe, Func<T, bool> predicate)
         {
-            return maybe.HasValue && predicate((T)maybe)
+            return maybe.HasValue && predicate(maybe.Value)
                 ? maybe
                 : Maybe<T>.None;
         }
@@ -115,7 +135,7 @@ namespace KLibrary.Labs
         public static Maybe<TResult> Combine<T1, T2, TResult>(this Maybe<T1> maybe1, Maybe<T2> maybe2, Func<T1, T2, TResult> resultSelector)
         {
             return maybe1.HasValue && maybe2.HasValue
-                ? resultSelector((T1)maybe1, (T2)maybe2)
+                ? resultSelector(maybe1.Value, maybe2.Value)
                 : Maybe<TResult>.None;
         }
     }
