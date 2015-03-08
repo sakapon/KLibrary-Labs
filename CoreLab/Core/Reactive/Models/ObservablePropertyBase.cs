@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace KLibrary.Labs.Reactive.Models
 {
+    [DebuggerDisplay("{Value}")]
     public abstract class ObservablePropertyBaseCore<T> : ObservableEvent<T>
     {
         public abstract T Value { get; set; }
@@ -29,6 +31,7 @@ namespace KLibrary.Labs.Reactive.Models
         }
     }
 
+    [DebuggerDisplay("{Value}")]
     public abstract class ObservableGetPropertyBaseCore<T> : NotifierBase<T>
     {
         public abstract T Value { get; }

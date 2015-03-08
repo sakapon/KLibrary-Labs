@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace KLibrary.Labs
 {
+    [DebuggerDisplay("{Value}")]
     public struct Sure<T>
     {
         T _value;

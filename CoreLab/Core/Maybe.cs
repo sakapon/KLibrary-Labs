@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace KLibrary.Labs
 {
@@ -6,6 +7,7 @@ namespace KLibrary.Labs
     /// Represents a value type that can be assigned the unset state.
     /// </summary>
     /// <typeparam name="T">The underlying value type.</typeparam>
+    [DebuggerDisplay("{HasValue ? Value}")]
     public struct Maybe<T>
     {
         /// <summary>
@@ -72,7 +74,7 @@ namespace KLibrary.Labs
         {
             return HasValue
                 ? Value.ToString()
-                : "{None}";
+                : "";
         }
 
         public Maybe<TResult> Bind<TResult>(Func<T, Maybe<TResult>> func)
