@@ -101,6 +101,32 @@ namespace KLibrary.Labs
             return value;
         }
 
+        /// <summary>
+        /// Creates a <see cref="Maybe&lt;T&gt;"/> from a nullable value.
+        /// </summary>
+        /// <typeparam name="T">The type of a value.</typeparam>
+        /// <param name="value">A value.</param>
+        /// <returns>A <see cref="Maybe&lt;T&gt;"/>.</returns>
+        public static Maybe<T> ToMaybe<T>(this T? value) where T : struct
+        {
+            return value.HasValue
+                ? value.Value
+                : Maybe<T>.None;
+        }
+
+        /// <summary>
+        /// Creates a nullable value from a <see cref="Maybe&lt;T&gt;"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of a value.</typeparam>
+        /// <param name="value">A <see cref="Maybe&lt;T&gt;"/>.</param>
+        /// <returns>A <see cref="Nullable&lt;T&gt;"/>.</returns>
+        public static T? ToNullable<T>(this Maybe<T> value) where T : struct
+        {
+            return value.HasValue
+                ? value.Value
+                : default(T?);
+        }
+
         public static Maybe<T> Do<T>(this Maybe<T> maybe, Action<T> action)
         {
             if (maybe.HasValue) action(maybe.Value);

@@ -8,6 +8,22 @@ namespace UnitTest
     public class MaybeTest
     {
         [TestMethod]
+        public void ToMaybe()
+        {
+            var m1 = 1.ToMaybe();
+            Assert.AreEqual(true, m1.HasValue);
+            Assert.AreEqual(1, m1.Value);
+
+            var m2 = ((int?)2).ToMaybe();
+            Assert.AreEqual(true, m2.HasValue);
+            Assert.AreEqual(2, m2.Value);
+
+            var m3 = default(int?).ToMaybe();
+            Assert.AreEqual(false, m3.HasValue);
+            Assert.AreEqual(0, m3.Value);
+        }
+
+        [TestMethod]
         public void Equals()
         {
             Assert.IsTrue(Maybe<int>.None == default(Maybe<int>));
