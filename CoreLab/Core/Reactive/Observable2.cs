@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using KLibrary.Labs.Mathematics;
 using KLibrary.Labs.Reactive.Timers;
@@ -32,6 +33,23 @@ namespace KLibrary.Labs.Reactive
             return ChainNext<TSource, TSource>(source, obs => o => { if (filter.CheckLap()) obs.OnNext(o); });
         }
 
+        public static IObservable<TSource> ToSync<TSource>(this IObservable<TSource> source)
+        {
+            var context = SynchronizationContext.Current;
+            return ChainNext<TSource, TSource>(source, obs => o =>
+            {
+                if (context != null && context != SynchronizationContext.Current)
+                {
+                    // Post メソッドを使うと、最後 (Completed のとき) の値が通知されません。
+                    context.Send(_ => obs.OnNext(o), null);
+                }
+                else
+                {
+                    obs.OnNext(o);
+                }
+            });
+        }
+
         public static IObservable<TSource> ToAsync<TSource>(this IObservable<TSource> source)
         {
             return ChainNext<TSource, TSource>(source, obs => o => Task.Run(() => obs.OnNext(o)));
@@ -47,7 +65,6 @@ namespace KLibrary.Labs.Reactive
             return ChainNext<TSource, TResult>(source, obs => o => obs.OnNext(mapping(o)));
         }
 
-        [Obsolete("Use Take method.")]
         public static IObservable<TSource> Take2<TSource>(this IObservable<TSource> source, int count)
         {
             var isCompleted = false;
