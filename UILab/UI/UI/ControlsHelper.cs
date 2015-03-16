@@ -43,5 +43,12 @@ namespace KLibrary.Labs.UI
         {
             window.Relocate(ScreenHelper.PrimaryScreenBounds);
         }
+
+        public static void FullScreenForCurrent(this Window window)
+        {
+            // TODO: Assert loaded or initialized.
+            var rect = new Int32Rect((int)window.Left, (int)window.Top, (int)window.ActualWidth, (int)window.ActualHeight);
+            window.Relocate(ScreenHelper.GetScreenBounds(rect));
+        }
     }
 }

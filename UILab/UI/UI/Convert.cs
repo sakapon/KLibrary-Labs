@@ -1,15 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
+using DRectangle = System.Drawing.Rectangle;
 
 namespace KLibrary.Labs.UI
 {
     public static class Convert
     {
-        public static Int32Rect ToInt32Rect(this System.Drawing.Rectangle r)
+        public static Int32Rect ToInt32Rect(this DRectangle r)
         {
             return new Int32Rect(r.X, r.Y, r.Width, r.Height);
+        }
+
+        public static DRectangle ToRectangle(this Int32Rect r)
+        {
+            return new DRectangle(r.X, r.Y, r.Width, r.Height);
         }
     }
 }
