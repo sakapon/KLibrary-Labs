@@ -44,11 +44,28 @@ namespace KLibrary.Labs.UI
             window.Relocate(ScreenHelper.PrimaryScreenBounds);
         }
 
+        public static void FullScreenFor(this Window window, int index)
+        {
+            window.Relocate(ScreenHelper.GetScreenBounds(index));
+        }
+
         public static void FullScreenForCurrent(this Window window)
         {
-            // TODO: Assert loaded or initialized.
-            var rect = new Int32Rect((int)window.Left, (int)window.Top, (int)window.ActualWidth, (int)window.ActualHeight);
-            window.Relocate(ScreenHelper.GetScreenBounds(rect));
+            var bounds = window.GetBounds();
+            window.Relocate(ScreenHelper.GetScreenBounds(bounds));
+        }
+
+        public static int GetScreenIndex(this Window window)
+        {
+            var bounds = window.GetBounds();
+            return ScreenHelper.GetScreenIndex(bounds);
+        }
+
+        public static Int32Rect GetBounds(this Window window)
+        {
+            if (!window.IsLoaded) throw new InvalidOperationException();
+
+            return new Int32Rect((int)window.Left, (int)window.Top, (int)window.ActualWidth, (int)window.ActualHeight);
         }
     }
 }

@@ -26,7 +26,35 @@ namespace TestWpf
             InitializeComponent();
 
             this.SetBorderless();
-            this.FullScreenForAll();
+            //this.FullScreenForAll();
+            ResizeMode = ResizeMode.NoResize;
+
+            Loaded += MainWindow_Loaded;
+            LocationChanged += MainWindow_LocationChanged;
+            SizeChanged += MainWindow_SizeChanged;
+        }
+
+        void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            window.FullScreenForCurrent();
+
+            System.Diagnostics.Debug.WriteLine("Loaded");
+        }
+
+        void MainWindow_LocationChanged(object sender, EventArgs e)
+        {
+            if (!IsLoaded) return;
+            window.FullScreenForCurrent();
+
+            System.Diagnostics.Debug.WriteLine("LocationChanged");
+        }
+
+        void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (!IsLoaded) return;
+            window.FullScreenForCurrent();
+
+            System.Diagnostics.Debug.WriteLine("SizeChanged");
         }
     }
 }

@@ -33,15 +33,27 @@ namespace KLibrary.Labs.UI
 
         static readonly Lazy<Int32Rect> _PrimaryScreenBounds = new Lazy<Int32Rect>(() => Screen.PrimaryScreen.Bounds.ToInt32Rect());
 
+        public static int ScreensCount
+        {
+            get { return Screen.AllScreens.Length; }
+        }
+
+        // On screen coordinate system.
         public static int GetScreenIndex(Int32Rect rect)
         {
             var screen = Screen.FromRectangle(rect.ToRectangle());
             return Array.IndexOf(Screen.AllScreens, screen);
         }
 
+        // On screen coordinate system.
         public static Int32Rect GetScreenBounds(Int32Rect rect)
         {
             return Screen.GetBounds(rect.ToRectangle()).ToInt32Rect();
+        }
+
+        public static Int32Rect GetScreenBounds(int index)
+        {
+            return Screen.AllScreens[index].Bounds.ToInt32Rect();
         }
 
         public static Point GetLeftTop(this Int32Rect rect)

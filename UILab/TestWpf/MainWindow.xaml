@@ -12,6 +12,7 @@
 	<Grid>
 		<StackPanel>
 			<TextBlock Text="{Binding ActualWidth, ElementName=window}"/>
+			<TextBlock Text="{Binding ActualHeight, ElementName=window}"/>
 			<TextBlock Text="{Binding ActualWidth, Converter={StaticResource ScaleConverter}, ElementName=window, Mode=OneWay}"/>
 		</StackPanel>
 	</Grid>
