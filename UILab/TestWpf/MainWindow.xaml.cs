@@ -26,7 +26,6 @@ namespace TestWpf
             InitializeComponent();
 
             this.SetBorderless();
-            //this.FullScreenForAll();
             ResizeMode = ResizeMode.NoResize;
 
             Loaded += MainWindow_Loaded;
@@ -34,9 +33,13 @@ namespace TestWpf
             SizeChanged += MainWindow_SizeChanged;
         }
 
+        bool _isRelocating;
+
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            _isRelocating = true;
             window.FullScreenForCurrent();
+            _isRelocating = false;
 
             System.Diagnostics.Debug.WriteLine("Loaded");
         }
@@ -44,7 +47,10 @@ namespace TestWpf
         void MainWindow_LocationChanged(object sender, EventArgs e)
         {
             if (!IsLoaded) return;
+            if (_isRelocating) return;
+            _isRelocating = true;
             window.FullScreenForCurrent();
+            _isRelocating = false;
 
             System.Diagnostics.Debug.WriteLine("LocationChanged");
         }
@@ -52,7 +58,10 @@ namespace TestWpf
         void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (!IsLoaded) return;
+            if (_isRelocating) return;
+            _isRelocating = true;
             window.FullScreenForCurrent();
+            _isRelocating = false;
 
             System.Diagnostics.Debug.WriteLine("SizeChanged");
         }

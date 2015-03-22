@@ -28,10 +28,12 @@ namespace KLibrary.Labs.UI
         /// <param name="bounds">The location and the size.</param>
         public static void Relocate(this Window window, Int32Rect bounds)
         {
-            window.Left = bounds.X;
-            window.Top = bounds.Y;
-            window.Width = bounds.Width;
-            window.Height = bounds.Height;
+            var scale = window.GetScreenScale();
+
+            window.Left = bounds.X / scale;
+            window.Top = bounds.Y / scale;
+            window.Width = bounds.Width / scale;
+            window.Height = bounds.Height / scale;
         }
 
         public static void FullScreenForAll(this Window window)
@@ -63,9 +65,17 @@ namespace KLibrary.Labs.UI
 
         public static Int32Rect GetBounds(this Window window)
         {
-            if (!window.IsLoaded) throw new InvalidOperationException();
+            if (!window.IsLoaded) throw new InvalidOperationException("The window has not been loaded.");
 
             return new Int32Rect((int)window.Left, (int)window.Top, (int)window.ActualWidth, (int)window.ActualHeight);
+        }
+
+        public static double GetScreenScale(this Window window)
+        {
+            if (!window.IsLoaded) throw new InvalidOperationException("The window has not been loaded.");
+
+            var v = window.PointToScreen(new Point(100, 0)) - window.PointToScreen(new Point(0, 0));
+            return v.X / 100;
         }
     }
 }
