@@ -28,23 +28,14 @@ namespace TestWpf
             this.SetBorderless();
             ResizeMode = ResizeMode.NoResize;
 
-            Loaded += MainWindow_Loaded;
-            LocationChanged += MainWindow_LocationChanged;
-            SizeChanged += MainWindow_SizeChanged;
+            Loaded += (o, e) => ToFullScreen("Loaded");
+            LocationChanged += (o, e) => ToFullScreen("LocationChanged");
+            SizeChanged += (o, e) => ToFullScreen("SizeChanged");
         }
 
         bool _isRelocating;
 
-        void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            _isRelocating = true;
-            window.FullScreenForCurrent();
-            _isRelocating = false;
-
-            System.Diagnostics.Debug.WriteLine("Loaded");
-        }
-
-        void MainWindow_LocationChanged(object sender, EventArgs e)
+        void ToFullScreen(string message)
         {
             if (!IsLoaded) return;
             if (_isRelocating) return;
@@ -52,18 +43,7 @@ namespace TestWpf
             window.FullScreenForCurrent();
             _isRelocating = false;
 
-            System.Diagnostics.Debug.WriteLine("LocationChanged");
-        }
-
-        void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if (!IsLoaded) return;
-            if (_isRelocating) return;
-            _isRelocating = true;
-            window.FullScreenForCurrent();
-            _isRelocating = false;
-
-            System.Diagnostics.Debug.WriteLine("SizeChanged");
+            System.Diagnostics.Debug.WriteLine(message);
         }
     }
 }
