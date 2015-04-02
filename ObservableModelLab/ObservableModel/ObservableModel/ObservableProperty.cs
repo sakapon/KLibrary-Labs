@@ -11,55 +11,55 @@ namespace KLibrary.Labs.ObservableModel
         /// <summary>
         /// Creates an instance of IObservable-based settable property.
         /// </summary>
-        /// <typeparam name="TSource">The type of the property.</typeparam>
+        /// <typeparam name="T">The type of the property.</typeparam>
         /// <param name="defaultValue">The default value.</param>
-        /// <returns>An <see cref="ISettableProperty&lt;TSource&gt;"/> object.</returns>
-        public static ISettableProperty<TSource> CreateSettable<TSource>(TSource defaultValue)
+        /// <returns>An <see cref="ISettableProperty&lt;T&gt;"/> object.</returns>
+        public static ISettableProperty<T> CreateSettable<T>(T defaultValue)
         {
             return CreateSettable(defaultValue, false);
         }
 
-        public static ISettableProperty<TSource> CreateSettable<TSource>(TSource defaultValue, bool notifiesUnchanged)
+        public static ISettableProperty<T> CreateSettable<T>(T defaultValue, bool notifiesUnchanged)
         {
-            return new SettableProperty<TSource>(defaultValue, notifiesUnchanged);
+            return new SettableProperty<T>(defaultValue, notifiesUnchanged);
         }
 
         /// <summary>
         /// Creates an instance of IObservable-based get-only property.
         /// The value is initialized with the return value of <paramref name="getValue"/>.
         /// </summary>
-        /// <typeparam name="TSource">The type of the property.</typeparam>
+        /// <typeparam name="T">The type of the property.</typeparam>
         /// <param name="getValue">The function to get a new property value.</param>
-        /// <returns>An <see cref="IGetOnlyProperty&lt;TSource&gt;"/> object.</returns>
-        public static IGetOnlyProperty<TSource> CreateGetOnly<TSource>(Func<TSource> getValue)
+        /// <returns>An <see cref="IGetOnlyProperty&lt;T&gt;"/> object.</returns>
+        public static IGetOnlyProperty<T> CreateGetOnly<T>(Func<T> getValue)
         {
             return CreateGetOnly(getValue, false);
         }
 
-        public static IGetOnlyProperty<TSource> CreateGetOnly<TSource>(Func<TSource> getValue, bool notifiesUnchanged)
+        public static IGetOnlyProperty<T> CreateGetOnly<T>(Func<T> getValue, bool notifiesUnchanged)
         {
             if (getValue == null) throw new ArgumentNullException("getValue");
 
-            return new CachingGetOnlyProperty<TSource>(getValue, getValue(), notifiesUnchanged);
+            return new CachingGetOnlyProperty<T>(getValue, getValue(), notifiesUnchanged);
         }
 
         /// <summary>
         /// Creates an instance of IObservable-based get-only property with the specified default value.
         /// </summary>
-        /// <typeparam name="TSource">The type of the property.</typeparam>
+        /// <typeparam name="T">The type of the property.</typeparam>
         /// <param name="getValue">The function to get a new property value.</param>
         /// <param name="defaultValue">The default value.</param>
-        /// <returns>An <see cref="IGetOnlyProperty&lt;TSource&gt;"/> object.</returns>
-        public static IGetOnlyProperty<TSource> CreateGetOnlyWithDefault<TSource>(Func<TSource> getValue, TSource defaultValue)
+        /// <returns>An <see cref="IGetOnlyProperty&lt;T&gt;"/> object.</returns>
+        public static IGetOnlyProperty<T> CreateGetOnlyWithDefault<T>(Func<T> getValue, T defaultValue)
         {
             return CreateGetOnlyWithDefault(getValue, defaultValue, false);
         }
 
-        public static IGetOnlyProperty<TSource> CreateGetOnlyWithDefault<TSource>(Func<TSource> getValue, TSource defaultValue, bool notifiesUnchanged)
+        public static IGetOnlyProperty<T> CreateGetOnlyWithDefault<T>(Func<T> getValue, T defaultValue, bool notifiesUnchanged)
         {
             if (getValue == null) throw new ArgumentNullException("getValue");
 
-            return new CachingGetOnlyProperty<TSource>(getValue, defaultValue, notifiesUnchanged);
+            return new CachingGetOnlyProperty<T>(getValue, defaultValue, notifiesUnchanged);
         }
 
         /// <summary>
