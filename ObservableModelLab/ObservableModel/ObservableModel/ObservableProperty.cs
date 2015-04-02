@@ -3,8 +3,17 @@ using System.Reactive.Linq;
 
 namespace KLibrary.Labs.ObservableModel
 {
+    /// <summary>
+    /// Provides a set of static methods for the observable model.
+    /// </summary>
     public static class ObservableProperty
     {
+        /// <summary>
+        /// Creates an instance of IObservable-based settable property.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the property.</typeparam>
+        /// <param name="defaultValue">The default value.</param>
+        /// <returns>An <see cref="ISettableProperty&lt;TSource&gt;"/> object.</returns>
         public static ISettableProperty<TSource> CreateSettable<TSource>(TSource defaultValue)
         {
             return CreateSettable(defaultValue, false);
@@ -15,7 +24,13 @@ namespace KLibrary.Labs.ObservableModel
             return new SettableProperty<TSource>(defaultValue, notifiesUnchanged);
         }
 
-        // 初期値は getValue 関数から取得します。
+        /// <summary>
+        /// Creates an instance of IObservable-based get-only property.
+        /// The value is initialized with the return value of <paramref name="getValue"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the property.</typeparam>
+        /// <param name="getValue">The function to get a new property value.</param>
+        /// <returns>An <see cref="IGetOnlyProperty&lt;TSource&gt;"/> object.</returns>
         public static IGetOnlyProperty<TSource> CreateGetOnly<TSource>(Func<TSource> getValue)
         {
             return CreateGetOnly(getValue, false);
@@ -28,6 +43,13 @@ namespace KLibrary.Labs.ObservableModel
             return new CachingGetOnlyProperty<TSource>(getValue, getValue(), notifiesUnchanged);
         }
 
+        /// <summary>
+        /// Creates an instance of IObservable-based get-only property with the specified default value.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the property.</typeparam>
+        /// <param name="getValue">The function to get a new property value.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <returns>An <see cref="IGetOnlyProperty&lt;TSource&gt;"/> object.</returns>
         public static IGetOnlyProperty<TSource> CreateGetOnlyWithDefault<TSource>(Func<TSource> getValue, TSource defaultValue)
         {
             return CreateGetOnlyWithDefault(getValue, defaultValue, false);
