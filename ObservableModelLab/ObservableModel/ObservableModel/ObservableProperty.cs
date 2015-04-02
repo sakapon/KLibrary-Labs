@@ -62,6 +62,13 @@ namespace KLibrary.Labs.ObservableModel
             return new CachingGetOnlyProperty<TSource>(getValue, defaultValue, notifiesUnchanged);
         }
 
+        /// <summary>
+        /// Creates an instance of IObservable-based get-only property from the predecessor sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the property.</typeparam>
+        /// <param name="source">The source sequence of elements.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <returns>An <see cref="IGetOnlyProperty&lt;TSource&gt;"/> object.</returns>
         public static IGetOnlyProperty<TSource> ToGetOnly<TSource>(this IObservable<TSource> source, TSource defaultValue)
         {
             return ToGetOnly(source, defaultValue, false);
@@ -74,6 +81,14 @@ namespace KLibrary.Labs.ObservableModel
             return new FollowingGetOnlyProperty<TSource>(source, defaultValue, notifiesUnchanged);
         }
 
+        /// <summary>
+        /// Creates an instance of IObservable-based get-only property from the predecessor settable property.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source.</typeparam>
+        /// <typeparam name="TResult">The type of the property.</typeparam>
+        /// <param name="source">The source property.</param>
+        /// <param name="selector">The transform function.</param>
+        /// <returns>An <see cref="IGetOnlyProperty&lt;TResult&gt;"/> object.</returns>
         public static IGetOnlyProperty<TResult> SelectToGetOnly<TSource, TResult>(this ISettableProperty<TSource> source, Func<TSource, TResult> selector)
         {
             return SelectToGetOnly(source, selector, false);
@@ -87,6 +102,14 @@ namespace KLibrary.Labs.ObservableModel
             return new FollowingGetOnlyProperty<TResult>(source.Select(selector), selector(source.Value), notifiesUnchanged);
         }
 
+        /// <summary>
+        /// Creates an instance of IObservable-based get-only property from the predecessor get-only property.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the source.</typeparam>
+        /// <typeparam name="TResult">The type of the property.</typeparam>
+        /// <param name="source">The source property.</param>
+        /// <param name="selector">The transform function.</param>
+        /// <returns>An <see cref="IGetOnlyProperty&lt;TResult&gt;"/> object.</returns>
         public static IGetOnlyProperty<TResult> SelectToGetOnly<TSource, TResult>(this IGetOnlyProperty<TSource> source, Func<TSource, TResult> selector)
         {
             return SelectToGetOnly(source, selector, false);
