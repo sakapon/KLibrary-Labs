@@ -1,8 +1,18 @@
-﻿<Window x:Class="TestWpf.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+        xmlns:local="clr-namespace:TestWpf" x:Class="TestWpf.MainWindow"
+        Title="MainWindow" Height="480" Width="720" FontSize="36">
+	<Window.DataContext>
+		<local:AppModel/>
+	</Window.DataContext>
+	<StackPanel Margin="20">
+		<TextBox Text="{Binding FirstName.Value, UpdateSourceTrigger=PropertyChanged}"/>
+		<TextBox Text="{Binding LastName.Value, UpdateSourceTrigger=PropertyChanged}"/>
+		<TextBlock Text="{Binding FullName.Value}"/>
+		<TextBlock Text="{Binding Message.Value}"/>
+		<TextBlock Text="{Binding CurrentTime.Value, StringFormat=\{0:HH:mm:ss\}}"/>
+		<TextBlock Text="{Binding RandomNumber.Value}"/>
+		<TextBlock Text="{Binding Count.Value}"/>
+	</StackPanel>
 </Window>
