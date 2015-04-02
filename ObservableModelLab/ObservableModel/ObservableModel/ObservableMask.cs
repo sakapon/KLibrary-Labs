@@ -23,6 +23,7 @@ namespace KLibrary.Labs.ObservableModel
     class GetOnlyPropertyMask<T> : IGetOnlyProperty<T>
     {
         ISettableProperty<T> _source;
+        Dictionary<PropertyChangedEventHandler, PropertyChangedEventHandler> _propertyChangedMasks = new Dictionary<PropertyChangedEventHandler, PropertyChangedEventHandler>();
 
         public bool HasObservers
         {
@@ -41,8 +42,23 @@ namespace KLibrary.Labs.ObservableModel
 
         public event PropertyChangedEventHandler PropertyChanged
         {
-            add { _source.PropertyChanged += (o, e) => value(this, e); }
-            remove { }
+            add
+            {
+                if (_propertyChangedMasks.ContainsKey(value)) return;
+
+                _propertyChangedMasks[value] = (o, e) => value(this, e);
+                _source.PropertyChanged += _propertyChangedMasks[value];
+            }
+            remove
+            {
+                if (!_propertyChangedMasks.ContainsKey(value)) return;
+
+                _source.PropertyChanged -= _propertyChangedMasks[value];
+                _propertyChangedMasks.Remove(value);
+            }
+            // データ バインディングでは sender が一致しなければならないため、以下のコードでは不可です。
+            //add { _source.PropertyChanged += value; }
+            //remove { _source.PropertyChanged -= value; }
         }
 
         public GetOnlyPropertyMask(ISettableProperty<T> source)
