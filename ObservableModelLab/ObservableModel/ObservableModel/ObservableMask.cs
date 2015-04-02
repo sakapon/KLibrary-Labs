@@ -11,6 +11,8 @@ namespace KLibrary.Labs.ObservableModel
 
         public ObservableMask(IObservable<T> source)
         {
+            if (source == null) throw new ArgumentNullException("source");
+
             _source = source;
         }
 
@@ -63,6 +65,8 @@ namespace KLibrary.Labs.ObservableModel
 
         public GetOnlyPropertyMask(ISettableProperty<T> source)
         {
+            if (source == null) throw new ArgumentNullException("source");
+
             _source = source;
         }
 
