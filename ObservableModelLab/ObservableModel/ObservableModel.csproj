@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="ObservableModel\Interfaces.cs" />
     <Compile Include="ObservableModel\NotifierBase.cs" />
+    <Compile Include="ObservableModel\ObservableMask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
