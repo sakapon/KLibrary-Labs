@@ -1,0 +1,85 @@
+﻿<Window
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:local="clr-namespace:BmiWpf"
+	xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+	xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+	x:Class="BmiWpf.MainWindow"
+	Title="Body Mass Index" Height="360" Width="540" FontSize="24">
+	<Window.Resources>
+		<local:ScaleConverter x:Key="ScaleConverter"/>
+		<Style x:Key="CaptionLabelStyle" TargetType="{x:Type Label}">
+			<Setter Property="HorizontalAlignment" Value="Right"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="12"/>
+		</Style>
+		<Style x:Key="NumberTextBlockStyle" TargetType="{x:Type TextBlock}">
+			<Setter Property="HorizontalAlignment" Value="Right"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="12"/>
+		</Style>
+		<Style x:Key="NumberSliderStyle" TargetType="{x:Type Slider}">
+			<Setter Property="VerticalAlignment" Value="Bottom"/>
+			<Setter Property="LargeChange" Value="10"/>
+			<Setter Property="SmallChange" Value="1"/>
+			<Style.Triggers>
+				<Trigger Property="Validation.HasError" Value="True">
+					<Setter Property="Background" Value="#FFFF6666"/>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+	</Window.Resources>
+	<Window.DataContext>
+		<local:Body/>
+	</Window.DataContext>
+	<Grid Margin="0,0,16,20">
+		<i:Interaction.Triggers>
+			<ei:DataTrigger Binding="{Binding Bmi, Mode=OneWay}" Comparison="LessThan" Value="25">
+				<ei:GoToStateAction StateName="Normal"/>
+			</ei:DataTrigger>
+			<ei:DataTrigger Binding="{Binding Bmi, Mode=OneWay}" Comparison="GreaterThanOrEqual" Value="25">
+				<ei:GoToStateAction StateName="Warning"/>
+			</ei:DataTrigger>
+			<ei:DataTrigger Binding="{Binding Bmi, Mode=OneWay}" Comparison="GreaterThanOrEqual" Value="40">
+				<ei:GoToStateAction StateName="Fat"/>
+			</ei:DataTrigger>
+		</i:Interaction.Triggers>
+		<VisualStateManager.VisualStateGroups>
+			<VisualStateGroup x:Name="BmiGroup">
+				<VisualState x:Name="Normal"/>
+				<VisualState x:Name="Warning">
+					<Storyboard>
+						<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="BmiRectangle">
+							<EasingColorKeyFrame KeyTime="0" Value="#FFDDDD00"/>
+						</ColorAnimationUsingKeyFrames>
+					</Storyboard>
+				</VisualState>
+				<VisualState x:Name="Fat">
+					<Storyboard>
+						<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="BmiRectangle">
+							<EasingColorKeyFrame KeyTime="0" Value="#FFEE0000"/>
+						</ColorAnimationUsingKeyFrames>
+					</Storyboard>
+				</VisualState>
+			</VisualStateGroup>
+		</VisualStateManager.VisualStateGroups>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="130"/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<Label Content="Height:" Style="{DynamicResource CaptionLabelStyle}"/>
+		<Label Content="Weight:" Style="{DynamicResource CaptionLabelStyle}" Grid.Row="1"/>
+		<Label Content="BMI:" Style="{DynamicResource CaptionLabelStyle}" Grid.Row="2"/>
+		<TextBlock Grid.Column="1" Style="{DynamicResource NumberTextBlockStyle}" Text="{Binding Height, StringFormat=\{0:N1\} cm}"/>
+		<TextBlock Grid.Column="1" Style="{DynamicResource NumberTextBlockStyle}" Text="{Binding Weight, StringFormat=\{0:N1\} kg}" Grid.Row="1"/>
+		<TextBlock Grid.Column="1" Style="{DynamicResource NumberTextBlockStyle}" Text="{Binding Bmi, StringFormat=\{0:N2\}}" Grid.Row="2"/>
+		<Slider Grid.Column="1" Style="{DynamicResource NumberSliderStyle}" Minimum="10" Maximum="250" Value="{Binding Height}"/>
+		<Slider Grid.Column="1" Style="{DynamicResource NumberSliderStyle}" Minimum="10" Maximum="250" Value="{Binding Weight}" Grid.Row="1"/>
+		<Rectangle x:Name="BmiRectangle" Grid.Column="1" Grid.Row="2" Width="{Binding Bmi, ConverterParameter=5, Converter={StaticResource ScaleConverter}}" Fill="#FF009900" Height="24" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="8,0,0,8"/>
+	</Grid>
+</Window>
