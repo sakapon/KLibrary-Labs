@@ -1,30 +1,22 @@
-﻿using KLibrary.ComponentModel;
-using System;
-using System.ComponentModel;
+﻿using System;
+using System.Reactive.Linq;
+using KLibrary.Labs.ObservableModel;
 
 namespace BmiWpf
 {
-    public class Body : NotifyBase
+    public class Body
     {
-        [DefaultValue(170.0)]
-        public double Height
-        {
-            get { return GetValue<double>(); }
-            set { SetValue(value); }
-        }
+        public ISettableProperty<double> Height { get; private set; }
+        public ISettableProperty<double> Weight { get; private set; }
+        public IGetOnlyProperty<double> Bmi { get; private set; }
 
-        [DefaultValue(70.0)]
-        public double Weight
+        public Body()
         {
-            get { return GetValue<double>(); }
-            set { SetValue(value); }
-        }
+            Height = ObservableProperty.CreateSettable(170.0);
+            Weight = ObservableProperty.CreateSettable(70.0);
+            Bmi = ObservableProperty.CreateGetOnly(() => Weight.Value / Math.Pow(Height.Value / 100, 2));
 
-        [DependentOn("Height")]
-        [DependentOn("Weight")]
-        public double Bmi
-        {
-            get { return Weight / Math.Pow(Height / 100, 2); }
+            Height.Merge(Weight).Subscribe(Bmi);
         }
     }
 }
