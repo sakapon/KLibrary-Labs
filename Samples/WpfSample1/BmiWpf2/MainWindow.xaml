@@ -1,8 +1,51 @@
-﻿<Window x:Class="BmiWpf2.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+        xmlns:local="clr-namespace:BmiWpf2" x:Class="BmiWpf2.MainWindow"
+        Title="Body Mass Index" Height="360" Width="540" FontSize="24">
+	<Window.Resources>
+		<Style x:Key="CaptionLabelStyle" TargetType="{x:Type Label}">
+			<Setter Property="HorizontalAlignment" Value="Right"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="12"/>
+		</Style>
+		<Style x:Key="NumberTextBlockStyle" TargetType="{x:Type TextBlock}">
+			<Setter Property="HorizontalAlignment" Value="Right"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="12"/>
+		</Style>
+		<Style x:Key="NumberSliderStyle" TargetType="{x:Type Slider}">
+			<Setter Property="VerticalAlignment" Value="Bottom"/>
+			<Setter Property="LargeChange" Value="10"/>
+			<Setter Property="SmallChange" Value="1"/>
+			<Style.Triggers>
+				<Trigger Property="Validation.HasError" Value="True">
+					<Setter Property="Background" Value="#FFFF6666"/>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+	</Window.Resources>
+	<Window.DataContext>
+		<local:MainViewModel/>
+	</Window.DataContext>
+	<Grid Margin="0,0,16,20">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="130"/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<Label Content="Height:" Style="{DynamicResource CaptionLabelStyle}"/>
+		<Label Content="Weight:" Style="{DynamicResource CaptionLabelStyle}" Grid.Row="1"/>
+		<Label Content="BMI:" Style="{DynamicResource CaptionLabelStyle}" Grid.Row="2"/>
+		<TextBlock Grid.Column="1" Style="{DynamicResource NumberTextBlockStyle}" Text="{Binding Body.Height.Value, StringFormat=\{0:N1\} cm}"/>
+		<TextBlock Grid.Column="1" Style="{DynamicResource NumberTextBlockStyle}" Text="{Binding Body.Weight.Value, StringFormat=\{0:N1\} kg}" Grid.Row="1"/>
+		<TextBlock Grid.Column="1" Style="{DynamicResource NumberTextBlockStyle}" Text="{Binding Body.Bmi.Value, StringFormat=\{0:N2\}}" Grid.Row="2"/>
+		<Slider Grid.Column="1" Style="{DynamicResource NumberSliderStyle}" Minimum="10" Maximum="250" Value="{Binding Body.Height.Value}"/>
+		<Slider Grid.Column="1" Style="{DynamicResource NumberSliderStyle}" Minimum="10" Maximum="250" Value="{Binding Body.Weight.Value}" Grid.Row="1"/>
+		<Rectangle Grid.Column="1" Grid.Row="2" Width="{Binding BmiRectangleWidth.Value}" Fill="{Binding BmiRectangleFill.Value}" Height="24" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="8,0,0,8"/>
+	</Grid>
 </Window>
