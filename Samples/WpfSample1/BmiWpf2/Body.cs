@@ -16,7 +16,9 @@ namespace BmiWpf2
             Weight = ObservableProperty.CreateSettable(70.0);
             Bmi = ObservableProperty.CreateGetOnly(() => Weight.Value / Math.Pow(Height.Value / 100, 2));
 
-            Height.Merge(Weight).Subscribe(Bmi);
+            Height.Merge(Weight)
+                //.Throttle(TimeSpan.FromSeconds(0.1))
+                .Subscribe(Bmi);
         }
     }
 }
