@@ -79,5 +79,21 @@ namespace KLibrary.Labs.Linq
 
             return source.Reverse().FirstMaybe(predicate);
         }
+
+        public static IEnumerable<TSource> CopyTo<TSource>(this IEnumerable<TSource> source, TSource[] array)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            if (array == null) throw new ArgumentNullException("array");
+
+            using (var enumerator = source.GetEnumerator())
+            {
+                for (int i = 0; i < array.Length && enumerator.MoveNext(); i++)
+                {
+                    array[i] = enumerator.Current;
+                }
+            }
+
+            return source;
+        }
     }
 }
