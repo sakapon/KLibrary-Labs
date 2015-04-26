@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 
 namespace KLibrary.Labs.ObservableModel
@@ -22,6 +23,7 @@ namespace KLibrary.Labs.ObservableModel
         }
     }
 
+    [DebuggerDisplay("{Value}")]
     class GetOnlyPropertyMask<T> : IGetOnlyProperty<T>
     {
         ISettableProperty<T> _source;
