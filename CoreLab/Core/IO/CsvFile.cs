@@ -62,5 +62,33 @@ namespace KLibrary.Labs.IO
                 .Select(s => s.Replace("\"\"", "\""));
 
         public static readonly Func<string, string[]> SplitLine = line => SplitLine0(line).ToArray();
+
+        public static void WriteLines(Stream stream, IEnumerable<string[]> lines, Encoding encoding = null)
+        {
+            using (var writer = new StreamWriter(stream, encoding ?? UTF8N))
+            {
+                foreach (var line in lines)
+                    writer.WriteLine(string.Join(",", line));
+            }
+        }
+
+        public static void WriteLines(Stream stream, IEnumerable<Dictionary<string, string>> lines, Encoding encoding = null)
+        {
+            var isColumnsWritten = false;
+
+            using (var writer = new StreamWriter(stream, encoding ?? UTF8N))
+            {
+                foreach (var line in lines)
+                {
+                    if (!isColumnsWritten)
+                    {
+                        isColumnsWritten = true;
+                        writer.WriteLine(string.Join(",", line.Keys));
+                    }
+
+                    writer.WriteLine(string.Join(",", line.Values));
+                }
+            }
+        }
     }
 }
