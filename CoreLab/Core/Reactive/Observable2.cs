@@ -10,6 +10,15 @@ namespace KLibrary.Labs.Reactive
 {
     public static class Observable2
     {
+        public static void PublishTo<TSource>(this IEnumerable<TSource> source, IObserver<TSource> observer)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            if (observer == null) throw new ArgumentNullException("observer");
+
+            foreach (var element in source)
+                observer.OnNext(element);
+        }
+
         public static IObservable<long> Interval(TimeSpan interval)
         {
             return new PeriodicTimer(interval);
