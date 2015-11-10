@@ -7,6 +7,13 @@ using System.Text.RegularExpressions;
 
 namespace KLibrary.Labs.IO
 {
+    /// <summary>
+    /// Provides a set of methods to access CSV files.
+    /// </summary>
+    /// <remarks>
+    /// RFC 4180
+    /// https://www.ietf.org/rfc/rfc4180.txt
+    /// </remarks>
     public static class CsvFile
     {
         public static readonly Encoding UTF8N = new UTF8Encoding();
@@ -44,6 +51,7 @@ namespace KLibrary.Labs.IO
             }
         }
 
+        // Excepts the definition for CRLF in a field.
         // Uses ?: to minimize capturing groups.
         static readonly Regex CsvFieldPattern = new Regex("(?<=^|,)" + "(?:\"(.*?)\"|[^,]*?)" + "(?=$|,)");
 
