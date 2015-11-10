@@ -22,7 +22,7 @@ namespace KLibrary.Labs.IO
         {
             if (stream == null) throw new ArgumentNullException("stream");
 
-            var lines = ReadLines(stream, encoding ?? UTF8N).Select(SplitLine0);
+            var lines = ReadLines(stream, encoding).Select(SplitLine0);
             string[] columnNames = null;
 
             foreach (var fields in lines)
@@ -44,7 +44,7 @@ namespace KLibrary.Labs.IO
 
         static IEnumerable<string> ReadLines(Stream stream, Encoding encoding)
         {
-            using (var reader = new StreamReader(stream, encoding))
+            using (var reader = new StreamReader(stream, encoding ?? UTF8N))
             {
                 while (!reader.EndOfStream)
                     yield return reader.ReadLine();
@@ -63,32 +63,42 @@ namespace KLibrary.Labs.IO
 
         public static readonly Func<string, string[]> SplitLine = line => SplitLine0(line).ToArray();
 
-        public static void WriteLines(Stream stream, IEnumerable<string[]> lines, Encoding encoding = null)
+        public static void WriteRecords(Stream stream, string[] columnNames, IEnumerable<Dictionary<string, string>> records, Encoding encoding = null)
+        {
+            if (stream == null) throw new ArgumentNullException("stream");
+            if (columnNames == null) throw new ArgumentNullException("columnNames");
+            if (records == null) throw new ArgumentNullException("records");
+
+            var lines = Enumerable.Repeat(columnNames, 1)
+                .Concat(records.Select(r => columnNames.Select(c => r[c])))
+                .Select(ToLine);
+
+            WriteLines(stream, lines, encoding);
+        }
+
+        public static void WriteRecords(string path, string[] columnNames, IEnumerable<Dictionary<string, string>> records, Encoding encoding = null)
+        {
+            using (var stream = File.Create(path))
+            {
+                WriteRecords(stream, columnNames, records, encoding);
+            }
+        }
+
+        static void WriteLines(Stream stream, IEnumerable<string> lines, Encoding encoding)
         {
             using (var writer = new StreamWriter(stream, encoding ?? UTF8N))
             {
                 foreach (var line in lines)
-                    writer.WriteLine(string.Join(",", line));
+                    writer.WriteLine(line);
             }
         }
 
-        public static void WriteLines(Stream stream, IEnumerable<Dictionary<string, string>> lines, Encoding encoding = null)
-        {
-            var isColumnsWritten = false;
+        static readonly Regex EscapingFieldPattern = new Regex("^.*[,\"].*$");
 
-            using (var writer = new StreamWriter(stream, encoding ?? UTF8N))
-            {
-                foreach (var line in lines)
-                {
-                    if (!isColumnsWritten)
-                    {
-                        isColumnsWritten = true;
-                        writer.WriteLine(string.Join(",", line.Keys));
-                    }
-
-                    writer.WriteLine(string.Join(",", line.Values));
-                }
-            }
-        }
+        public static readonly Func<IEnumerable<string>, string> ToLine = fields => string.Join(",",
+            fields
+                .Select(f => f.Replace("\"", "\"\""))
+                .Select(f => EscapingFieldPattern.Replace(f, "\"$&\""))
+        );
     }
 }
