@@ -11,18 +11,36 @@ namespace KLibrary.Labs.IO
     {
         public static readonly Encoding UTF8N = new UTF8Encoding();
 
-        public static IEnumerable<Dictionary<string, string>> ReadLines(string path, Encoding encoding = null)
+        public static IEnumerable<Dictionary<string, string>> ReadRecords(Stream stream, Encoding encoding = null)
         {
-            // Simple implementation.
-            var lines = File.ReadLines(path, encoding ?? UTF8N).Select(l => l.Split(','));
+            if (stream == null) throw new ArgumentNullException("stream");
+
+            var lines = ReadLines(stream, encoding ?? UTF8N).Select(SplitLine0);
             string[] columnNames = null;
 
-            foreach (var line in lines)
+            foreach (var fields in lines)
             {
                 if (columnNames == null)
-                    columnNames = line;
+                    columnNames = fields.ToArray();
                 else
-                    yield return columnNames.Zip(line, (c, v) => new { c, v }).ToDictionary(o => o.c, o => o.v);
+                    yield return fields.Select((f, i) => new { c = columnNames[i], f }).ToDictionary(o => o.c, o => o.f);
+            }
+        }
+
+        public static IEnumerable<Dictionary<string, string>> ReadRecords(string path, Encoding encoding = null)
+        {
+            using (var stream = File.OpenRead(path))
+            {
+                return ReadRecords(stream, encoding);
+            }
+        }
+
+        static IEnumerable<string> ReadLines(Stream stream, Encoding encoding)
+        {
+            using (var reader = new StreamReader(stream, encoding))
+            {
+                while (!reader.EndOfStream)
+                    yield return reader.ReadLine();
             }
         }
 
