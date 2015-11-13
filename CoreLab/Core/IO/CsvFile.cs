@@ -17,33 +17,31 @@ namespace KLibrary.Labs.IO
     public static class CsvFile
     {
         public static readonly Encoding UTF8N = new UTF8Encoding();
+        public static readonly Encoding ShiftJIS = Encoding.GetEncoding("shift_jis");
 
-        public static IEnumerable<Dictionary<string, string>> ReadRecords(Stream stream, Encoding encoding = null)
+        public static IEnumerable<Dictionary<string, string>> ReadRecords(Stream stream, string[] columnNames, Encoding encoding = null)
         {
-            if (stream == null) throw new ArgumentNullException("stream");
+            if (columnNames == null) throw new ArgumentNullException("columnNames");
 
-            var lines = ReadLines(stream, encoding).Select(SplitLine0);
-            string[] columnNames = null;
-
-            foreach (var fields in lines)
-            {
-                if (columnNames == null)
-                    columnNames = fields.ToArray();
-                else
-                    yield return fields.Select((f, i) => new { c = columnNames[i], f }).ToDictionary(o => o.c, o => o.f);
-            }
+            return ReadLines(stream, encoding)
+                .Select(SplitLine0)
+                .Select(fields => fields
+                    .Select((f, i) => new { c = columnNames[i], f })
+                    .ToDictionary(o => o.c, o => o.f));
         }
 
-        public static IEnumerable<Dictionary<string, string>> ReadRecords(string path, Encoding encoding = null)
+        public static IEnumerable<Dictionary<string, string>> ReadRecords(string path, string[] columnNames, Encoding encoding = null)
         {
             using (var stream = File.OpenRead(path))
             {
-                return ReadRecords(stream, encoding);
+                return ReadRecords(stream, columnNames, encoding);
             }
         }
 
         static IEnumerable<string> ReadLines(Stream stream, Encoding encoding)
         {
+            if (stream == null) throw new ArgumentNullException("stream");
+
             using (var reader = new StreamReader(stream, encoding ?? UTF8N))
             {
                 while (!reader.EndOfStream)
