@@ -48,6 +48,7 @@
     <Compile Include="ComponentModel\NotifyPropertyChangedBase.cs" />
     <Compile Include="Disposable.cs" />
     <Compile Include="IO\CsvFile.cs" />
+    <Compile Include="IO\TextFile.cs" />
     <Compile Include="Linq\Enumerable2.cs" />
     <Compile Include="Linq\RecursiveHelper.cs" />
     <Compile Include="Mathematics\FrequencyConditioner.cs" />
