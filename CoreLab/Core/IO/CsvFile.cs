@@ -61,6 +61,23 @@ namespace KLibrary.Labs.IO
 
         public static readonly Func<string, string[]> SplitLine = line => SplitLine0(line).ToArray();
 
+        public static void WriteRecords(Stream stream, IEnumerable<string[]> records, Encoding encoding = null)
+        {
+            if (records == null) throw new ArgumentNullException("records");
+
+            var lines = records.Select(ToLine);
+
+            stream.WriteLines(lines, encoding);
+        }
+
+        public static void WriteRecords(string path, IEnumerable<string[]> records, Encoding encoding = null)
+        {
+            using (var stream = File.Create(path))
+            {
+                WriteRecords(stream, records, encoding);
+            }
+        }
+
         public static void WriteRecords(Stream stream, string[] columnNames, IEnumerable<Dictionary<string, string>> records, Encoding encoding = null)
         {
             if (columnNames == null) throw new ArgumentNullException("columnNames");
