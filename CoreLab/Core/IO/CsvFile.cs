@@ -16,14 +16,25 @@ namespace KLibrary.Labs.IO
     /// </remarks>
     public static class CsvFile
     {
-        public static readonly Encoding UTF8N = new UTF8Encoding();
-        public static readonly Encoding ShiftJIS = Encoding.GetEncoding("shift_jis");
+        public static IEnumerable<string[]> ReadRecords(Stream stream, Encoding encoding = null)
+        {
+            return stream.ReadLines(encoding)
+                .Select(SplitLine);
+        }
+
+        public static IEnumerable<string[]> ReadRecords(string path, Encoding encoding = null)
+        {
+            using (var stream = File.OpenRead(path))
+            {
+                return ReadRecords(stream, encoding);
+            }
+        }
 
         public static IEnumerable<Dictionary<string, string>> ReadRecords(Stream stream, string[] columnNames, Encoding encoding = null)
         {
             if (columnNames == null) throw new ArgumentNullException("columnNames");
 
-            return ReadLines(stream, encoding)
+            return stream.ReadLines(encoding)
                 .Select(SplitLine0)
                 .Select(fields => fields
                     .Select((f, i) => new { c = columnNames[i], f })
@@ -35,17 +46,6 @@ namespace KLibrary.Labs.IO
             using (var stream = File.OpenRead(path))
             {
                 return ReadRecords(stream, columnNames, encoding);
-            }
-        }
-
-        static IEnumerable<string> ReadLines(Stream stream, Encoding encoding)
-        {
-            if (stream == null) throw new ArgumentNullException("stream");
-
-            using (var reader = new StreamReader(stream, encoding ?? UTF8N))
-            {
-                while (!reader.EndOfStream)
-                    yield return reader.ReadLine();
             }
         }
 
@@ -63,7 +63,6 @@ namespace KLibrary.Labs.IO
 
         public static void WriteRecords(Stream stream, string[] columnNames, IEnumerable<Dictionary<string, string>> records, Encoding encoding = null)
         {
-            if (stream == null) throw new ArgumentNullException("stream");
             if (columnNames == null) throw new ArgumentNullException("columnNames");
             if (records == null) throw new ArgumentNullException("records");
 
@@ -71,7 +70,7 @@ namespace KLibrary.Labs.IO
                 .Concat(records.Select(r => columnNames.Select(c => r[c])))
                 .Select(ToLine);
 
-            WriteLines(stream, lines, encoding);
+            stream.WriteLines(lines, encoding);
         }
 
         public static void WriteRecords(string path, string[] columnNames, IEnumerable<Dictionary<string, string>> records, Encoding encoding = null)
@@ -82,15 +81,6 @@ namespace KLibrary.Labs.IO
             }
         }
 
-        static void WriteLines(Stream stream, IEnumerable<string> lines, Encoding encoding)
-        {
-            using (var writer = new StreamWriter(stream, encoding ?? UTF8N))
-            {
-                foreach (var line in lines)
-                    writer.WriteLine(line);
-            }
-        }
-
         static readonly Regex EscapingFieldPattern = new Regex("^.*[,\"].*$");
 
         public static readonly Func<IEnumerable<string>, string> ToLine = fields => string.Join(",",
@@ -98,5 +88,33 @@ namespace KLibrary.Labs.IO
                 .Select(f => f.Replace("\"", "\"\""))
                 .Select(f => EscapingFieldPattern.Replace(f, "\"$&\""))
         );
+    }
+
+    public static class TextFile
+    {
+        public static readonly Encoding UTF8N = new UTF8Encoding();
+        public static readonly Encoding ShiftJIS = Encoding.GetEncoding("shift_jis");
+
+        public static IEnumerable<string> ReadLines(this Stream stream, Encoding encoding = null)
+        {
+            if (stream == null) throw new ArgumentNullException("stream");
+
+            using (var reader = new StreamReader(stream, encoding ?? UTF8N))
+            {
+                while (!reader.EndOfStream)
+                    yield return reader.ReadLine();
+            }
+        }
+
+        public static void WriteLines(this Stream stream, IEnumerable<string> lines, Encoding encoding = null)
+        {
+            if (stream == null) throw new ArgumentNullException("stream");
+
+            using (var writer = new StreamWriter(stream, encoding ?? UTF8N))
+            {
+                foreach (var line in lines)
+                    writer.WriteLine(line);
+            }
+        }
     }
 }
