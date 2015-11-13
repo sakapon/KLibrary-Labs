@@ -16,21 +16,21 @@ namespace KLibrary.Labs.IO
     /// </remarks>
     public static class CsvFile
     {
-        public static IEnumerable<string[]> ReadRecords(Stream stream, Encoding encoding = null)
+        public static IEnumerable<string[]> ReadRecordsByArray(Stream stream, Encoding encoding = null)
         {
             return stream.ReadLines(encoding)
                 .Select(SplitLine);
         }
 
-        public static IEnumerable<string[]> ReadRecords(string path, Encoding encoding = null)
+        public static IEnumerable<string[]> ReadRecordsByArray(string path, Encoding encoding = null)
         {
             using (var stream = File.OpenRead(path))
             {
-                return ReadRecords(stream, encoding);
+                return ReadRecordsByArray(stream, encoding);
             }
         }
 
-        public static IEnumerable<Dictionary<string, string>> ReadRecords(Stream stream, string[] columnNames, Encoding encoding = null)
+        public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(Stream stream, string[] columnNames, Encoding encoding = null)
         {
             if (columnNames == null) throw new ArgumentNullException("columnNames");
 
@@ -41,11 +41,11 @@ namespace KLibrary.Labs.IO
                     .ToDictionary(o => o.c, o => o.f));
         }
 
-        public static IEnumerable<Dictionary<string, string>> ReadRecords(string path, string[] columnNames, Encoding encoding = null)
+        public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(string path, string[] columnNames, Encoding encoding = null)
         {
             using (var stream = File.OpenRead(path))
             {
-                return ReadRecords(stream, columnNames, encoding);
+                return ReadRecordsByDictionary(stream, columnNames, encoding);
             }
         }
 
@@ -61,7 +61,7 @@ namespace KLibrary.Labs.IO
 
         public static readonly Func<string, string[]> SplitLine = line => SplitLine0(line).ToArray();
 
-        public static void WriteRecords(Stream stream, IEnumerable<string[]> records, Encoding encoding = null)
+        public static void WriteRecordsByArray(Stream stream, IEnumerable<string[]> records, Encoding encoding = null)
         {
             if (records == null) throw new ArgumentNullException("records");
 
@@ -70,15 +70,15 @@ namespace KLibrary.Labs.IO
             stream.WriteLines(lines, encoding);
         }
 
-        public static void WriteRecords(string path, IEnumerable<string[]> records, Encoding encoding = null)
+        public static void WriteRecordsByArray(string path, IEnumerable<string[]> records, Encoding encoding = null)
         {
             using (var stream = File.Create(path))
             {
-                WriteRecords(stream, records, encoding);
+                WriteRecordsByArray(stream, records, encoding);
             }
         }
 
-        public static void WriteRecords(Stream stream, string[] columnNames, IEnumerable<Dictionary<string, string>> records, Encoding encoding = null)
+        public static void WriteRecordsByDictionary(Stream stream, string[] columnNames, IEnumerable<Dictionary<string, string>> records, Encoding encoding = null)
         {
             if (columnNames == null) throw new ArgumentNullException("columnNames");
             if (records == null) throw new ArgumentNullException("records");
@@ -90,11 +90,11 @@ namespace KLibrary.Labs.IO
             stream.WriteLines(lines, encoding);
         }
 
-        public static void WriteRecords(string path, string[] columnNames, IEnumerable<Dictionary<string, string>> records, Encoding encoding = null)
+        public static void WriteRecordsByDictionary(string path, string[] columnNames, IEnumerable<Dictionary<string, string>> records, Encoding encoding = null)
         {
             using (var stream = File.Create(path))
             {
-                WriteRecords(stream, columnNames, records, encoding);
+                WriteRecordsByDictionary(stream, columnNames, records, encoding);
             }
         }
 

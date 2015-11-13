@@ -25,6 +25,7 @@ namespace KLibrary.Labs.IO
         public static void WriteLines(this Stream stream, IEnumerable<string> lines, Encoding encoding = null)
         {
             if (stream == null) throw new ArgumentNullException("stream");
+            if (lines == null) throw new ArgumentNullException("lines");
 
             using (var writer = new StreamWriter(stream, encoding ?? UTF8N))
             {
