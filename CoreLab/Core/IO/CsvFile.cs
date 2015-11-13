@@ -16,6 +16,26 @@ namespace KLibrary.Labs.IO
     /// </remarks>
     public static class CsvFile
     {
+        // Excepts the definition for CRLF in a field.
+        // Uses ?: to minimize capturing groups.
+        static readonly Regex CsvFieldPattern = new Regex("(?<=^|,)" + "(?:\"(.*?)\"|[^,]*?)" + "(?=$|,)");
+
+        static readonly Func<string, IEnumerable<string>> SplitLine0 = line =>
+            CsvFieldPattern.Matches(line)
+                .Cast<Match>()
+                .Select(m => m.Groups[1].Success ? m.Groups[1].Value : m.Value)
+                .Select(s => s.Replace("\"\"", "\""));
+
+        public static readonly Func<string, string[]> SplitLine = line => SplitLine0(line).ToArray();
+
+        static readonly Regex QualifyingFieldPattern = new Regex("^.*[,\"].*$");
+
+        public static readonly Func<IEnumerable<string>, string> ToLine = fields => string.Join(",",
+            fields
+                .Select(f => f.Replace("\"", "\"\""))
+                .Select(f => QualifyingFieldPattern.Replace(f, "\"$&\""))
+        );
+
         public static IEnumerable<string[]> ReadRecordsByArray(Stream stream, Encoding encoding = null)
         {
             return stream.ReadLines(encoding)
@@ -48,18 +68,6 @@ namespace KLibrary.Labs.IO
                 return ReadRecordsByDictionary(stream, columnNames, encoding);
             }
         }
-
-        // Excepts the definition for CRLF in a field.
-        // Uses ?: to minimize capturing groups.
-        static readonly Regex CsvFieldPattern = new Regex("(?<=^|,)" + "(?:\"(.*?)\"|[^,]*?)" + "(?=$|,)");
-
-        static readonly Func<string, IEnumerable<string>> SplitLine0 = line =>
-            CsvFieldPattern.Matches(line)
-                .Cast<Match>()
-                .Select(m => m.Groups[1].Success ? m.Groups[1].Value : m.Value)
-                .Select(s => s.Replace("\"\"", "\""));
-
-        public static readonly Func<string, string[]> SplitLine = line => SplitLine0(line).ToArray();
 
         public static void WriteRecordsByArray(Stream stream, IEnumerable<string[]> records, Encoding encoding = null)
         {
@@ -97,13 +105,5 @@ namespace KLibrary.Labs.IO
                 WriteRecordsByDictionary(stream, columnNames, records, encoding);
             }
         }
-
-        static readonly Regex EscapingFieldPattern = new Regex("^.*[,\"].*$");
-
-        public static readonly Func<IEnumerable<string>, string> ToLine = fields => string.Join(",",
-            fields
-                .Select(f => f.Replace("\"", "\"\""))
-                .Select(f => EscapingFieldPattern.Replace(f, "\"$&\""))
-        );
     }
 }
