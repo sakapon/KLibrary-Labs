@@ -36,17 +36,18 @@ namespace KLibrary.Labs.IO
                 .Select(f => QualifyingFieldPattern.Replace(f, "\"$&\""))
         );
 
-        public static IEnumerable<string[]> ReadRecordsByArray(Stream stream, Encoding encoding = null)
+        public static IEnumerable<string[]> ReadRecordsByArray(Stream stream, bool hasHeader, Encoding encoding = null)
         {
             return stream.ReadLines(encoding)
+                .Skip(hasHeader ? 1 : 0)
                 .Select(SplitLine);
         }
 
-        public static IEnumerable<string[]> ReadRecordsByArray(string path, Encoding encoding = null)
+        public static IEnumerable<string[]> ReadRecordsByArray(string path, bool hasHeader, Encoding encoding = null)
         {
             using (var stream = File.OpenRead(path))
             {
-                return ReadRecordsByArray(stream, encoding);
+                return ReadRecordsByArray(stream, hasHeader, encoding);
             }
         }
 
