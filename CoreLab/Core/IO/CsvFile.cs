@@ -36,18 +36,37 @@ namespace KLibrary.Labs.IO
                 .Select(f => QualifyingFieldPattern.Replace(f, "\"$&\""))
         );
 
-        public static IEnumerable<string[]> ReadRecordsByArray(Stream stream, bool hasHeader, Encoding encoding = null)
+        public static IEnumerable<string[]> ReadRecordsByArray(Stream stream, bool hasHeader = false, Encoding encoding = null)
         {
             return stream.ReadLines(encoding)
                 .Skip(hasHeader ? 1 : 0)
                 .Select(SplitLine);
         }
 
-        public static IEnumerable<string[]> ReadRecordsByArray(string path, bool hasHeader, Encoding encoding = null)
+        public static IEnumerable<string[]> ReadRecordsByArray(string path, bool hasHeader = false, Encoding encoding = null)
         {
             using (var stream = File.OpenRead(path))
             {
                 return ReadRecordsByArray(stream, hasHeader, encoding);
+            }
+        }
+
+        public static void WriteRecordsByArray(Stream stream, IEnumerable<string[]> records, string[] columnNames = null, Encoding encoding = null)
+        {
+            if (records == null) throw new ArgumentNullException("records");
+
+            var lines = Enumerable.Repeat(columnNames, columnNames != null ? 1 : 0)
+                .Concat(records)
+                .Select(ToLine);
+
+            stream.WriteLines(lines, encoding);
+        }
+
+        public static void WriteRecordsByArray(string path, IEnumerable<string[]> records, string[] columnNames = null, Encoding encoding = null)
+        {
+            using (var stream = File.Create(path))
+            {
+                WriteRecordsByArray(stream, records, columnNames, encoding);
             }
         }
 
@@ -67,23 +86,6 @@ namespace KLibrary.Labs.IO
             using (var stream = File.OpenRead(path))
             {
                 return ReadRecordsByDictionary(stream, columnNames, encoding);
-            }
-        }
-
-        public static void WriteRecordsByArray(Stream stream, IEnumerable<string[]> records, Encoding encoding = null)
-        {
-            if (records == null) throw new ArgumentNullException("records");
-
-            var lines = records.Select(ToLine);
-
-            stream.WriteLines(lines, encoding);
-        }
-
-        public static void WriteRecordsByArray(string path, IEnumerable<string[]> records, Encoding encoding = null)
-        {
-            using (var stream = File.Create(path))
-            {
-                WriteRecordsByArray(stream, records, encoding);
             }
         }
 
