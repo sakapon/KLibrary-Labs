@@ -148,5 +148,65 @@ namespace UnitTest.IO
                 CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(content), stream.ToArray());
             }
         }
+
+        [TestMethod]
+        public void ReadWriteRecordsByArray_2()
+        {
+            var columnNames = new[] { "Id", "Name" };
+            var records = new[]
+            {
+                new[] { "123", "Taro" },
+                new[] { "456", "Jiro" }
+            };
+            var content = @"Id,Name
+123,Taro
+456,Jiro
+";
+
+            using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(content)))
+            {
+                var records_actual = CsvFile.ReadRecordsByArray(stream, true).ToArray();
+
+                for (var i = 0; i < records.Length; i++)
+                    CollectionAssert.AreEqual(records[i], records_actual[i]);
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                CsvFile.WriteRecordsByArray(stream, records, columnNames);
+
+                CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(content), stream.ToArray());
+            }
+        }
+
+        [TestMethod]
+        public void ReadWriteRecordsByArray_3()
+        {
+            var columnNames = new[] { "Id", "Name" };
+            var records = new[]
+            {
+                new[] { "123", "Taro" },
+                new[] { "456", "Jiro" }
+            };
+            var content = @"Id,Name
+123,Taro
+456,Jiro
+";
+
+            using (var stream = new MemoryStream(TextFile.ShiftJIS.GetBytes(content)))
+            {
+                var records_actual = CsvFile.ReadRecordsByArray(stream, true, TextFile.ShiftJIS).ToArray();
+
+                for (var i = 0; i < records.Length; i++)
+                    CollectionAssert.AreEqual(records[i], records_actual[i]);
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                CsvFile.WriteRecordsByArray(stream, records, columnNames, TextFile.ShiftJIS);
+
+                CollectionAssert.AreEqual(TextFile.ShiftJIS.GetBytes(content), stream.ToArray());
+            }
+        }
     }
 }
