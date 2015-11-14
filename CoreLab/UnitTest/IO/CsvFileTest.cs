@@ -82,5 +82,45 @@ namespace UnitTest.IO
 
             CollectionAssert.AreEqual(new[] { "\"", "", "2\"2" }, CsvFile.SplitLine("\",,2\"2"));
         }
+
+        [TestMethod]
+        public void ToLine_1()
+        {
+            Assert.AreEqual("", CsvFile.ToLine(new string[0]));
+            Assert.AreEqual("", CsvFile.ToLine(new[] { "" }));
+            Assert.AreEqual("0", CsvFile.ToLine(new[] { "0" }));
+
+            Assert.AreEqual(",", CsvFile.ToLine(new[] { "", "" }));
+            Assert.AreEqual("0,1", CsvFile.ToLine(new[] { "0", "1" }));
+            Assert.AreEqual(",1", CsvFile.ToLine(new[] { "", "1" }));
+            Assert.AreEqual("0,", CsvFile.ToLine(new[] { "0", "" }));
+
+            Assert.AreEqual(",,", CsvFile.ToLine(new[] { "", "", "" }));
+            Assert.AreEqual("0,1,2", CsvFile.ToLine(new[] { "0", "1", "2" }));
+            Assert.AreEqual(",1,", CsvFile.ToLine(new[] { "", "1", "" }));
+            Assert.AreEqual("0,,2", CsvFile.ToLine(new[] { "0", "", "2" }));
+        }
+
+        [TestMethod]
+        public void ToLine_3()
+        {
+            Assert.AreEqual("\",\"", CsvFile.ToLine(new[] { "," }));
+            Assert.AreEqual("\"0,\"", CsvFile.ToLine(new[] { "0," }));
+            Assert.AreEqual("\",0\"", CsvFile.ToLine(new[] { ",0" }));
+
+            Assert.AreEqual("\",0\",\"1,\"", CsvFile.ToLine(new[] { ",0", "1," }));
+
+            Assert.AreEqual(",\",\",\"2,2\"", CsvFile.ToLine(new[] { "", ",", "2,2" }));
+        }
+
+        [TestMethod]
+        public void ToLine_4()
+        {
+            Assert.AreEqual("\"\"\"\"", CsvFile.ToLine(new[] { "\"" }));
+
+            Assert.AreEqual("\"0\"\"\",\"\"\"1\"", CsvFile.ToLine(new[] { "0\"", "\"1" }));
+
+            Assert.AreEqual("\"\"\"\",,\"2\"\"2,\"", CsvFile.ToLine(new[] { "\"", "", "2\"2," }));
+        }
     }
 }
