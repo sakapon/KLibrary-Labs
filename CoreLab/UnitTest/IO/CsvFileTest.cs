@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
+using System.Text;
 using KLibrary.Labs.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -7,11 +10,6 @@ namespace UnitTest.IO
     [TestClass]
     public class CsvFileTest
     {
-        [TestMethod]
-        public void ReadRecords_1()
-        {
-        }
-
         [TestMethod]
         public void SplitLine_1()
         {
@@ -121,6 +119,34 @@ namespace UnitTest.IO
             Assert.AreEqual("\"0\"\"\",\"\"\"1\"", CsvFile.ToLine(new[] { "0\"", "\"1" }));
 
             Assert.AreEqual("\"\"\"\",,\"2\"\"2,\"", CsvFile.ToLine(new[] { "\"", "", "2\"2," }));
+        }
+
+        [TestMethod]
+        public void ReadWriteRecordsByArray_1()
+        {
+            var records = new[]
+            {
+                new[] { "123", "Taro" },
+                new[] { "456", "Jiro" }
+            };
+            var content = @"123,Taro
+456,Jiro
+";
+
+            using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(content)))
+            {
+                var records_actual = CsvFile.ReadRecordsByArray(stream).ToArray();
+
+                for (var i = 0; i < records.Length; i++)
+                    CollectionAssert.AreEqual(records[i], records_actual[i]);
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                CsvFile.WriteRecordsByArray(stream, records);
+
+                CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(content), stream.ToArray());
+            }
         }
     }
 }
