@@ -126,12 +126,12 @@ namespace UnitTest.IO
         {
             var records = new[]
             {
-                new[] { "123", "Taro" },
-                new[] { "456", "Jiro" }
+                new[] { "123", "太郎" },
+                new[] { "456", "次郎" }
             };
-            var content = @"123,Taro
-456,Jiro
-";
+            var content = @"123,太郎
+456,次郎
+".Replace("\n", "\r\n");
 
             using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(content)))
             {
@@ -155,13 +155,13 @@ namespace UnitTest.IO
             var columnNames = new[] { "Id", "Name" };
             var records = new[]
             {
-                new[] { "123", "Taro" },
-                new[] { "456", "Jiro" }
+                new[] { "123", "太郎" },
+                new[] { "456", "次郎" }
             };
             var content = @"Id,Name
-123,Taro
-456,Jiro
-";
+123,太郎
+456,次郎
+".Replace("\n", "\r\n");
 
             using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(content)))
             {
@@ -185,13 +185,13 @@ namespace UnitTest.IO
             var columnNames = new[] { "Id", "Name" };
             var records = new[]
             {
-                new[] { "123", "Taro" },
-                new[] { "456", "Jiro" }
+                new[] { "123", "太郎" },
+                new[] { "456", "次郎" }
             };
             var content = @"Id,Name
-123,Taro
-456,Jiro
-";
+123,太郎
+456,次郎
+".Replace("\n", "\r\n");
 
             using (var stream = new MemoryStream(TextFile.ShiftJIS.GetBytes(content)))
             {
