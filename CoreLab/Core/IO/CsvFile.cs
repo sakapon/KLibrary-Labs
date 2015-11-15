@@ -70,25 +70,30 @@ namespace KLibrary.Labs.IO
             }
         }
 
-        public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(Stream stream, string[] columnNames, Encoding encoding = null)
+        // Supposes that a CSV file has the header line.
+        public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(Stream stream, Encoding encoding = null)
         {
-            if (columnNames == null) throw new ArgumentNullException("columnNames");
+            var lines = stream.ReadLines(encoding).Select(SplitLine);
+            string[] columnNames = null;
 
-            return stream.ReadLines(encoding)
-                .Select(SplitLine0)
-                .Select(fields => fields
-                    .Select((f, i) => new { c = columnNames[i], f })
-                    .ToDictionary(o => o.c, o => o.f));
-        }
-
-        public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(string path, string[] columnNames, Encoding encoding = null)
-        {
-            using (var stream = File.OpenRead(path))
+            foreach (var fields in lines)
             {
-                return ReadRecordsByDictionary(stream, columnNames, encoding);
+                if (columnNames == null)
+                    columnNames = fields;
+                else
+                    yield return Enumerable.Range(0, columnNames.Length).ToDictionary(i => columnNames[i], i => fields[i]);
             }
         }
 
+        public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(string path, Encoding encoding = null)
+        {
+            using (var stream = File.OpenRead(path))
+            {
+                return ReadRecordsByDictionary(stream, encoding);
+            }
+        }
+
+        // Supposes that a CSV file has the header line.
         public static void WriteRecordsByDictionary(Stream stream, IEnumerable<Dictionary<string, string>> records, string[] columnNames, Encoding encoding = null)
         {
             if (records == null) throw new ArgumentNullException("records");
