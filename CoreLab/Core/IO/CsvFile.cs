@@ -89,20 +89,19 @@ namespace KLibrary.Labs.IO
             }
         }
 
-        public static void WriteRecordsByDictionary(Stream stream, IEnumerable<Dictionary<string, string>> records, string[] columnNames = null, Encoding encoding = null)
+        public static void WriteRecordsByDictionary(Stream stream, IEnumerable<Dictionary<string, string>> records, string[] columnNames, Encoding encoding = null)
         {
             if (records == null) throw new ArgumentNullException("records");
+            if (columnNames == null) throw new ArgumentNullException("columnNames");
 
-            var records2 = columnNames == null ?
-                records.Select(d => d.Values) :
-                Enumerable.Repeat(columnNames, 1)
-                    .Concat(records.Select(d => columnNames.Select(c => d[c])));
-            var lines = records2.Select(ToLine);
+            var lines = Enumerable.Repeat(columnNames, 1)
+                .Concat(records.Select(d => columnNames.Select(c => d[c])))
+                .Select(ToLine);
 
             stream.WriteLines(lines, encoding);
         }
 
-        public static void WriteRecordsByDictionary(string path, IEnumerable<Dictionary<string, string>> records, string[] columnNames = null, Encoding encoding = null)
+        public static void WriteRecordsByDictionary(string path, IEnumerable<Dictionary<string, string>> records, string[] columnNames, Encoding encoding = null)
         {
             using (var stream = File.Create(path))
             {
