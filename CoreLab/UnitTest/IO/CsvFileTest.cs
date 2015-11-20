@@ -133,7 +133,7 @@ namespace UnitTest.IO
             };
             var content = @"123,太郎
 456,次郎
-".Replace("\n", "\r\n");
+";
 
             using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(content)))
             {
@@ -163,7 +163,7 @@ namespace UnitTest.IO
             var content = @"Id,Name
 123,太郎
 456,次郎
-".Replace("\n", "\r\n");
+";
 
             using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(content)))
             {
@@ -193,7 +193,7 @@ namespace UnitTest.IO
             var content = @"Id,Name
 123,太郎
 456,次郎
-".Replace("\n", "\r\n");
+";
 
             using (var stream = new MemoryStream(TextFile.ShiftJIS.GetBytes(content)))
             {
@@ -223,7 +223,7 @@ namespace UnitTest.IO
             var content = @"Id,Name
 123,太郎
 456,次郎
-".Replace("\n", "\r\n");
+";
 
             using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(content)))
             {
@@ -238,6 +238,36 @@ namespace UnitTest.IO
                 CsvFile.WriteRecordsByDictionary(stream, records, columnNames);
 
                 CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(content), stream.ToArray());
+            }
+        }
+
+        [TestMethod]
+        public void ReadWriteRecordsByDictionary_2()
+        {
+            var columnNames = new[] { "Id", "Name" };
+            var records = new[]
+            {
+                new Dictionary<string, string> { { "Id", "123" }, { "Name", "太郎" } },
+                new Dictionary<string, string> { { "Id", "456" }, { "Name", "次郎" } },
+            };
+            var content = @"Id,Name
+123,太郎
+456,次郎
+";
+
+            using (var stream = new MemoryStream(TextFile.ShiftJIS.GetBytes(content)))
+            {
+                var records_actual = CsvFile.ReadRecordsByDictionary(stream, TextFile.ShiftJIS).ToArray();
+
+                for (var i = 0; i < records.Length; i++)
+                    DictionaryAssert(records[i], records_actual[i]);
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                CsvFile.WriteRecordsByDictionary(stream, records, columnNames, TextFile.ShiftJIS);
+
+                CollectionAssert.AreEqual(TextFile.ShiftJIS.GetBytes(content), stream.ToArray());
             }
         }
 
