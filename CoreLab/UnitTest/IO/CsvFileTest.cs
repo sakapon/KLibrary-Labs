@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using KLibrary.Labs.IO;
+using KLibrary.Labs.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTest.IO
@@ -127,7 +129,7 @@ namespace UnitTest.IO
             var records = new[]
             {
                 new[] { "123", "太郎" },
-                new[] { "456", "次郎" }
+                new[] { "456", "次郎" },
             };
             var content = @"123,太郎
 456,次郎
@@ -156,7 +158,7 @@ namespace UnitTest.IO
             var records = new[]
             {
                 new[] { "123", "太郎" },
-                new[] { "456", "次郎" }
+                new[] { "456", "次郎" },
             };
             var content = @"Id,Name
 123,太郎
@@ -186,7 +188,7 @@ namespace UnitTest.IO
             var records = new[]
             {
                 new[] { "123", "太郎" },
-                new[] { "456", "次郎" }
+                new[] { "456", "次郎" },
             };
             var content = @"Id,Name
 123,太郎
@@ -207,6 +209,49 @@ namespace UnitTest.IO
 
                 CollectionAssert.AreEqual(TextFile.ShiftJIS.GetBytes(content), stream.ToArray());
             }
+        }
+
+        [TestMethod]
+        public void ReadWriteRecordsByDictionary_1()
+        {
+            var columnNames = new[] { "Id", "Name" };
+            var records = new[]
+            {
+                new Dictionary<string, string> { { "Id", "123" }, { "Name", "太郎" } },
+                new Dictionary<string, string> { { "Id", "456" }, { "Name", "次郎" } },
+            };
+            var content = @"Id,Name
+123,太郎
+456,次郎
+".Replace("\n", "\r\n");
+
+            using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(content)))
+            {
+                var records_actual = CsvFile.ReadRecordsByDictionary(stream).ToArray();
+
+                for (var i = 0; i < records.Length; i++)
+                    DictionaryAssert(records[i], records_actual[i]);
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                CsvFile.WriteRecordsByDictionary(stream, records, columnNames);
+
+                CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(content), stream.ToArray());
+            }
+        }
+
+        static void DictionaryAssert<TKey, TValue>(Dictionary<TKey, TValue> expected, Dictionary<TKey, TValue> actual)
+        {
+            Assert.AreEqual(expected.Count, actual.Count);
+            expected.Zip(actual, (e, a) => new { e, a })
+                .Execute(_ => KeyValuePairAssert(_.e, _.a));
+        }
+
+        static void KeyValuePairAssert<TKey, TValue>(KeyValuePair<TKey, TValue> expected, KeyValuePair<TKey, TValue> actual)
+        {
+            Assert.AreEqual(expected.Key, actual.Key);
+            Assert.AreEqual(expected.Value, actual.Value);
         }
     }
 }
