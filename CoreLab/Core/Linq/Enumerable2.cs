@@ -95,5 +95,25 @@ namespace KLibrary.Labs.Linq
 
             return source;
         }
+
+        public static IEnumerable<TSource> Prepend<TSource>(this IEnumerable<TSource> source, TSource obj)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+
+            yield return obj;
+
+            foreach (var item in source)
+                yield return item;
+        }
+
+        public static IEnumerable<TSource> Append<TSource>(this IEnumerable<TSource> source, TSource obj)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+
+            foreach (var item in source)
+                yield return item;
+
+            yield return obj;
+        }
     }
 }
