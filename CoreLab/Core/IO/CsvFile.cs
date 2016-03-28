@@ -74,20 +74,16 @@ namespace KLibrary.Labs.IO
         public static void WriteRecordsByArray(string path, IEnumerable<string[]> records, Encoding encoding = null) =>
             WriteFile(path, stream => WriteRecordsByArray(stream, records, encoding));
 
-        public static void WriteRecordsByArrayWithColumnNames(Stream stream, IEnumerable<string[]> records, string[] columnNames, Encoding encoding = null)
+        public static void WriteRecordsByArray(Stream stream, IEnumerable<string[]> records, string[] columnNames, Encoding encoding = null)
         {
             if (records == null) throw new ArgumentNullException(nameof(records));
             if (columnNames == null) throw new ArgumentNullException(nameof(columnNames));
 
-            var lines = Enumerable.Repeat(columnNames, 1)
-                .Concat(records)
-                .Select(ToLine);
-
-            stream.WriteLines(lines, encoding);
+            WriteRecordsByArray(stream, Enumerable.Repeat(columnNames, 1).Concat(records), encoding);
         }
 
-        public static void WriteRecordsByArrayWithColumnNames(string path, IEnumerable<string[]> records, string[] columnNames, Encoding encoding = null) =>
-            WriteFile(path, stream => WriteRecordsByArrayWithColumnNames(stream, records, columnNames, encoding));
+        public static void WriteRecordsByArray(string path, IEnumerable<string[]> records, string[] columnNames, Encoding encoding = null) =>
+            WriteFile(path, stream => WriteRecordsByArray(stream, records, columnNames, encoding));
 
         // Supposes that a CSV file has the header line.
         public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(Stream stream, Encoding encoding = null)
