@@ -20,17 +20,17 @@ namespace KLibrary.Labs.IO
         // Uses ?: to minimize capturing groups.
         static readonly Regex CsvFieldPattern = new Regex("(?<=^|,)" + "(?:\"(.*?)\"|[^,]*?)" + "(?=$|,)");
 
-        static readonly Func<string, IEnumerable<string>> SplitLine0 = line =>
+        static IEnumerable<string> SplitLine0(string line) =>
             CsvFieldPattern.Matches(line)
                 .Cast<Match>()
                 .Select(m => m.Groups[1].Success ? m.Groups[1].Value : m.Value)
                 .Select(s => s.Replace("\"\"", "\""));
 
-        public static readonly Func<string, string[]> SplitLine = line => SplitLine0(line).ToArray();
+        public static string[] SplitLine(string line) => SplitLine0(line).ToArray();
 
         static readonly Regex QualifyingFieldPattern = new Regex("^.*[,\"].*$");
 
-        public static readonly Func<IEnumerable<string>, string> ToLine = fields => string.Join(",",
+        public static string ToLine(IEnumerable<string> fields) => string.Join(",",
             fields
                 .Select(f => f.Replace("\"", "\"\""))
                 .Select(f => QualifyingFieldPattern.Replace(f, "\"$&\""))
@@ -55,10 +55,8 @@ namespace KLibrary.Labs.IO
                 .Select(SplitLine);
         }
 
-        public static IEnumerable<string[]> ReadRecordsByArray(string path, bool hasHeader = false, Encoding encoding = null)
-        {
-            return ReadFile(path, stream => ReadRecordsByArray(stream, hasHeader, encoding));
-        }
+        public static IEnumerable<string[]> ReadRecordsByArray(string path, bool hasHeader = false, Encoding encoding = null) =>
+            ReadFile(path, stream => ReadRecordsByArray(stream, hasHeader, encoding));
 
         public static void WriteRecordsByArray(Stream stream, IEnumerable<string[]> records, string[] columnNames = null, Encoding encoding = null)
         {
@@ -71,10 +69,8 @@ namespace KLibrary.Labs.IO
             stream.WriteLines(lines, encoding);
         }
 
-        public static void WriteRecordsByArray(string path, IEnumerable<string[]> records, string[] columnNames = null, Encoding encoding = null)
-        {
+        public static void WriteRecordsByArray(string path, IEnumerable<string[]> records, string[] columnNames = null, Encoding encoding = null) =>
             WriteFile(path, stream => WriteRecordsByArray(stream, records, columnNames, encoding));
-        }
 
         // Supposes that a CSV file has the header line.
         public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(Stream stream, Encoding encoding = null)
@@ -91,10 +87,8 @@ namespace KLibrary.Labs.IO
             }
         }
 
-        public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(string path, Encoding encoding = null)
-        {
-            return ReadFile(path, stream => ReadRecordsByDictionary(stream, encoding));
-        }
+        public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(string path, Encoding encoding = null) =>
+            ReadFile(path, stream => ReadRecordsByDictionary(stream, encoding));
 
         // Supposes that a CSV file has the header line.
         public static void WriteRecordsByDictionary(Stream stream, IEnumerable<Dictionary<string, string>> records, string[] columnNames, Encoding encoding = null)
@@ -109,9 +103,7 @@ namespace KLibrary.Labs.IO
             stream.WriteLines(lines, encoding);
         }
 
-        public static void WriteRecordsByDictionary(string path, IEnumerable<Dictionary<string, string>> records, string[] columnNames, Encoding encoding = null)
-        {
+        public static void WriteRecordsByDictionary(string path, IEnumerable<Dictionary<string, string>> records, string[] columnNames, Encoding encoding = null) =>
             WriteFile(path, stream => WriteRecordsByDictionary(stream, records, columnNames, encoding));
-        }
     }
 }
