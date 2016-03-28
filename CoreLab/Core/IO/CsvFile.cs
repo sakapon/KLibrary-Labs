@@ -107,7 +107,20 @@ namespace KLibrary.Labs.IO
         public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(string path, Encoding encoding = null) =>
             ReadFile(path, stream => ReadRecordsByDictionary(stream, encoding));
 
-        // Supposes that a CSV file has the header line.
+        public static void WriteRecordsByDictionary(Stream stream, IEnumerable<Dictionary<string, string>> records, Encoding encoding = null)
+        {
+            if (records == null) throw new ArgumentNullException(nameof(records));
+
+            var lines = records
+                .Select(d => d.Values)
+                .Select(ToLine);
+
+            stream.WriteLines(lines, encoding);
+        }
+
+        public static void WriteRecordsByDictionary(string path, IEnumerable<Dictionary<string, string>> records, Encoding encoding = null) =>
+            WriteFile(path, stream => WriteRecordsByDictionary(stream, records, encoding));
+
         public static void WriteRecordsByDictionary(Stream stream, IEnumerable<Dictionary<string, string>> records, string[] columnNames, Encoding encoding = null)
         {
             if (records == null) throw new ArgumentNullException(nameof(records));
