@@ -137,7 +137,7 @@ namespace UnitTest.IO
 
             using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(content)))
             {
-                var records_actual = CsvFile.ReadRecordsByArray(stream).ToArray();
+                var records_actual = CsvFile.ReadRecordsByArray(stream, false).ToArray();
 
                 for (var i = 0; i < records.Length; i++)
                     CollectionAssert.AreEqual(records[i], records_actual[i]);
@@ -175,7 +175,7 @@ namespace UnitTest.IO
 
             using (var stream = new MemoryStream())
             {
-                CsvFile.WriteRecordsByArray(stream, records, columnNames);
+                CsvFile.WriteRecordsByArrayWithColumnNames(stream, records, columnNames);
 
                 CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(content), stream.ToArray());
             }
@@ -205,7 +205,7 @@ namespace UnitTest.IO
 
             using (var stream = new MemoryStream())
             {
-                CsvFile.WriteRecordsByArray(stream, records, columnNames, TextFile.ShiftJIS);
+                CsvFile.WriteRecordsByArrayWithColumnNames(stream, records, columnNames, TextFile.ShiftJIS);
 
                 CollectionAssert.AreEqual(TextFile.ShiftJIS.GetBytes(content), stream.ToArray());
             }

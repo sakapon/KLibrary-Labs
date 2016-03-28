@@ -52,29 +52,42 @@ namespace KLibrary.Labs.IO
             }
         }
 
-        public static IEnumerable<string[]> ReadRecordsByArray(Stream stream, bool hasHeader = false, Encoding encoding = null)
+        public static IEnumerable<string[]> ReadRecordsByArray(Stream stream, bool hasHeader, Encoding encoding = null)
         {
             return stream.ReadLines(encoding)
                 .Skip(hasHeader ? 1 : 0)
                 .Select(SplitLine);
         }
 
-        public static IEnumerable<string[]> ReadRecordsByArray(string path, bool hasHeader = false, Encoding encoding = null) =>
+        public static IEnumerable<string[]> ReadRecordsByArray(string path, bool hasHeader, Encoding encoding = null) =>
             ReadFile(path, stream => ReadRecordsByArray(stream, hasHeader, encoding));
 
-        public static void WriteRecordsByArray(Stream stream, IEnumerable<string[]> records, string[] columnNames = null, Encoding encoding = null)
+        public static void WriteRecordsByArray(Stream stream, IEnumerable<string[]> records, Encoding encoding = null)
         {
             if (records == null) throw new ArgumentNullException(nameof(records));
 
-            var lines = Enumerable.Repeat(columnNames, columnNames != null ? 1 : 0)
+            var lines = records.Select(ToLine);
+
+            stream.WriteLines(lines, encoding);
+        }
+
+        public static void WriteRecordsByArray(string path, IEnumerable<string[]> records, Encoding encoding = null) =>
+            WriteFile(path, stream => WriteRecordsByArray(stream, records, encoding));
+
+        public static void WriteRecordsByArrayWithColumnNames(Stream stream, IEnumerable<string[]> records, string[] columnNames, Encoding encoding = null)
+        {
+            if (records == null) throw new ArgumentNullException(nameof(records));
+            if (columnNames == null) throw new ArgumentNullException(nameof(columnNames));
+
+            var lines = Enumerable.Repeat(columnNames, 1)
                 .Concat(records)
                 .Select(ToLine);
 
             stream.WriteLines(lines, encoding);
         }
 
-        public static void WriteRecordsByArray(string path, IEnumerable<string[]> records, string[] columnNames = null, Encoding encoding = null) =>
-            WriteFile(path, stream => WriteRecordsByArray(stream, records, columnNames, encoding));
+        public static void WriteRecordsByArrayWithColumnNames(string path, IEnumerable<string[]> records, string[] columnNames, Encoding encoding = null) =>
+            WriteFile(path, stream => WriteRecordsByArrayWithColumnNames(stream, records, columnNames, encoding));
 
         // Supposes that a CSV file has the header line.
         public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(Stream stream, Encoding encoding = null)
