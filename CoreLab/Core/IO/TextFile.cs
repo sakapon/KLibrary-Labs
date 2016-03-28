@@ -13,7 +13,7 @@ namespace KLibrary.Labs.IO
 
         public static IEnumerable<string> ReadLines(this Stream stream, Encoding encoding = null)
         {
-            if (stream == null) throw new ArgumentNullException("stream");
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
 
             using (var reader = new StreamReader(stream, encoding ?? UTF8N))
             {
@@ -24,8 +24,8 @@ namespace KLibrary.Labs.IO
 
         public static void WriteLines(this Stream stream, IEnumerable<string> lines, Encoding encoding = null)
         {
-            if (stream == null) throw new ArgumentNullException("stream");
-            if (lines == null) throw new ArgumentNullException("lines");
+            if (stream == null) throw new ArgumentNullException(nameof(stream));
+            if (lines == null) throw new ArgumentNullException(nameof(lines));
 
             using (var writer = new StreamWriter(stream, encoding ?? UTF8N))
             {

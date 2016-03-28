@@ -39,13 +39,17 @@ namespace KLibrary.Labs.IO
         static TResult ReadFile<TResult>(string path, Func<Stream, TResult> func)
         {
             using (var stream = File.OpenRead(path))
+            {
                 return func(stream);
+            }
         }
 
         static void WriteFile(string path, Action<Stream> action)
         {
             using (var stream = File.Create(path))
+            {
                 action(stream);
+            }
         }
 
         public static IEnumerable<string[]> ReadRecordsByArray(Stream stream, bool hasHeader = false, Encoding encoding = null)
@@ -60,7 +64,7 @@ namespace KLibrary.Labs.IO
 
         public static void WriteRecordsByArray(Stream stream, IEnumerable<string[]> records, string[] columnNames = null, Encoding encoding = null)
         {
-            if (records == null) throw new ArgumentNullException("records");
+            if (records == null) throw new ArgumentNullException(nameof(records));
 
             var lines = Enumerable.Repeat(columnNames, columnNames != null ? 1 : 0)
                 .Concat(records)
@@ -93,8 +97,8 @@ namespace KLibrary.Labs.IO
         // Supposes that a CSV file has the header line.
         public static void WriteRecordsByDictionary(Stream stream, IEnumerable<Dictionary<string, string>> records, string[] columnNames, Encoding encoding = null)
         {
-            if (records == null) throw new ArgumentNullException("records");
-            if (columnNames == null) throw new ArgumentNullException("columnNames");
+            if (records == null) throw new ArgumentNullException(nameof(records));
+            if (columnNames == null) throw new ArgumentNullException(nameof(columnNames));
 
             var lines = Enumerable.Repeat(columnNames, 1)
                 .Concat(records.Select(d => columnNames.Select(c => d[c])))
