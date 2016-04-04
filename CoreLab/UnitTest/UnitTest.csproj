@@ -60,7 +60,9 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
@@ -68,6 +70,7 @@
     <Compile Include="Collections\HistoryTest.cs" />
     <Compile Include="Collections\QueueCollectionTest.cs" />
     <Compile Include="IO\CsvFileTest.cs" />
+    <Compile Include="IO\TextFileTest.cs" />
     <Compile Include="Linq\RecursiveHelperTest.cs" />
     <Compile Include="Mathematics\PolynomialTest.cs" />
     <Compile Include="Mathematics\FrequencyMeterTest.cs" />
