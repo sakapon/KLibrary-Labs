@@ -24,9 +24,9 @@ namespace UnitTest.IO
         {
             using (var stream = new MemoryStream())
             {
-                var records_actual = stream.ReadLines().ToArray();
+                var actual = stream.ReadLines().ToArray();
 
-                Assert.AreEqual(0, records_actual.Length);
+                Assert.AreEqual(0, actual.Length);
             }
         }
 
@@ -35,10 +35,10 @@ namespace UnitTest.IO
         {
             using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(Content1)))
             {
-                var records_actual = stream.ReadLines().ToArray();
+                var actual = stream.ReadLines().ToArray();
 
                 for (var i = 0; i < Lines.Length; i++)
-                    Assert.AreEqual(Lines[i], records_actual[i]);
+                    Assert.AreEqual(Lines[i], actual[i]);
             }
         }
 
@@ -47,10 +47,10 @@ namespace UnitTest.IO
         {
             using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(Content2)))
             {
-                var records_actual = stream.ReadLines().ToArray();
+                var actual = stream.ReadLines().ToArray();
 
                 for (var i = 0; i < Lines.Length; i++)
-                    Assert.AreEqual(Lines[i], records_actual[i]);
+                    Assert.AreEqual(Lines[i], actual[i]);
             }
         }
 
@@ -59,10 +59,10 @@ namespace UnitTest.IO
         {
             using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(Content3)))
             {
-                var records_actual = stream.ReadLines().ToArray();
+                var actual = stream.ReadLines().ToArray();
 
                 for (var i = 0; i < Lines.Length; i++)
-                    Assert.AreEqual(Lines[i], records_actual[i]);
+                    Assert.AreEqual(Lines[i], actual[i]);
             }
         }
 
@@ -71,10 +71,10 @@ namespace UnitTest.IO
         {
             using (var stream = new MemoryStream(TextFile.ShiftJIS.GetBytes(Content1)))
             {
-                var records_actual = stream.ReadLines(TextFile.ShiftJIS).ToArray();
+                var actual = stream.ReadLines(TextFile.ShiftJIS).ToArray();
 
                 for (var i = 0; i < Lines.Length; i++)
-                    Assert.AreEqual(Lines[i], records_actual[i]);
+                    Assert.AreEqual(Lines[i], actual[i]);
             }
         }
 
@@ -83,9 +83,9 @@ namespace UnitTest.IO
         {
             File.WriteAllBytes(TextFileName, new byte[0]);
 
-            var records_actual = TextFile.ReadLines(TextFileName).ToArray();
+            var actual = TextFile.ReadLines(TextFileName).ToArray();
 
-            Assert.AreEqual(0, records_actual.Length);
+            Assert.AreEqual(0, actual.Length);
         }
 
         [TestMethod]
@@ -93,10 +93,10 @@ namespace UnitTest.IO
         {
             File.WriteAllBytes(TextFileName, TextFile.UTF8N.GetBytes(Content1));
 
-            var records_actual = TextFile.ReadLines(TextFileName).ToArray();
+            var actual = TextFile.ReadLines(TextFileName).ToArray();
 
             for (var i = 0; i < Lines.Length; i++)
-                Assert.AreEqual(Lines[i], records_actual[i]);
+                Assert.AreEqual(Lines[i], actual[i]);
         }
 
         [TestMethod]
