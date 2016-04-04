@@ -15,6 +15,18 @@ namespace UnitTest.IO
 ";
         const string Content2 = @"123
 あいう";
+        const string Content3 = "123\nあいう\n";
+
+        [TestMethod]
+        public void ReadLines_Empty()
+        {
+            using (var stream = new MemoryStream())
+            {
+                var records_actual = stream.ReadLines().ToArray();
+
+                Assert.AreEqual(0, records_actual.Length);
+            }
+        }
 
         [TestMethod]
         public void ReadLines_1()
@@ -41,6 +53,18 @@ namespace UnitTest.IO
         }
 
         [TestMethod]
+        public void ReadLines_3()
+        {
+            using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(Content3)))
+            {
+                var records_actual = stream.ReadLines().ToArray();
+
+                for (var i = 0; i < Lines.Length; i++)
+                    Assert.AreEqual(Lines[i], records_actual[i]);
+            }
+        }
+
+        [TestMethod]
         public void ReadLines_ShiftJIS()
         {
             using (var stream = new MemoryStream(TextFile.ShiftJIS.GetBytes(Content1)))
@@ -49,6 +73,17 @@ namespace UnitTest.IO
 
                 for (var i = 0; i < Lines.Length; i++)
                     Assert.AreEqual(Lines[i], records_actual[i]);
+            }
+        }
+
+        [TestMethod]
+        public void WriteLines_Empty()
+        {
+            using (var stream = new MemoryStream())
+            {
+                stream.WriteLines(Enumerable.Empty<string>());
+
+                Assert.AreEqual(0, stream.ToArray().Length);
             }
         }
 
