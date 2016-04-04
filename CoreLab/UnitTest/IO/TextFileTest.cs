@@ -9,6 +9,8 @@ namespace UnitTest.IO
     [TestClass]
     public class TextFileTest
     {
+        const string TextFileName = "TextFileTest.txt";
+
         static readonly string[] Lines = new[] { "123", "あいう" };
         const string Content1 = @"123
 あいう
@@ -77,6 +79,27 @@ namespace UnitTest.IO
         }
 
         [TestMethod]
+        public void ReadLines_Path_Empty()
+        {
+            File.WriteAllBytes(TextFileName, new byte[0]);
+
+            var records_actual = TextFile.ReadLines(TextFileName).ToArray();
+
+            Assert.AreEqual(0, records_actual.Length);
+        }
+
+        [TestMethod]
+        public void ReadLines_Path_1()
+        {
+            File.WriteAllBytes(TextFileName, TextFile.UTF8N.GetBytes(Content1));
+
+            var records_actual = TextFile.ReadLines(TextFileName).ToArray();
+
+            for (var i = 0; i < Lines.Length; i++)
+                Assert.AreEqual(Lines[i], records_actual[i]);
+        }
+
+        [TestMethod]
         public void WriteLines_Empty()
         {
             using (var stream = new MemoryStream())
@@ -107,6 +130,24 @@ namespace UnitTest.IO
 
                 CollectionAssert.AreEqual(TextFile.ShiftJIS.GetBytes(Content1), stream.ToArray());
             }
+        }
+
+        [TestMethod]
+        public void WriteLines_Path_Empty()
+        {
+            TextFile.WriteLines(TextFileName, Enumerable.Empty<string>());
+
+            var bytes_actual = File.ReadAllBytes(TextFileName);
+            Assert.AreEqual(0, bytes_actual.Length);
+        }
+
+        [TestMethod]
+        public void WriteLines_Path_1()
+        {
+            TextFile.WriteLines(TextFileName, Lines);
+
+            var bytes_actual = File.ReadAllBytes(TextFileName);
+            CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(Content1), bytes_actual);
         }
     }
 }

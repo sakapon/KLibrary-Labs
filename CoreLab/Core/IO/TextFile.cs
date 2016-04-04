@@ -22,16 +22,8 @@ namespace KLibrary.Labs.IO
             }
         }
 
-        public static IEnumerable<string> ReadLines(string path, Encoding encoding = null)
-        {
-            if (path == null) throw new ArgumentNullException(nameof(path));
-
-            using (var reader = new StreamReader(path, encoding ?? UTF8N))
-            {
-                while (!reader.EndOfStream)
-                    yield return reader.ReadLine();
-            }
-        }
+        public static IEnumerable<string> ReadLines(string path, Encoding encoding = null) =>
+            File.ReadLines(path, encoding ?? UTF8N);
 
         public static void WriteLines(this Stream stream, IEnumerable<string> lines, Encoding encoding = null)
         {
@@ -45,16 +37,7 @@ namespace KLibrary.Labs.IO
             }
         }
 
-        public static void WriteLines(string path, IEnumerable<string> lines, Encoding encoding = null)
-        {
-            if (path == null) throw new ArgumentNullException(nameof(path));
-            if (lines == null) throw new ArgumentNullException(nameof(lines));
-
-            using (var writer = new StreamWriter(path, false, encoding ?? UTF8N))
-            {
-                foreach (var line in lines)
-                    writer.WriteLine(line);
-            }
-        }
+        public static void WriteLines(string path, IEnumerable<string> lines, Encoding encoding = null) =>
+            File.WriteAllLines(path, lines, encoding ?? UTF8N);
     }
 }
