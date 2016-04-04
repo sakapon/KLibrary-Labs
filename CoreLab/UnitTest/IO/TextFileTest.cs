@@ -29,6 +29,30 @@ namespace UnitTest.IO
         }
 
         [TestMethod]
+        public void ReadLines_2()
+        {
+            using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(Content2)))
+            {
+                var records_actual = stream.ReadLines().ToArray();
+
+                for (var i = 0; i < Lines.Length; i++)
+                    Assert.AreEqual(Lines[i], records_actual[i]);
+            }
+        }
+
+        [TestMethod]
+        public void ReadLines_ShiftJIS()
+        {
+            using (var stream = new MemoryStream(TextFile.ShiftJIS.GetBytes(Content1)))
+            {
+                var records_actual = stream.ReadLines(TextFile.ShiftJIS).ToArray();
+
+                for (var i = 0; i < Lines.Length; i++)
+                    Assert.AreEqual(Lines[i], records_actual[i]);
+            }
+        }
+
+        [TestMethod]
         public void WriteLines_1()
         {
             using (var stream = new MemoryStream())
@@ -36,6 +60,17 @@ namespace UnitTest.IO
                 stream.WriteLines(Lines);
 
                 CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(Content1), stream.ToArray());
+            }
+        }
+
+        [TestMethod]
+        public void WriteLines_ShiftJIS()
+        {
+            using (var stream = new MemoryStream())
+            {
+                stream.WriteLines(Lines, TextFile.ShiftJIS);
+
+                CollectionAssert.AreEqual(TextFile.ShiftJIS.GetBytes(Content1), stream.ToArray());
             }
         }
     }
