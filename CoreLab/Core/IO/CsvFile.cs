@@ -36,14 +36,6 @@ namespace KLibrary.Labs.IO
                 .Select(f => QualifyingFieldPattern.Replace(f, "\"$&\""))
         );
 
-        static TResult ReadFile<TResult>(string path, Func<Stream, TResult> func)
-        {
-            using (var stream = File.OpenRead(path))
-            {
-                return func(stream);
-            }
-        }
-
         static void WriteFile(string path, Action<Stream> action)
         {
             using (var stream = File.Create(path))
@@ -52,15 +44,18 @@ namespace KLibrary.Labs.IO
             }
         }
 
-        public static IEnumerable<string[]> ReadRecordsByArray(Stream stream, bool hasHeader, Encoding encoding = null)
+        static IEnumerable<string[]> ReadRecordsByArray(this IEnumerable<string> lines, bool hasHeader)
         {
-            return stream.ReadLines(encoding)
+            return lines
                 .Skip(hasHeader ? 1 : 0)
                 .Select(SplitLine);
         }
 
+        public static IEnumerable<string[]> ReadRecordsByArray(Stream stream, bool hasHeader, Encoding encoding = null) =>
+            stream.ReadLines(encoding).ReadRecordsByArray(hasHeader);
+
         public static IEnumerable<string[]> ReadRecordsByArray(string path, bool hasHeader, Encoding encoding = null) =>
-            ReadFile(path, stream => ReadRecordsByArray(stream, hasHeader, encoding));
+            TextFile.ReadLines(path, encoding).ReadRecordsByArray(hasHeader);
 
         public static void WriteRecordsByArray(Stream stream, IEnumerable<string[]> records, Encoding encoding = null)
         {
@@ -86,12 +81,12 @@ namespace KLibrary.Labs.IO
             WriteFile(path, stream => WriteRecordsByArray(stream, records, columnNames, encoding));
 
         // Supposes that a CSV file has the header line.
-        public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(Stream stream, Encoding encoding = null)
+        static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(this IEnumerable<string> lines)
         {
-            var lines = stream.ReadLines(encoding).Select(SplitLine);
+            var lines2 = lines.Select(SplitLine);
             string[] columnNames = null;
 
-            foreach (var fields in lines)
+            foreach (var fields in lines2)
             {
                 if (columnNames == null)
                     columnNames = fields;
@@ -100,8 +95,11 @@ namespace KLibrary.Labs.IO
             }
         }
 
+        public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(Stream stream, Encoding encoding = null) =>
+            stream.ReadLines(encoding).ReadRecordsByDictionary();
+
         public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(string path, Encoding encoding = null) =>
-            ReadFile(path, stream => ReadRecordsByDictionary(stream, encoding));
+            TextFile.ReadLines(path, encoding).ReadRecordsByDictionary();
 
         public static void WriteRecordsByDictionary(Stream stream, IEnumerable<Dictionary<string, string>> records, Encoding encoding = null)
         {
