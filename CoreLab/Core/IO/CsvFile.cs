@@ -44,7 +44,7 @@ namespace KLibrary.Labs.IO
         }
 
         public static IEnumerable<string[]> ReadRecordsByArray(Stream stream, bool hasHeader, Encoding encoding = null) =>
-            stream.ReadLines(encoding).ReadRecordsByArray(hasHeader);
+            TextFile.ReadLines(stream, encoding).ReadRecordsByArray(hasHeader);
 
         public static IEnumerable<string[]> ReadRecordsByArray(string path, bool hasHeader, Encoding encoding = null) =>
             TextFile.ReadLines(path, encoding).ReadRecordsByArray(hasHeader);
@@ -57,7 +57,7 @@ namespace KLibrary.Labs.IO
         }
 
         public static void WriteRecordsByArray(Stream stream, IEnumerable<string[]> records, Encoding encoding = null) =>
-            stream.WriteLines(records.WriteRecordsByArray(), encoding);
+            TextFile.WriteLines(stream, records.WriteRecordsByArray(), encoding);
 
         public static void WriteRecordsByArray(string path, IEnumerable<string[]> records, Encoding encoding = null) =>
             TextFile.WriteLines(path, records.WriteRecordsByArray(), encoding);
@@ -73,7 +73,7 @@ namespace KLibrary.Labs.IO
         }
 
         public static void WriteRecordsByArray(Stream stream, IEnumerable<string[]> records, string[] columnNames, Encoding encoding = null) =>
-            stream.WriteLines(records.WriteRecordsByArray(columnNames), encoding);
+            TextFile.WriteLines(stream, records.WriteRecordsByArray(columnNames), encoding);
 
         public static void WriteRecordsByArray(string path, IEnumerable<string[]> records, string[] columnNames, Encoding encoding = null) =>
             TextFile.WriteLines(path, records.WriteRecordsByArray(columnNames), encoding);
@@ -94,7 +94,7 @@ namespace KLibrary.Labs.IO
         }
 
         public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(Stream stream, Encoding encoding = null) =>
-            stream.ReadLines(encoding).ReadRecordsByDictionary();
+            TextFile.ReadLines(stream, encoding).ReadRecordsByDictionary();
 
         public static IEnumerable<Dictionary<string, string>> ReadRecordsByDictionary(string path, Encoding encoding = null) =>
             TextFile.ReadLines(path, encoding).ReadRecordsByDictionary();
@@ -109,7 +109,7 @@ namespace KLibrary.Labs.IO
         }
 
         public static void WriteRecordsByDictionary(Stream stream, IEnumerable<Dictionary<string, string>> records, Encoding encoding = null) =>
-            stream.WriteLines(records.WriteRecordsByDictionary(), encoding);
+            TextFile.WriteLines(stream, records.WriteRecordsByDictionary(), encoding);
 
         public static void WriteRecordsByDictionary(string path, IEnumerable<Dictionary<string, string>> records, Encoding encoding = null) =>
             TextFile.WriteLines(path, records.WriteRecordsByDictionary(), encoding);
@@ -125,7 +125,7 @@ namespace KLibrary.Labs.IO
         }
 
         public static void WriteRecordsByDictionary(Stream stream, IEnumerable<Dictionary<string, string>> records, string[] columnNames, Encoding encoding = null) =>
-            stream.WriteLines(records.WriteRecordsByDictionary(columnNames), encoding);
+            TextFile.WriteLines(stream, records.WriteRecordsByDictionary(columnNames), encoding);
 
         public static void WriteRecordsByDictionary(string path, IEnumerable<Dictionary<string, string>> records, string[] columnNames, Encoding encoding = null) =>
             TextFile.WriteLines(path, records.WriteRecordsByDictionary(columnNames), encoding);
