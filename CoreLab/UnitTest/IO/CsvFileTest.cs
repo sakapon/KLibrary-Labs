@@ -123,91 +123,85 @@ namespace UnitTest.IO
             Assert.AreEqual("\"\"\"\",,\"2\"\"2,\"", CsvFile.ToLine(new[] { "\"", "", "2\"2," }));
         }
 
-        [TestMethod]
-        public void ReadWriteRecordsByArray_1()
+        const string CsvFileName = "CsvFileTest.csv";
+
+        static readonly string[] ColumnNames = new[] { "Id", "Name" };
+        static readonly string[][] Records = new[]
         {
-            var records = new[]
-            {
-                new[] { "123", "太郎" },
-                new[] { "456", "次郎" },
-            };
-            var content = @"123,太郎
+            new[] { "123", "太郎" },
+            new[] { "456", "次郎" },
+        };
+        const string Content1 = @"123,太郎
+456,次郎
+";
+        const string Content2 = @"Id,Name
+123,太郎
 456,次郎
 ";
 
-            using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(content)))
+        [TestMethod]
+        public void ReadRecordsByArray_1()
+        {
+            using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(Content1)))
             {
                 var records_actual = CsvFile.ReadRecordsByArray(stream, false).ToArray();
 
-                for (var i = 0; i < records.Length; i++)
-                    CollectionAssert.AreEqual(records[i], records_actual[i]);
-            }
-
-            using (var stream = new MemoryStream())
-            {
-                CsvFile.WriteRecordsByArray(stream, records);
-
-                CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(content), stream.ToArray());
+                TestHelper.AreCollectionEqual(Records, records_actual);
             }
         }
 
         [TestMethod]
-        public void ReadWriteRecordsByArray_2()
+        public void ReadRecordsByArray_2()
         {
-            var columnNames = new[] { "Id", "Name" };
-            var records = new[]
-            {
-                new[] { "123", "太郎" },
-                new[] { "456", "次郎" },
-            };
-            var content = @"Id,Name
-123,太郎
-456,次郎
-";
-
-            using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(content)))
+            using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(Content2)))
             {
                 var records_actual = CsvFile.ReadRecordsByArray(stream, true).ToArray();
 
-                for (var i = 0; i < records.Length; i++)
-                    CollectionAssert.AreEqual(records[i], records_actual[i]);
-            }
-
-            using (var stream = new MemoryStream())
-            {
-                CsvFile.WriteRecordsByArray(stream, records, columnNames);
-
-                CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(content), stream.ToArray());
+                TestHelper.AreCollectionEqual(Records, records_actual);
             }
         }
 
         [TestMethod]
-        public void ReadWriteRecordsByArray_3()
+        public void ReadRecordsByArray_ShiftJIS()
         {
-            var columnNames = new[] { "Id", "Name" };
-            var records = new[]
-            {
-                new[] { "123", "太郎" },
-                new[] { "456", "次郎" },
-            };
-            var content = @"Id,Name
-123,太郎
-456,次郎
-";
-
-            using (var stream = new MemoryStream(TextFile.ShiftJIS.GetBytes(content)))
+            using (var stream = new MemoryStream(TextFile.ShiftJIS.GetBytes(Content2)))
             {
                 var records_actual = CsvFile.ReadRecordsByArray(stream, true, TextFile.ShiftJIS).ToArray();
 
-                for (var i = 0; i < records.Length; i++)
-                    CollectionAssert.AreEqual(records[i], records_actual[i]);
+                TestHelper.AreCollectionEqual(Records, records_actual);
             }
+        }
 
+        [TestMethod]
+        public void WriteRecordsByArray_1()
+        {
             using (var stream = new MemoryStream())
             {
-                CsvFile.WriteRecordsByArray(stream, records, columnNames, TextFile.ShiftJIS);
+                CsvFile.WriteRecordsByArray(stream, Records);
 
-                CollectionAssert.AreEqual(TextFile.ShiftJIS.GetBytes(content), stream.ToArray());
+                CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(Content1), stream.ToArray());
+            }
+        }
+
+        [TestMethod]
+        public void WriteRecordsByArray_2()
+        {
+            using (var stream = new MemoryStream())
+            {
+                CsvFile.WriteRecordsByArray(stream, Records, ColumnNames);
+
+                CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(Content2), stream.ToArray());
+            }
+        }
+
+        [TestMethod]
+        public void WriteRecordsByArray_ShiftJIS()
+        {
+            using (var stream = new MemoryStream())
+            {
+                CsvFile.WriteRecordsByArray(stream, Records, ColumnNames, TextFile.ShiftJIS);
+
+                CollectionAssert.AreEqual(TextFile.ShiftJIS.GetBytes(Content2), stream.ToArray());
             }
         }
 
