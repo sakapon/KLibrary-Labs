@@ -37,8 +37,7 @@ namespace UnitTest.IO
             {
                 var actual = stream.ReadLines().ToArray();
 
-                for (var i = 0; i < Lines.Length; i++)
-                    Assert.AreEqual(Lines[i], actual[i]);
+                CollectionAssert.AreEqual(Lines, actual);
             }
         }
 
@@ -49,8 +48,7 @@ namespace UnitTest.IO
             {
                 var actual = stream.ReadLines().ToArray();
 
-                for (var i = 0; i < Lines.Length; i++)
-                    Assert.AreEqual(Lines[i], actual[i]);
+                CollectionAssert.AreEqual(Lines, actual);
             }
         }
 
@@ -61,8 +59,7 @@ namespace UnitTest.IO
             {
                 var actual = stream.ReadLines().ToArray();
 
-                for (var i = 0; i < Lines.Length; i++)
-                    Assert.AreEqual(Lines[i], actual[i]);
+                CollectionAssert.AreEqual(Lines, actual);
             }
         }
 
@@ -73,8 +70,7 @@ namespace UnitTest.IO
             {
                 var actual = stream.ReadLines(TextFile.ShiftJIS).ToArray();
 
-                for (var i = 0; i < Lines.Length; i++)
-                    Assert.AreEqual(Lines[i], actual[i]);
+                CollectionAssert.AreEqual(Lines, actual);
             }
         }
 
@@ -95,8 +91,7 @@ namespace UnitTest.IO
 
             var actual = TextFile.ReadLines(TextFileName).ToArray();
 
-            for (var i = 0; i < Lines.Length; i++)
-                Assert.AreEqual(Lines[i], actual[i]);
+            CollectionAssert.AreEqual(Lines, actual);
         }
 
         [TestMethod]
