@@ -83,6 +83,7 @@
     <Compile Include="Reactive\ObservableEventTest.cs" />
     <Compile Include="Reactive\Timers\PeriodicTimerTest.cs" />
     <Compile Include="SureTest.cs" />
+    <Compile Include="TestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
