@@ -179,6 +179,16 @@ namespace UnitTest.IO
         }
 
         [TestMethod]
+        public void ReadRecordsByArray_Path_1()
+        {
+            File.WriteAllBytes(CsvFileName, TextFile.UTF8N.GetBytes(Content1));
+
+            var actual = CsvFile.ReadRecordsByArray(CsvFileName, false).ToArray();
+
+            TestHelper.AreCollectionEqual(Records, actual);
+        }
+
+        [TestMethod]
         public void WriteRecordsByArray_1()
         {
             using (var stream = new MemoryStream())
@@ -209,6 +219,15 @@ namespace UnitTest.IO
 
                 CollectionAssert.AreEqual(TextFile.ShiftJIS.GetBytes(Content2), stream.ToArray());
             }
+        }
+
+        [TestMethod]
+        public void WriteRecordsByArray_Path_1()
+        {
+            CsvFile.WriteRecordsByArray(CsvFileName, Records);
+
+            var bytes_actual = File.ReadAllBytes(CsvFileName);
+            CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(Content1), bytes_actual);
         }
 
         [TestMethod]
