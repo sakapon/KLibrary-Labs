@@ -150,9 +150,9 @@ namespace UnitTest.IO
         {
             using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(Content1)))
             {
-                var records_actual = CsvFile.ReadRecordsByArray(stream, false).ToArray();
+                var actual = CsvFile.ReadRecordsByArray(stream, false).ToArray();
 
-                TestHelper.AreCollectionEqual(Records, records_actual);
+                TestHelper.AreCollectionEqual(Records, actual);
             }
         }
 
@@ -161,9 +161,9 @@ namespace UnitTest.IO
         {
             using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(Content2)))
             {
-                var records_actual = CsvFile.ReadRecordsByArray(stream, true).ToArray();
+                var actual = CsvFile.ReadRecordsByArray(stream, true).ToArray();
 
-                TestHelper.AreCollectionEqual(Records, records_actual);
+                TestHelper.AreCollectionEqual(Records, actual);
             }
         }
 
@@ -172,9 +172,9 @@ namespace UnitTest.IO
         {
             using (var stream = new MemoryStream(TextFile.ShiftJIS.GetBytes(Content2)))
             {
-                var records_actual = CsvFile.ReadRecordsByArray(stream, true, TextFile.ShiftJIS).ToArray();
+                var actual = CsvFile.ReadRecordsByArray(stream, true, TextFile.ShiftJIS).ToArray();
 
-                TestHelper.AreCollectionEqual(Records, records_actual);
+                TestHelper.AreCollectionEqual(Records, actual);
             }
         }
 
@@ -216,10 +216,10 @@ namespace UnitTest.IO
         {
             using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(Content2)))
             {
-                var records_actual = CsvFile.ReadRecordsByDictionary(stream).ToArray();
+                var actual = CsvFile.ReadRecordsByDictionary(stream).ToArray();
 
                 for (var i = 0; i < Records2.Length; i++)
-                    DictionaryAssert(Records2[i], records_actual[i]);
+                    DictionaryAssert(Records2[i], actual[i]);
             }
         }
 
@@ -228,10 +228,10 @@ namespace UnitTest.IO
         {
             using (var stream = new MemoryStream(TextFile.ShiftJIS.GetBytes(Content2)))
             {
-                var records_actual = CsvFile.ReadRecordsByDictionary(stream, TextFile.ShiftJIS).ToArray();
+                var actual = CsvFile.ReadRecordsByDictionary(stream, TextFile.ShiftJIS).ToArray();
 
                 for (var i = 0; i < Records2.Length; i++)
-                    DictionaryAssert(Records2[i], records_actual[i]);
+                    DictionaryAssert(Records2[i], actual[i]);
             }
         }
 
