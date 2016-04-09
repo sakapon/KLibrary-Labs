@@ -131,6 +131,12 @@ namespace UnitTest.IO
             new[] { "123", "太郎" },
             new[] { "456", "次郎" },
         };
+        static readonly Dictionary<string, string>[] Records2 = new[]
+        {
+            new Dictionary<string, string> { { "Id", "123" }, { "Name", "太郎" } },
+            new Dictionary<string, string> { { "Id", "456" }, { "Name", "次郎" } },
+        };
+
         const string Content1 = @"123,太郎
 456,次郎
 ";
@@ -206,94 +212,59 @@ namespace UnitTest.IO
         }
 
         [TestMethod]
-        public void ReadWriteRecordsByDictionary_1()
+        public void ReadRecordsByDictionary_1()
         {
-            var records = new[]
-            {
-                new Dictionary<string, string> { { "Id", "123" }, { "Name", "太郎" } },
-                new Dictionary<string, string> { { "Id", "456" }, { "Name", "次郎" } },
-            };
-            var content = @"123,太郎
-456,次郎
-";
-            var content2 = @"Id,Name
-123,太郎
-456,次郎
-";
-
-            using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(content2)))
+            using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(Content2)))
             {
                 var records_actual = CsvFile.ReadRecordsByDictionary(stream).ToArray();
 
-                for (var i = 0; i < records.Length; i++)
-                    DictionaryAssert(records[i], records_actual[i]);
-            }
-
-            using (var stream = new MemoryStream())
-            {
-                CsvFile.WriteRecordsByDictionary(stream, records);
-
-                CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(content), stream.ToArray());
+                for (var i = 0; i < Records2.Length; i++)
+                    DictionaryAssert(Records2[i], records_actual[i]);
             }
         }
 
         [TestMethod]
-        public void ReadWriteRecordsByDictionary_2()
+        public void ReadRecordsByDictionary_ShiftJIS()
         {
-            var columnNames = new[] { "Id", "Name" };
-            var records = new[]
-            {
-                new Dictionary<string, string> { { "Id", "123" }, { "Name", "太郎" } },
-                new Dictionary<string, string> { { "Id", "456" }, { "Name", "次郎" } },
-            };
-            var content = @"Id,Name
-123,太郎
-456,次郎
-";
-
-            using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(content)))
-            {
-                var records_actual = CsvFile.ReadRecordsByDictionary(stream).ToArray();
-
-                for (var i = 0; i < records.Length; i++)
-                    DictionaryAssert(records[i], records_actual[i]);
-            }
-
-            using (var stream = new MemoryStream())
-            {
-                CsvFile.WriteRecordsByDictionary(stream, records, columnNames);
-
-                CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(content), stream.ToArray());
-            }
-        }
-
-        [TestMethod]
-        public void ReadWriteRecordsByDictionary_3()
-        {
-            var columnNames = new[] { "Id", "Name" };
-            var records = new[]
-            {
-                new Dictionary<string, string> { { "Id", "123" }, { "Name", "太郎" } },
-                new Dictionary<string, string> { { "Id", "456" }, { "Name", "次郎" } },
-            };
-            var content = @"Id,Name
-123,太郎
-456,次郎
-";
-
-            using (var stream = new MemoryStream(TextFile.ShiftJIS.GetBytes(content)))
+            using (var stream = new MemoryStream(TextFile.ShiftJIS.GetBytes(Content2)))
             {
                 var records_actual = CsvFile.ReadRecordsByDictionary(stream, TextFile.ShiftJIS).ToArray();
 
-                for (var i = 0; i < records.Length; i++)
-                    DictionaryAssert(records[i], records_actual[i]);
+                for (var i = 0; i < Records2.Length; i++)
+                    DictionaryAssert(Records2[i], records_actual[i]);
             }
+        }
 
+        [TestMethod]
+        public void WriteRecordsByDictionary_1()
+        {
             using (var stream = new MemoryStream())
             {
-                CsvFile.WriteRecordsByDictionary(stream, records, columnNames, TextFile.ShiftJIS);
+                CsvFile.WriteRecordsByDictionary(stream, Records2);
 
-                CollectionAssert.AreEqual(TextFile.ShiftJIS.GetBytes(content), stream.ToArray());
+                CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(Content1), stream.ToArray());
+            }
+        }
+
+        [TestMethod]
+        public void WriteRecordsByDictionary_2()
+        {
+            using (var stream = new MemoryStream())
+            {
+                CsvFile.WriteRecordsByDictionary(stream, Records2, ColumnNames);
+
+                CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(Content2), stream.ToArray());
+            }
+        }
+
+        [TestMethod]
+        public void WriteRecordsByDictionary_ShiftJIS()
+        {
+            using (var stream = new MemoryStream())
+            {
+                CsvFile.WriteRecordsByDictionary(stream, Records2, ColumnNames, TextFile.ShiftJIS);
+
+                CollectionAssert.AreEqual(TextFile.ShiftJIS.GetBytes(Content2), stream.ToArray());
             }
         }
 
