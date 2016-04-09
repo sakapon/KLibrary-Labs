@@ -146,6 +146,17 @@ namespace UnitTest.IO
 ";
 
         [TestMethod]
+        public void ReadRecordsByArray_Empty()
+        {
+            using (var stream = new MemoryStream())
+            {
+                var actual = CsvFile.ReadRecordsByArray(stream, false).ToArray();
+
+                Assert.AreEqual(0, actual.Length);
+            }
+        }
+
+        [TestMethod]
         public void ReadRecordsByArray_1()
         {
             using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(Content1)))
@@ -186,6 +197,17 @@ namespace UnitTest.IO
             var actual = CsvFile.ReadRecordsByArray(CsvFileName, false).ToArray();
 
             TestHelper.AreCollectionEqual(Records, actual);
+        }
+
+        [TestMethod]
+        public void WriteRecordsByArray_Empty()
+        {
+            using (var stream = new MemoryStream())
+            {
+                CsvFile.WriteRecordsByArray(stream, Enumerable.Empty<string[]>());
+
+                Assert.AreEqual(0, stream.ToArray().Length);
+            }
         }
 
         [TestMethod]
@@ -231,6 +253,17 @@ namespace UnitTest.IO
         }
 
         [TestMethod]
+        public void ReadRecordsByDictionary_Empty()
+        {
+            using (var stream = new MemoryStream())
+            {
+                var actual = CsvFile.ReadRecordsByDictionary(stream).ToArray();
+
+                Assert.AreEqual(0, actual.Length);
+            }
+        }
+
+        [TestMethod]
         public void ReadRecordsByDictionary_1()
         {
             using (var stream = new MemoryStream(TextFile.UTF8N.GetBytes(Content2)))
@@ -251,6 +284,17 @@ namespace UnitTest.IO
 
                 for (var i = 0; i < Records2.Length; i++)
                     DictionaryAssert(Records2[i], actual[i]);
+            }
+        }
+
+        [TestMethod]
+        public void WriteRecordsByDictionary_Empty()
+        {
+            using (var stream = new MemoryStream())
+            {
+                CsvFile.WriteRecordsByDictionary(stream, Enumerable.Empty<Dictionary<string, string>>());
+
+                Assert.AreEqual(0, stream.ToArray().Length);
             }
         }
 
