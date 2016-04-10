@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using KLibrary.Labs.IO;
-using KLibrary.Labs.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTest.IO
@@ -271,7 +270,7 @@ namespace UnitTest.IO
                 var actual = CsvFile.ReadRecordsByDictionary(stream).ToArray();
 
                 for (var i = 0; i < Records2.Length; i++)
-                    DictionaryAssert(Records2[i], actual[i]);
+                    TestHelper.AreDictionaryEqual(Records2[i], actual[i]);
             }
         }
 
@@ -283,7 +282,7 @@ namespace UnitTest.IO
                 var actual = CsvFile.ReadRecordsByDictionary(stream, TextFile.ShiftJIS).ToArray();
 
                 for (var i = 0; i < Records2.Length; i++)
-                    DictionaryAssert(Records2[i], actual[i]);
+                    TestHelper.AreDictionaryEqual(Records2[i], actual[i]);
             }
         }
 
@@ -329,19 +328,6 @@ namespace UnitTest.IO
 
                 CollectionAssert.AreEqual(TextFile.ShiftJIS.GetBytes(Content2), stream.ToArray());
             }
-        }
-
-        static void DictionaryAssert<TKey, TValue>(Dictionary<TKey, TValue> expected, Dictionary<TKey, TValue> actual)
-        {
-            Assert.AreEqual(expected.Count, actual.Count);
-            expected.Zip(actual, (e, a) => new { e, a })
-                .Execute(_ => KeyValuePairAssert(_.e, _.a));
-        }
-
-        static void KeyValuePairAssert<TKey, TValue>(KeyValuePair<TKey, TValue> expected, KeyValuePair<TKey, TValue> actual)
-        {
-            Assert.AreEqual(expected.Key, actual.Key);
-            Assert.AreEqual(expected.Value, actual.Value);
         }
     }
 }
