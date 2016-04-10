@@ -269,8 +269,7 @@ namespace UnitTest.IO
             {
                 var actual = CsvFile.ReadRecordsByDictionary(stream).ToArray();
 
-                for (var i = 0; i < Records2.Length; i++)
-                    TestHelper.AreDictionaryEqual(Records2[i], actual[i]);
+                TestHelper.AreDictionaryCollectionEqual(Records2, actual);
             }
         }
 
@@ -281,8 +280,7 @@ namespace UnitTest.IO
             {
                 var actual = CsvFile.ReadRecordsByDictionary(stream, TextFile.ShiftJIS).ToArray();
 
-                for (var i = 0; i < Records2.Length; i++)
-                    TestHelper.AreDictionaryEqual(Records2[i], actual[i]);
+                TestHelper.AreDictionaryCollectionEqual(Records2, actual);
             }
         }
 

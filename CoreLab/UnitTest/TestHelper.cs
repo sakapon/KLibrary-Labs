@@ -18,6 +18,15 @@ namespace UnitTest
         }
 
         [DebuggerStepThrough]
+        public static void AreDictionaryCollectionEqual<TKey, TValue>(ICollection<Dictionary<TKey, TValue>> expected, ICollection<Dictionary<TKey, TValue>> actual)
+        {
+            Assert.AreEqual(expected.Count, actual.Count);
+
+            foreach (var _ in expected.Zip(actual, (e, a) => new { e, a }))
+                AreDictionaryEqual(_.e, _.a);
+        }
+
+        [DebuggerStepThrough]
         public static void AreDictionaryEqual<TKey, TValue>(Dictionary<TKey, TValue> expected, Dictionary<TKey, TValue> actual)
         {
             Assert.AreEqual(expected.Count, actual.Count);
