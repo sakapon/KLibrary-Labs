@@ -163,7 +163,7 @@ namespace UnitTest.IO
             {
                 var actual = CsvFile.ReadRecordsByArray(stream, false).ToArray();
 
-                TestHelper.AreCollectionEqual(Records1, actual);
+                TestHelper.AreCollectionCollectionEqual(Records1, actual);
             }
         }
 
@@ -174,7 +174,7 @@ namespace UnitTest.IO
             {
                 var actual = CsvFile.ReadRecordsByArray(stream, true).ToArray();
 
-                TestHelper.AreCollectionEqual(Records1, actual);
+                TestHelper.AreCollectionCollectionEqual(Records1, actual);
             }
         }
 
@@ -185,7 +185,7 @@ namespace UnitTest.IO
             {
                 var actual = CsvFile.ReadRecordsByArray(stream, true, TextFile.ShiftJIS).ToArray();
 
-                TestHelper.AreCollectionEqual(Records1, actual);
+                TestHelper.AreCollectionCollectionEqual(Records1, actual);
             }
         }
 
@@ -196,7 +196,7 @@ namespace UnitTest.IO
 
             var actual = CsvFile.ReadRecordsByArray(CsvFileName, false).ToArray();
 
-            TestHelper.AreCollectionEqual(Records1, actual);
+            TestHelper.AreCollectionCollectionEqual(Records1, actual);
         }
 
         [TestMethod]

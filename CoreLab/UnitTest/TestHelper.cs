@@ -9,7 +9,7 @@ namespace UnitTest
     public static class TestHelper
     {
         [DebuggerStepThrough]
-        public static void AreCollectionEqual(ICollection<System.Collections.ICollection> expected, ICollection<System.Collections.ICollection> actual)
+        public static void AreCollectionCollectionEqual(ICollection<System.Collections.ICollection> expected, ICollection<System.Collections.ICollection> actual)
         {
             Assert.AreEqual(expected.Count, actual.Count);
 
