@@ -126,7 +126,7 @@ namespace UnitTest.IO
         const string CsvFileName = "CsvFileTest.csv";
 
         static readonly string[] ColumnNames = new[] { "Id", "Name" };
-        static readonly string[][] Records = new[]
+        static readonly string[][] Records1 = new[]
         {
             new[] { "123", "太郎" },
             new[] { "456", "次郎" },
@@ -163,7 +163,7 @@ namespace UnitTest.IO
             {
                 var actual = CsvFile.ReadRecordsByArray(stream, false).ToArray();
 
-                TestHelper.AreCollectionEqual(Records, actual);
+                TestHelper.AreCollectionEqual(Records1, actual);
             }
         }
 
@@ -174,7 +174,7 @@ namespace UnitTest.IO
             {
                 var actual = CsvFile.ReadRecordsByArray(stream, true).ToArray();
 
-                TestHelper.AreCollectionEqual(Records, actual);
+                TestHelper.AreCollectionEqual(Records1, actual);
             }
         }
 
@@ -185,7 +185,7 @@ namespace UnitTest.IO
             {
                 var actual = CsvFile.ReadRecordsByArray(stream, true, TextFile.ShiftJIS).ToArray();
 
-                TestHelper.AreCollectionEqual(Records, actual);
+                TestHelper.AreCollectionEqual(Records1, actual);
             }
         }
 
@@ -196,7 +196,7 @@ namespace UnitTest.IO
 
             var actual = CsvFile.ReadRecordsByArray(CsvFileName, false).ToArray();
 
-            TestHelper.AreCollectionEqual(Records, actual);
+            TestHelper.AreCollectionEqual(Records1, actual);
         }
 
         [TestMethod]
@@ -215,7 +215,7 @@ namespace UnitTest.IO
         {
             using (var stream = new MemoryStream())
             {
-                CsvFile.WriteRecordsByArray(stream, Records);
+                CsvFile.WriteRecordsByArray(stream, Records1);
 
                 CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(Content1), stream.ToArray());
             }
@@ -226,7 +226,7 @@ namespace UnitTest.IO
         {
             using (var stream = new MemoryStream())
             {
-                CsvFile.WriteRecordsByArray(stream, Records, ColumnNames);
+                CsvFile.WriteRecordsByArray(stream, Records1, ColumnNames);
 
                 CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(Content2), stream.ToArray());
             }
@@ -237,7 +237,7 @@ namespace UnitTest.IO
         {
             using (var stream = new MemoryStream())
             {
-                CsvFile.WriteRecordsByArray(stream, Records, ColumnNames, TextFile.ShiftJIS);
+                CsvFile.WriteRecordsByArray(stream, Records1, ColumnNames, TextFile.ShiftJIS);
 
                 CollectionAssert.AreEqual(TextFile.ShiftJIS.GetBytes(Content2), stream.ToArray());
             }
@@ -246,7 +246,7 @@ namespace UnitTest.IO
         [TestMethod]
         public void WriteRecordsByArray_Path_1()
         {
-            CsvFile.WriteRecordsByArray(CsvFileName, Records);
+            CsvFile.WriteRecordsByArray(CsvFileName, Records1);
 
             var bytes_actual = File.ReadAllBytes(CsvFileName);
             CollectionAssert.AreEqual(TextFile.UTF8N.GetBytes(Content1), bytes_actual);
