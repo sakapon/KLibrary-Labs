@@ -2,8 +2,18 @@
 
 namespace KLibrary.Labs
 {
+    /// <summary>
+    /// Provides a set of methods for nullable objects (class or <see cref="Nullable{T}"/>).
+    /// </summary>
     public static class NullableHelper
     {
+        /// <summary>
+        /// Does an action for an object, if the object is not null.
+        /// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+        /// <param name="obj">An object.</param>
+        /// <param name="action">An action.</param>
+        /// <returns>The original object.</returns>
         public static T IfNotNull<T>(this T obj, Action<T> action)
             where T : class
         {
@@ -11,6 +21,13 @@ namespace KLibrary.Labs
             return obj;
         }
 
+        /// <summary>
+        /// Does an action for an object, if the object is not null.
+        /// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+        /// <param name="obj">An object.</param>
+        /// <param name="action">An action.</param>
+        /// <returns>The original object.</returns>
         public static T? IfNotNull<T>(this T? obj, Action<T> action)
             where T : struct
         {
