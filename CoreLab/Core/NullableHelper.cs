@@ -45,6 +45,7 @@ namespace KLibrary.Labs
         /// <returns>The return value of the function if the object is not null; otherwise, null.</returns>
         public static TResult IfNotNull<T, TResult>(this T obj, Func<T, TResult> func)
             where T : class
+            where TResult : class
         {
             return obj != null ? func(obj) : default(TResult);
         }
@@ -59,6 +60,7 @@ namespace KLibrary.Labs
         /// <returns>The return value of the function if the object is not null; otherwise, null.</returns>
         public static TResult IfNotNull<T, TResult>(this T? obj, Func<T, TResult> func)
             where T : struct
+            where TResult : class
         {
             return obj.HasValue ? func(obj.Value) : default(TResult);
         }
