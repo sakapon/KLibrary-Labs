@@ -35,18 +35,42 @@ namespace KLibrary.Labs
             return obj;
         }
 
+        /// <summary>
+        /// Passes an object to a function, if the object is not null.
+        /// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+        /// <typeparam name="TResult">The type of the result object.</typeparam>
+        /// <param name="obj">An object.</param>
+        /// <param name="func">A function.</param>
+        /// <returns>The return value of the function if the object is not null; otherwise, null.</returns>
         public static TResult IfNotNull<T, TResult>(this T obj, Func<T, TResult> func)
             where T : class
         {
             return obj != null ? func(obj) : default(TResult);
         }
 
+        /// <summary>
+        /// Passes an object to a function, if the object is not null.
+        /// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+        /// <typeparam name="TResult">The type of the result object.</typeparam>
+        /// <param name="obj">An object.</param>
+        /// <param name="func">A function.</param>
+        /// <returns>The return value of the function if the object is not null; otherwise, null.</returns>
         public static TResult IfNotNull<T, TResult>(this T? obj, Func<T, TResult> func)
             where T : struct
         {
             return obj.HasValue ? func(obj.Value) : default(TResult);
         }
 
+        /// <summary>
+        /// Passes an object to a function, if the object is not null.
+        /// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+        /// <typeparam name="TResult">The type of the result object.</typeparam>
+        /// <param name="obj">An object.</param>
+        /// <param name="func">A function.</param>
+        /// <returns>The return value of the function if the object is not null; otherwise, null.</returns>
         public static TResult? IfNotNull2<T, TResult>(this T obj, Func<T, TResult> func)
             where T : class
             where TResult : struct
@@ -54,6 +78,14 @@ namespace KLibrary.Labs
             return obj != null ? func(obj) : default(TResult?);
         }
 
+        /// <summary>
+        /// Passes an object to a function, if the object is not null.
+        /// </summary>
+        /// <typeparam name="T">The type of the object.</typeparam>
+        /// <typeparam name="TResult">The type of the result object.</typeparam>
+        /// <param name="obj">An object.</param>
+        /// <param name="func">A function.</param>
+        /// <returns>The return value of the function if the object is not null; otherwise, null.</returns>
         public static TResult? IfNotNull2<T, TResult>(this T? obj, Func<T, TResult> func)
             where T : struct
             where TResult : struct
