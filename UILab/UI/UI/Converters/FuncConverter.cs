@@ -5,6 +5,19 @@ using System.Windows.Data;
 
 namespace KLibrary.Labs.UI.Converters
 {
+    /* 
+     * Usage Example
+     * 
+     * (1) Define the function on the code.
+     * public static readonly Func<double, double> Scale3 = x => 3 * x;
+     * 
+     * (2) Add the FuncConverter object to <Window.Resources> in the XAML file.
+     * <local:FuncConverter x:Key="Scale3Converter" ToFunc="{x:Static local:MainWindow.Scale3}"/>
+     * 
+     * (3) Set the Binding.Converter property to the FuncConverter object.
+     * <TextBlock Text="{Binding Width, Converter={StaticResource Scale3Converter}}"/>
+     */
+
     /// <summary>
     /// Represents the value converter that uses defined functions.
     /// </summary>
