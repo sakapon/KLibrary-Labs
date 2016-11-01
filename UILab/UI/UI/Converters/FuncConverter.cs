@@ -19,7 +19,7 @@ namespace KLibrary.Labs.UI.Converters
      */
 
     /// <summary>
-    /// Represents the value converter that uses defined functions.
+    /// Represents the value converter that uses the defined functions.
     /// </summary>
     [ValueConversion(typeof(object), typeof(object))]
     public class FuncConverter : DependencyObject, IValueConverter
