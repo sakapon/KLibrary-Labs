@@ -42,7 +42,7 @@ namespace TestWpf
             if (!IsLoaded) return;
             if (_isRelocating) return;
             _isRelocating = true;
-            window.FullScreenForCurrent();
+            this.FullScreenForCurrent();
             _isRelocating = false;
 
             System.Diagnostics.Debug.WriteLine(message);
