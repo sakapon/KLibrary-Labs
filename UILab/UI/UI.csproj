@@ -55,6 +55,7 @@
     <Compile Include="UI\ControlsHelper.cs" />
     <Compile Include="UI\Convert.cs" />
     <Compile Include="UI\Converters\BooleanInverseConverter.cs" />
+    <Compile Include="UI\Converters\FuncConverter.cs" />
     <Compile Include="UI\Converters\ScaleConverter.cs" />
     <Compile Include="UI\Converters\SolidColorBrushConverter.cs" />
     <Compile Include="UI\ScreenHelper.cs" />
