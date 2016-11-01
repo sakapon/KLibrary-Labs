@@ -21,6 +21,8 @@ namespace TestWpf
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static readonly Func<double, double> Scale3 = x => 3 * x;
+
         public MainWindow()
         {
             InitializeComponent();

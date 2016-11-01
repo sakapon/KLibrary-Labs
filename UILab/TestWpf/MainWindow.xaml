@@ -1,11 +1,13 @@
 ﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:TestWpf"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:kui="http://schemas.saka-pon.net/klibrary/ui"
         x:Name="window" x:Class="TestWpf.MainWindow"
         Title="MainWindow" Height="400" Width="600" Opacity="0.5" FontSize="24">
     <Window.Resources>
+        <kui:FuncConverter x:Key="Scale3Converter" ToFunc="{x:Static local:MainWindow.Scale3}"/>
         <System:Double x:Key="WidthScale">2.5</System:Double>
         <kui:ScaleConverter x:Key="ScaleConverter" Scale="{StaticResource WidthScale}"/>
     </Window.Resources>
@@ -13,6 +15,7 @@
         <StackPanel>
             <TextBlock Text="{Binding ActualWidth, ElementName=window}"/>
             <TextBlock Text="{Binding ActualHeight, ElementName=window}"/>
+            <TextBlock Text="{Binding ActualWidth, Converter={StaticResource Scale3Converter}, ElementName=window, Mode=OneWay}"/>
             <TextBlock Text="{Binding ActualWidth, Converter={StaticResource ScaleConverter}, ElementName=window, Mode=OneWay}"/>
         </StackPanel>
     </Grid>
