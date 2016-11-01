@@ -5,15 +5,15 @@
         xmlns:kui="http://schemas.saka-pon.net/klibrary/ui"
         x:Name="window" x:Class="TestWpf.MainWindow"
         Title="MainWindow" Height="400" Width="600" Opacity="0.5" FontSize="24">
-	<Window.Resources>
-		<System:Double x:Key="WidthScale">2.5</System:Double>
-		<kui:ScaleConverter x:Key="ScaleConverter" Scale="{StaticResource WidthScale}"/>
-	</Window.Resources>
-	<Grid>
-		<StackPanel>
-			<TextBlock Text="{Binding ActualWidth, ElementName=window}"/>
-			<TextBlock Text="{Binding ActualHeight, ElementName=window}"/>
-			<TextBlock Text="{Binding ActualWidth, Converter={StaticResource ScaleConverter}, ElementName=window, Mode=OneWay}"/>
-		</StackPanel>
-	</Grid>
+    <Window.Resources>
+        <System:Double x:Key="WidthScale">2.5</System:Double>
+        <kui:ScaleConverter x:Key="ScaleConverter" Scale="{StaticResource WidthScale}"/>
+    </Window.Resources>
+    <Grid>
+        <StackPanel>
+            <TextBlock Text="{Binding ActualWidth, ElementName=window}"/>
+            <TextBlock Text="{Binding ActualHeight, ElementName=window}"/>
+            <TextBlock Text="{Binding ActualWidth, Converter={StaticResource ScaleConverter}, ElementName=window, Mode=OneWay}"/>
+        </StackPanel>
+    </Grid>
 </Window>
